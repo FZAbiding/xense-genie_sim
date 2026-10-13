@@ -20,6 +20,9 @@ unchanged on both distros.
 ros2 launch genie_sim_moveit wbc.launch.py
 ```
 
+An optional `rviz_config:=/path/to/layout.rviz` selects a custom RViz
+layout; an empty value keeps the packaged `config/moveit.rviz` default.
+
 Brings up `move_group` + the WBC-configured RViz with the Genie's full
 mobile-base + dual-arm planning groups.  See `launch/wbc.launch.py` for
 the parameter knobs (workspace bounds, start-state tolerance, etc.).

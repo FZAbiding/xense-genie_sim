@@ -14,6 +14,15 @@ how it talks to its siblings.
 
 ## 0. Fresh-machine setup
 
+Native RoboStack installations are supported by `geniesim ros build` when
+the activated mamba environment supplies `AMENT_PREFIX_PATH` with the
+`ament_cmake` and `rclcpp` CMake packages. A ROS installation under
+`/opt/ros` is only needed for automatic discovery when no valid prefix
+is already sourced.
+The build-output guard checks the selected workspace's `src` directory;
+unrelated robot repositories elsewhere under a user's `~/src` do not
+make the whole home directory a workspace.
+
 The CLI is the **first thing** installed on a new machine — it ships the
 `geniesim bootstrap` verb that lays down every other peer.
 

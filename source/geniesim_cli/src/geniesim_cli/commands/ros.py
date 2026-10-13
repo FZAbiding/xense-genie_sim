@@ -69,17 +69,17 @@ _RELEASE_PROFILE: dict = {
 
 
 def _ros_already_sourced() -> bool:
-    """Cheap signal that an ament/ROS overlay is already on the environment.
-
-    We treat ``$AMENT_PREFIX_PATH`` containing ``/opt/ros/`` as proof:
-    sourcing ``/opt/ros/<distro>/setup.bash`` always populates that var
-    with at least the base prefix. ``$ROS_DISTRO`` alone is *not* enough
-    — users sometimes export it manually without sourcing the setup.
-    """
+    """Check for a sourced ROS prefix, including native RoboStack environments."""
     import os
+    from pathlib import Path
 
     ament = os.environ.get("AMENT_PREFIX_PATH", "")
-    return any(part.startswith("/opt/ros/") for part in ament.split(":") if part)
+    return any(
+        (Path(prefix) / "share/ament_cmake/cmake/ament_cmakeConfig.cmake").is_file()
+        and (Path(prefix) / "share/rclcpp/cmake/rclcppConfig.cmake").is_file()
+        for prefix in ament.split(os.pathsep)
+        if prefix
+    )
 
 
 def _discover_opt_ros_distro() -> "str | None":
@@ -277,17 +277,9 @@ def _cwd_inside_colcon_source_tree() -> "Path | None":
     from pathlib import Path
 
     cwd = Path.cwd().resolve()
-    # Start from parent — CWD itself being a workspace root is allowed.
-    for candidate in cwd.parents:
-        src = candidate / "src"
-        if not src.is_dir():
-            continue
-        try:
-            for child in src.iterdir():
-                if (child / "package.xml").is_file():
-                    return candidate
-        except OSError:
-            continue
+    workspace = Path(ros_workspace_root()).resolve()
+    if cwd.is_relative_to(workspace / "src"):
+        return workspace
     return None
 
 

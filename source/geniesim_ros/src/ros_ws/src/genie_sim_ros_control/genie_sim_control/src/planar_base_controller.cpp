@@ -458,7 +458,7 @@ bool PlanarBaseController::sample_trajectory_velocity(
       return true;
     };
 
-  double v0x, v0y, v0w, v1x, v1y, v1w;
+  double v0x = 0.0, v0y = 0.0, v0w = 0.0, v1x = 0.0, v1y = 0.0, v1w = 0.0;
   const bool have0 = vel_at(seg_i - 1, v0x, v0y, v0w);
   const bool have1 = vel_at(seg_i, v1x, v1y, v1w);
   const double t0 = rclcpp::Duration(points[seg_i - 1].time_from_start).seconds();

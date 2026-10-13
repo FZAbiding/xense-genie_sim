@@ -79,6 +79,7 @@ re-deriving `joint_limits.yaml` from URDF.
 ## Routing rules
 
 - Default entry point → `launch/wbc.launch.py`
+- Custom RViz layout → `wbc.launch.py rviz_config:=/path/to/layout.rviz` (empty uses the packaged default)
 - Hardware/controller bindings → `config/genie.ros2_control.xacro`
 - Active IK plugin selection → `config/kinematics.yaml`
 - IK plugins themselves → `../genie_sim_moveit_plugins/`

@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cassert>
 #include "genie_sim_controllers/solvers/function_base.hpp"
 #include "genie_sim_controllers/solvers/scalar_function.hpp"
 

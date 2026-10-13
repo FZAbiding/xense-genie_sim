@@ -168,7 +168,8 @@ def _launch_setup(context):
             output="screen",
             arguments=[
                 "-d",
-                str(moveit_config.package_path / "config" / "moveit.rviz"),
+                context.perform_substitution(LaunchConfiguration("rviz_config"))
+                or str(moveit_config.package_path / "config" / "moveit.rviz"),
             ],
             parameters=[
                 moveit_config.robot_description,
@@ -324,6 +325,9 @@ def generate_launch_description():
     )
     ld.add_action(
         DeclareLaunchArgument("use_rviz", default_value="true"),
+    )
+    ld.add_action(
+        DeclareLaunchArgument("rviz_config", default_value="", description="Optional custom RViz config path"),
     )
     ld.add_action(
         DeclareLaunchArgument(

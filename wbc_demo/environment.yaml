@@ -1,0 +1,21 @@
+name: xense-wbc
+channels:
+  - robostack-jazzy
+  - conda-forge
+dependencies:
+  - python=3.12
+  - pip
+  - git-lfs
+  - ros-jazzy-desktop
+  - ros-jazzy-moveit
+  - ros-jazzy-ros2-control
+  - ros-jazzy-ros2-controllers
+  - ros-jazzy-image-transport
+  - ros-jazzy-realtime-tools
+  - pybind11
+  - cmake
+  - ninja
+  - cxx-compiler
+  - colcon-common-extensions
+  - osqp-eigen
+  - nlohmann_json

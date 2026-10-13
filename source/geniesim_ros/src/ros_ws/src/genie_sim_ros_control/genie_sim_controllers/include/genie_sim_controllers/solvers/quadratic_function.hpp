@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cassert>
 #include <memory>
 #include <utility>
 #include "genie_sim_controllers/solvers/linear_relative_function.hpp"
