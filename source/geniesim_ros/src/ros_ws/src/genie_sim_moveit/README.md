@@ -242,6 +242,13 @@ ros2 launch genie_sim_moveit wbc.launch.py
 
 ---
 
+## Native joint limits
+
+`wbc.launch.py pad_joint_limits:=false` keeps the native URDF joint bounds for IK.
+The default remains `true`, retaining the existing padding for soft-limit drift.
+Use native limits for the fixed-base PhysX laboratory so IK does not rely on the
+extra 0.01 rad and lose TCP accuracy when execution projects back to native bounds.
+
 ## Cross-distro maintenance
 
 When you upgrade ROS / MoveIt, expect to refresh:

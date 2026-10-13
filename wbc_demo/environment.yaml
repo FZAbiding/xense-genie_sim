@@ -6,6 +6,8 @@ dependencies:
   - python=3.12
   - pip
   - git-lfs
+  - matplotlib
+  - pyqt=5
   - ros-jazzy-desktop
   - ros-jazzy-moveit
   - ros-jazzy-ros2-control

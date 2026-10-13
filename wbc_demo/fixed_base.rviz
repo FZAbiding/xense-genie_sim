@@ -11,6 +11,17 @@ Visualization Manager:
       Cell Size: 0.5
       Plane Cell Count: 20
       Reference Frame: <Fixed Frame>
+    - Class: rviz_default_plugins/MarkerArray
+      Name: TCP Targets And Trails
+      Enabled: true
+      Topic:
+        Value: /wbc_demo/markers
+        Reliability Policy: Reliable
+        Durability Policy: Volatile
+    - Class: rviz_default_plugins/InteractiveMarkers
+      Name: Lab Target Handles
+      Enabled: true
+      Update Topic: /wbc_demo_targets/update
     - Class: moveit_rviz_plugin/MotionPlanning
       Name: MotionPlanning
       Enabled: true

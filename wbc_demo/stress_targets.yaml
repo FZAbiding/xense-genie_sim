@@ -1,0 +1,28 @@
+targets:
+  - name: long_reach
+    left: [0.28, 0.0, -0.20]
+    right: [0.28, 0.0, -0.20]
+  - name: deep_reach
+    left: [0.08, 0.0, -0.55]
+    right: [0.08, 0.0, -0.55]
+  - name: sweep_left
+    left: [0.05, 0.25, -0.15]
+    right: [0.05, 0.25, -0.15]
+  - name: sweep_right
+    left: [0.05, -0.25, -0.15]
+    right: [0.05, -0.25, -0.15]
+  - name: spread_hands
+    left: [0.08, 0.18, -0.10]
+    right: [0.08, -0.18, -0.10]
+  - name: asymmetric
+    left: [0.10, 0.10, 0.18]
+    right: [0.16, -0.10, -0.30]
+  - name: orbit_left
+    orbit_deg: 30
+  - name: orbit_right
+    orbit_deg: -30
+  - name: wrist_rotation
+    left: [0.10, 0.05, -0.15]
+    right: [0.10, -0.05, -0.15]
+    left_rpy_deg: [25, 0, 0]
+    right_rpy_deg: [-25, 0, 0]

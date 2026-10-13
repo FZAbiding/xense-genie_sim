@@ -38,8 +38,9 @@ def orientation_error(actual, target):
 
 
 class DualArmDemo(Node):
-    def __init__(self):
+    def __init__(self, group=GROUP):
         super().__init__("fixed_base_dual_arm_ik_demo")
+        self.group = group
         self.state = None
         self.last_state_time = 0.0
         self.report = None
@@ -105,6 +106,8 @@ class DualArmDemo(Node):
     def wait_for_state(self):
         deadline = time.monotonic() + 300.0
         while rclpy.ok() and time.monotonic() < deadline:
+            if getattr(self, "cancel", None) is not None and self.cancel.is_set():
+                raise RuntimeError("Cancelled while waiting for simulator readiness")
             rclpy.spin_once(self, timeout_sec=0.1)
             if (
                 self.state is not None
@@ -131,7 +134,7 @@ class DualArmDemo(Node):
 
     def solve(self, state, targets):
         request = GetPositionIK.Request()
-        request.ik_request.group_name = GROUP
+        request.ik_request.group_name = self.group
         request.ik_request.robot_state = state
         request.ik_request.avoid_collisions = True
         request.ik_request.ik_link_names = TIPS
@@ -143,7 +146,9 @@ class DualArmDemo(Node):
         initial = dict(zip(state.joint_state.name, state.joint_state.position))
         result = dict(zip(response.solution.joint_state.name, response.solution.joint_state.position))
         for name, position in initial.items():
-            active = any(part in name for part in ("_body_joint", "_arm_l_joint", "_arm_r_joint"))
+            active = any(part in name for part in ("_arm_l_joint", "_arm_r_joint")) or (
+                "_body_joint" in name and self.group != "wbc_fixed_arms"
+            )
             if not active and abs(result.get(name, position) - position) > 1e-7:
                 raise RuntimeError(f"IK unexpectedly moved an excluded joint: {name}")
         solution = copy.deepcopy(state)
@@ -172,9 +177,11 @@ class DualArmDemo(Node):
         return state
 
     def execute(self, start, goal, seconds):
+        if self.count_publishers("/joint_command") > 1:
+            raise RuntimeError("Multiple joint-command publishers; refusing competing execution")
         for sample in range(21):
             request = GetStateValidity.Request()
-            request.group_name = GROUP
+            request.group_name = self.group
             request.robot_state = self.interpolate(start, goal, sample / 20.0)
             if not self.call(self.validity, request).valid:
                 raise RuntimeError(f"Self-collision detected along joint interpolation at sample {sample}")

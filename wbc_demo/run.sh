@@ -15,17 +15,27 @@ if [[ $# -gt 0 ]]; then shift; fi
 case "$mode" in
     sim)
         exec ros2 launch genie_sim_bringup app.launch.py \
-            scene:="$repo_root/wbc_demo/scene_fixed.yaml" \
+            scene:="$repo_root/wbc_demo/${WBC_SCENE:-scene_stress.yaml}" \
             launcher_config:=launcher_ovrtx_isaac_physx headless:=true rviz:=false "$@"
         ;;
     moveit)
         exec ros2 launch genie_sim_moveit wbc.launch.py \
-            use_ros2_control:=false use_rviz:=true rviz_config:="$repo_root/wbc_demo/fixed_base.rviz" "$@"
+            use_ros2_control:=false use_rviz:=true pad_joint_limits:=false \
+            rviz_config:="$repo_root/wbc_demo/fixed_base.rviz" "$@"
         ;;
     demo)
         exec python wbc_demo/dual_arm_ik.py "$@"
         ;;
-    all)
+    stress)
+        exec python wbc_demo/experiments.py "$@"
+        ;;
+    compare)
+        exec python wbc_demo/experiments.py --compare "$@"
+        ;;
+    interactive)
+        exec python wbc_demo/interactive_lab.py "$@"
+        ;;
+    all|lab)
         if [[ ! "${OMNI_KIT_ACCEPT_EULA:-}" =~ ^([Yy][Ee][Ss]|[Yy]|1)$ ]]; then
             echo "Isaac Sim requires your acceptance of the NVIDIA Omniverse EULA." >&2
             echo "If you agree, run: export OMNI_KIT_ACCEPT_EULA=YES" >&2
@@ -61,12 +71,17 @@ case "$mode" in
         children+=("$!")
         setsid bash wbc_demo/run.sh moveit > wbc_demo/logs/moveit.log 2>&1 &
         children+=("$!")
-        python wbc_demo/dual_arm_ik.py "$@" 2>&1 | tee wbc_demo/logs/demo.log
+        if [[ "$mode" == "lab" ]]; then
+            python wbc_demo/interactive_lab.py "$@" 2>&1 | tee wbc_demo/logs/interactive.log
+            exit 0
+        else
+            python wbc_demo/experiments.py "$@" 2>&1 | tee wbc_demo/logs/demo.log
+        fi
         echo "Demo complete. RViz and simulation stay open; press Ctrl+C to stop."
         wait
         ;;
     *)
-        echo "Usage: bash wbc_demo/run.sh {all|sim|moveit|demo} [arguments]" >&2
+        echo "Usage: bash wbc_demo/run.sh {all|lab|sim|moveit|demo|stress|compare|interactive} [arguments]" >&2
         exit 2
         ;;
 esac

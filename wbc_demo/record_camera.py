@@ -1,5 +1,6 @@
 import argparse
 import json
+import os
 import time
 from pathlib import Path
 
@@ -15,9 +16,11 @@ from transforms3d.quaternions import mat2quat
 
 
 class CameraRecorder(Node):
-    def __init__(self, output):
+    def __init__(self, output, name="physx-demo", scene="scene_stress.yaml"):
         super().__init__("fixed_base_camera_recorder")
         self.output = output
+        self.name = name
+        self.image_prefix = "physx" if name == "physx-demo" else name
         self.writer = None
         self.frames = 0
         self.received_frames = 0
@@ -28,7 +31,7 @@ class CameraRecorder(Node):
             "/genie_sim_engine/viewer/camera_pose",
             QoSProfile(depth=1, durability=DurabilityPolicy.TRANSIENT_LOCAL),
         )
-        config = yaml.safe_load(Path(__file__).with_name("scene_fixed.yaml").read_text())["viewer_camera"]
+        config = yaml.safe_load((Path(__file__).parent / scene).read_text())["viewer_camera"]
         position = np.array(config["pos"], dtype=float)
         backward = position - np.array(config["lookat"], dtype=float)
         backward /= np.linalg.norm(backward)
@@ -66,14 +69,14 @@ class CameraRecorder(Node):
             frame = cv2.cvtColor(frame, conversion)
         if self.writer is None:
             self.writer = cv2.VideoWriter(
-                str(self.output / "physx-demo.mp4"),
+                str(self.output / (self.name + ".mp4")),
                 cv2.VideoWriter_fourcc(*"mp4v"),
                 30,
                 (message.width, message.height),
             )
             if not self.writer.isOpened():
                 raise RuntimeError("Cannot create camera recording")
-            cv2.imwrite(str(self.output / "physx-start.png"), frame)
+            cv2.imwrite(str(self.output / (self.image_prefix + "-start.png")), frame)
             print(f"Camera ready: {message.width}x{message.height}, {message.encoding}", flush=True)
         self.latest_frame = frame
         self.received_frames += 1
@@ -84,17 +87,22 @@ class CameraRecorder(Node):
         self.writer.write(self.latest_frame)
         self.frames += 1
         if self.frames % 30 == 0:
-            cv2.imwrite(str(self.output / "physx-latest.png"), self.latest_frame)
+            cv2.imwrite(str(self.output / (self.image_prefix + "-latest.png")), self.latest_frame)
 
 
 def main():
     parser = argparse.ArgumentParser(description="Record the simulator's rendered camera, not the desktop")
     parser.add_argument("--seconds", type=float, default=90.0)
+    parser.add_argument("--output-name", default="physx-demo")
+    parser.add_argument("--scene", default="scene_stress.yaml")
     args = parser.parse_args()
+    if "/" in args.output_name or args.output_name in (".", "..") or args.seconds <= 0:
+        parser.error("Use a simple output name and positive duration")
     output = Path(__file__).parent / "logs"
     output.mkdir(exist_ok=True)
+    os.environ.setdefault("ROS_DOMAIN_ID", "42")
     rclpy.init()
-    node = CameraRecorder(output)
+    node = CameraRecorder(output, args.output_name, args.scene)
     beginning = time.monotonic()
     next_capture = beginning
     try:
@@ -117,7 +125,8 @@ def main():
         "elapsed_seconds": time.monotonic() - beginning,
         "video_fps": 30,
     }
-    (output / "camera-recording.json").write_text(json.dumps(report, indent=2) + "\n")
+    metadata = "camera-recording.json" if args.output_name == "physx-demo" else args.output_name + ".json"
+    (output / metadata).write_text(json.dumps(report, indent=2) + "\n")
     print(json.dumps(report), flush=True)
 
 

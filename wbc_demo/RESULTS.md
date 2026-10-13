@@ -1,5 +1,8 @@
 # 复现结果：G2 固定底盘双臂 + 腰部全身 IK
 
+本文件保留初版四点小范围实验的历史证据。当前入口已升级为大范围测试与交互实验台，
+最新结果见 [EXPERIMENT_RESULTS.md](EXPERIMENT_RESULTS.md)，操作见 [LAB_USAGE.md](LAB_USAGE.md)。
+
 ## 结论
 
 **成功。** 使用 mamba 环境 `xense-wbc`，真实运行 Isaac Sim 6.0 / PhysX，
@@ -36,10 +39,13 @@
 - `logs/environment-full.yaml`、`logs/pip-freeze.txt`、`logs/source-changes.patch`：环境与修改快照。
 - `logs/warm-repeat-demo.log`、`logs/warm-repeat-report.json`：视频对应的额外一轮温启动测试，也已通过。
 
-## 重跑
+## 运行当前升级版
 
 测试完成后已停止本 demo 的仿真/MoveIt，释放 GPU；其他任务未停止。
 进入 `xense-genie_sim` 仓库根目录即可重跑，避免同时启动多个副本：
+
+下面运行升级版大范围压力测试，不是本文件历史数据对应的四点序列。
+经典四点序列保留在 `demo` 子命令中，需要已启动的后端，见 `README.md`。
 
 ```bash
 mamba activate xense-wbc

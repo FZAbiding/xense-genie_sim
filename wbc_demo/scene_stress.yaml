@@ -1,0 +1,30 @@
+robot:
+  robot_name: G2_crsB_swiftpicker_stress
+  robot_prefix: genie
+  robot_source:
+    arm: crsB
+    body: g2
+    gripper: swiftpicker
+    robot_model: genie
+    package: genie_sim_robot_model
+    pin_base_to_world: true
+    convert_joints_to_fixed: []
+    urdf: {}
+  init_base_pose:
+    x: -0.25
+    y: 0.0
+    z: 0.04
+    theta: 0.0
+  init_joint_pos:
+    idx22_arm_l_joint2: -45
+    idx24_arm_l_joint4: -75
+    idx26_arm_l_joint6: -55
+    idx62_arm_r_joint2: -45
+    idx64_arm_r_joint4: -75
+    idx66_arm_r_joint6: -55
+viewer_camera:
+  pos: [1.8, -2.2, 1.6]
+  lookat: [-0.25, 0.0, 0.85]
+cameras: []
+lidars: []
+scene: scenes/blank/blank.usda

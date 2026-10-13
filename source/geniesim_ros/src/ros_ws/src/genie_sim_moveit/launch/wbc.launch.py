@@ -90,7 +90,7 @@ def _launch_setup(context):
         from genie_sim_robot_model.urdf_utils import pad_urdf_joint_limits  # type: ignore
 
         _urdf = moveit_config.robot_description.get("robot_description", "")
-        if _urdf:
+        if _urdf and context.perform_substitution(LaunchConfiguration("pad_joint_limits")).lower() == "true":
             _widened = pad_urdf_joint_limits(_urdf, 0.01, 0.001)
             if _widened is not _urdf:
                 moveit_config.robot_description["robot_description"] = _widened
@@ -328,6 +328,9 @@ def generate_launch_description():
     )
     ld.add_action(
         DeclareLaunchArgument("rviz_config", default_value="", description="Optional custom RViz config path"),
+    )
+    ld.add_action(
+        DeclareLaunchArgument("pad_joint_limits", default_value="true", description="Widen native URDF joint limits"),
     )
     ld.add_action(
         DeclareLaunchArgument(

@@ -6,7 +6,43 @@
 **来源说明：本 demo 是基于仓库已有 G2 仿真与 MoveIt/BioIK 能力新增的测试流程，
 不是原封不动的官方 demo，也没有重写 IK 核心算法。**
 
-## 当前状态
+## 升级版：大范围测试与交互实验台
+
+当前目录是 `xense-genie_sim`，迁移版本 `d975634` 已推送到私人仓库 `main`。
+升级版操作说明见 **[LAB_USAGE.md](LAB_USAGE.md)**，测试结果见 [EXPERIMENT_RESULTS.md](EXPERIMENT_RESULTS.md)。
+
+```bash
+mamba activate xense-wbc
+export OMNI_KIT_ACCEPT_EULA=YES
+bash wbc_demo/run.sh lab
+```
+
+此命令启动 PhysX、MoveIt、RViz 和中文交互实验台。拖动 RViz 蓝色目标或输入双手位姿，
+先“求解并检查路径”，再“执行”；可以切换锁腰/解锁，做同目标对照并观察误差和腰部曲线。
+关闭实验台会清理本次启动的后端。不要与另一套仿真/MoveIt 重复启动。
+
+大范围自动测试：
+
+```bash
+bash wbc_demo/run.sh all --cycles 2
+```
+
+每轮 9 类目标，包括前伸 28 cm、下降 55 cm、左右横移 25 cm、双手展开、
+不对称上下伸手、绕底盘 ±30° 扭转、双腕 ±25° 转动。每类目标执行后回到初始关节姿态。
+两轮是 18 个挑战目标 + 18 次回家，不再是初版的 8/16 cm 四点序列。
+默认使用没有货架的 blank 场景；原 GDK 场景可通过 `WBC_SCENE=scene_fixed.yaml` 选择，
+但货架尚未接入 MoveIt 碰撞世界，不推荐拿它直接进行大范围避障测试。
+
+自动寻找并执行锁腰不可达、解锁可达的几何证明案例：
+
+```bash
+bash wbc_demo/run.sh all --compare --execute-found
+```
+
+默认 ROS domain 为 42。`stress`、`compare`、`interactive` 子命令只启动控制端，
+用于连接已经启动的 `sim` + `moveit`；不要与另一控制端并行发送命令。
+
+## 初版验证记录
 
 - 环境：`xense-wbc`，Python 3.12、RoboStack ROS 2 Jazzy、MoveIt 2.12.4。
 - 已安装 Isaac Sim 6.0.0.1、OVRTX 0.3.0.312915、MuJoCo 3.8.0。
@@ -62,7 +98,10 @@ bash wbc_demo/run.sh all
 也可分终端启动 `bash wbc_demo/run.sh sim`、`bash wbc_demo/run.sh moveit`，
 最后执行 `bash wbc_demo/run.sh demo --cycles 3`。
 
-## Demo 做什么
+## 初版经典回归做什么
+
+以下四点序列仅指 `bash wbc_demo/run.sh demo --cycles 3`；它需要已经运行的仿真与 MoveIt。
+现在 `all` 默认执行升级版压力测试，不再执行这段经典序列。
 
 - 物理配置 `scene_fixed.yaml` 中 `pin_base_to_world: true` 将底盘焊接到世界。
 - MoveIt 规划组 `wbc_fixed_headless` 包含 5 个 body/waist 关节与双臂 14 个关节，排除底盘与头部。
@@ -97,7 +136,8 @@ python wbc_demo/record_camera.py --seconds 90
 
 前者录制 RViz 窗口并将其置前，其他窗口遮挡会影响画面；后者直接订阅 OVRTX 的
 `/genie_sim/free_camera_rgb/image_raw`，不采集桌面，并按 `scene_fixed.yaml` 的
-`viewer_camera` 设置视角。输出分别为 `logs/rviz-demo.mp4` 和 `logs/physx-demo.mp4`。
+`viewer_camera` 设置视角，默认读取 `scene_stress.yaml`，也可用 `--scene scene_fixed.yaml`。
+输出分别为 `logs/rviz-demo.mp4` 和 `logs/physx-demo.mp4`；`--output-name` 可指定新录像名。
 录像只用于观察，性能/精度以 JSON 和 CSV 为准。
 
 ## 原生 mamba 构建说明

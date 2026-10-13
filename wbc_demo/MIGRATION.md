@@ -30,8 +30,9 @@
 
 迁移已完成：11 个 ROS 包在原目录重新编译通过，`pip check` 通过，
 真实 PhysX 回归的 4 个双手目标全部通过，底盘最大位置漂移约 2.39 微米。
-三个 editable 包均已确认指向原目录。源码将提交到 `main`，
-提交哈希及真实远端推送结果在后续实验记录中补充。
+三个 editable 包均已确认指向原目录。
+第一阶段迁移提交 `d97563413f5797a1afe90bcc6ea74c3d22bab727` 已推送到 `origin/main`，
+通过 `git ls-remote` 核对远端哈希一致。升级实验的结果见 `EXPERIMENT_RESULTS.md`。
 
 ## 后续运行
 
