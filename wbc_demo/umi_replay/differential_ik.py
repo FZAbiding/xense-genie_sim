@@ -6,6 +6,7 @@ from scipy import sparse
 from scipy.spatial.transform import Rotation
 
 from .geometry import check_transform, pose_matrix
+from .validation import validate_realtime_profile
 
 
 class PlaybackClock:
@@ -35,6 +36,11 @@ class URDFKinematics:
         self.root = check_transform(root_to_odom)
         self.names = list(names)
         self.index = {name: index for index, name in enumerate(names)}
+        self.mimic_weights = {
+            name: eef.joint_motion_weights(name, self.names)
+            for name, joint in eef.joints.items()
+            if joint.find("mimic") is not None
+        }
         if len(self.index) != len(self.names):
             raise ValueError("Duplicate command joints")
         self.chains = []
@@ -93,9 +99,9 @@ class URDFKinematics:
             if master in self.index:
                 perturbed = dict(positions)
                 perturbed[master] = positions[master] + 1e-6
-                for name, joint in self.eef.joints.items():
-                    if joint.find("mimic") is not None:
-                        perturbed.pop(name, None)
+                for name, weights in self.mimic_weights.items():
+                    if name in positions:
+                        perturbed[name] = positions[name] + 1e-6 * weights[self.index[master]]
                 shifted = self.eef.offsets_at(perturbed)[side]
                 derivative[:3, self.index[master]] = matrix[:3, :3] @ ((shifted[:3, 3] - offset[:3, 3]) / 1e-6)
             derivatives.append(derivative)
@@ -108,6 +114,7 @@ def matrix_error(actual, target):
 
 class DifferentialIK:
     def __init__(self, model, positions, native_limits, native_velocities, coupled, profile, bounds=None):
+        validate_realtime_profile(profile)
         self.model = model
         self.names = model.names
         self.reference = np.array([positions[name] for name in self.names])

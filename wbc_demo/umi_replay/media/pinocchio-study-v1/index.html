@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>G2 Pinocchio 模型接入验证</title>
+<style>body{margin:0;background:#101822;color:#e3edf5;font:16px/1.7 system-ui,sans-serif}main{max-width:1200px;margin:auto;padding:24px}a{color:#87dae7}img{width:100%;background:white;border-radius:8px}table{border-collapse:collapse;width:100%}th,td{text-align:left;padding:10px;border-bottom:1px solid #465566}.notice{padding:16px;background:#263e4d}code{overflow-wrap:anywhere}</style></head>
+<body><main><h1>G2 · Pinocchio 模型级接入验证</h1>
+<div class="notice">这是 100 个真实反馈关节状态的离线 FK/Jacobian 对照，不是 Pinocchio 机器人闭环演示，也不是力矩 WBC。在线默认后端没有切换，现有 xense-wbc 环境未安装 Pinocchio。</div>
+<p>Pinocchio 4.1.0，Python 3.12.15；同一份 URDF、同一夹爪指尖 EEF、同一实测 mimic 偏差、同一非单位基座变换。</p>
+<table><tr><th>检查项</th><th>结果</th></tr>
+<tr><td>双手 EEF 最大位置差 / 旋转差</td><td>1.913e-15 m / 1.302e-15 rad</td></tr>
+<tr><td>Jacobian 最大元素差</td><td>2.410e-8，小于 2e-6 阈值</td></tr>
+<tr><td>原实现 FK/Jacobian 中位 / P95</td><td>1.149 / 2.614 ms</td></tr>
+<tr><td>Pinocchio FK/Jacobian 中位 / P95</td><td>0.092 / 0.230 ms</td></tr>
+<tr><td>模型 nq / nv / 命令自由度</td><td>46 / 42 / 21，按关节名及 mimic 比例映射</td></tr>
+<tr><td>投影质量矩阵最小特征值</td><td>6.090e-4，大于零；不等于惯量参数已标定</td></tr></table>
+<h2>实测图，而不是性能估算</h2><img src="kinematics-comparison.png" alt="100个实际机器人状态上的Python与Pinocchio模型耗时和Jacobian差异">
+<p>仅模型计算段中位耗时约下降 12.4 倍；不能把它外推成整个机器人控制速度提升 12.4 倍。</p>
+<h2>已经执行 / 尚待执行</h2><p>已做模型对照、实测 mimic 偏差测试、同一 QP 的单步结果对照。尚未做 Pinocchio 实际整段控制 A/B、力矩接口或轮地接触控制。</p>
+<p><a href="metrics.json">原始指标和输入 SHA256</a> · <a href="../../PINOCCHIO_STUDY_ZH.md">详细可行性研究</a> · <a href="../../CODE_AUDIT_ZH.md">代码审计</a> · <a href="../../WBC_NEXT_STAGE_ZH.md">WBC 技术路线</a> · <a href="../episode-000-v5/index.html">已有 v5 真实回放基线</a></p>
+</main></body></html>

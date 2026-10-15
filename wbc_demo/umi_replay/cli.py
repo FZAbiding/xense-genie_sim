@@ -29,6 +29,13 @@ def main():
     analyze_parser = commands.add_parser("analyze")
     analyze_parser.add_argument("--input", type=Path, required=True)
     analyze_parser.add_argument("--run-directory", type=Path, required=True)
+    model_parser = commands.add_parser("benchmark-kinematics")
+    model_parser.add_argument("--reference-run", type=Path, required=True)
+    model_parser.add_argument("--samples", type=int, default=100)
+    model_parser.add_argument("--output", type=Path, required=True)
+    model_package = ROOT.parent / "source/geniesim_ros/src/ros_ws/src/genie_sim_robot_model"
+    model_parser.add_argument("--package-root", type=Path, default=model_package)
+    model_parser.add_argument("--urdf", type=Path, default=model_package / "urdf/genie_g2_crsB_swiftpicker.urdf")
     evidence_parser = commands.add_parser("evidence")
     evidence_parser.add_argument("--run-directory", type=Path, required=True)
     evidence_parser.add_argument("--robot-video", type=Path, required=True)
@@ -89,6 +96,10 @@ def main():
         from .analysis import analyze
 
         analyze(args.run_directory, json.loads(args.input.read_text()))
+    elif args.command == "benchmark-kinematics":
+        from .kinematics_benchmark import benchmark_kinematics
+
+        benchmark_kinematics(args)
     elif args.command == "evidence":
         from .evidence import build_evidence
 

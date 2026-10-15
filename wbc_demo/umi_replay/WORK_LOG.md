@@ -237,3 +237,18 @@
 - 最新 Firefox 原生输入验收 `wbc_demo/logs/umi-realtime-work/browser-reliable-01/` 完成：拖动、缩放、重置、播放、暂停/恢复、整段结束通过。源 / 墙钟倍率 1.000021，视频时钟差最大 110.2 ms；浏览器实际呈现约 24.58 fps，不冒称全帧 30 fps。
 - 76 项 UMI + 10 项 lab 单测通过。完整结果、视频、首中末帧、实际跟踪曲线、真实浏览器截图、报告和 SHA256 收到 [episode-000-v5/index.html](media/episode-000-v5/index.html)，不覆盖 v4 历史媒体。
 - 此节取代上一节“未完成图像传输验收”的当前状态；历史失败日志继续保留。当前结果是固定底盘的软实时运动学仿真，不是真机认证或力矩 WBC。
+
+## 下一阶段首批执行：代码审计、Pinocchio 探测与 WBC 路线
+
+- 根据用户追加要求，优先进行代码审计和架构调研，暂不直接扩展示范动作或解锁底盘。
+- 测试复现并修复：超时后审计全部 fail-open、NaN 审计绕过、非法速度配置被 native min 掩盖/首帧运动后才读取、实际 mimic 偏差污染 Jacobian；并修正首帧预检声明及过期碰撞请求排队。
+- 复现前失败日志保留于 `wbc_demo/logs/wbc-next-stage/bugs-before-fix.log` 和 `mimic-bug-before-fix.log`；修复后测试日志同目录。
+- 在 logs 下独立 venv 安装 Pinocchio 4.1.0，不修改基础 xense-wbc，也不修改运行中的默认 IK 后端。
+- 新增可选 `PinocchioKinematics` 与 `benchmark-kinematics` 命令；对 100 个真实反馈状态比较双手动态 TCP 的 FK/Jacobian。位置差最大 1.913e-15 m、Jacobian 元素差最大 2.410e-8，通过预设阈值；模型计算段 P95 2.614 → 0.230 ms。
+- 四项独立 Pinocchio 测试通过，包括同一 QP 单步结果、测量 mimic 偏差和投影质量矩阵。没有以离线基准冒充 Pinocchio 实际闭环运行。
+- 原默认控制器新回归 `umi-realtime-web-reliable-01/run-003` 已完成整段及回零；模型研究图文放入 `media/pinocchio-study-v1`，不覆盖 v5 原验收媒体。
+- 官方项目依据与分工：Pinocchio 做模型，Pink 做微分 IK 任务层候选，TSID / PlaCo 为逆动力学候选，MoveIt Servo 借鉴奇异性/碰撞/停止机制，Mink 借鉴测试和约束组织，不为使用 IK 而替换 PhysX。
+- 路线明确区分固定底盘闭环、多 episode 验收、VLA 在线流、轮式运动学 WBC、力矩/接触力 WBC；详见 `WBC_NEXT_STAGE_ZH.md`。本轮未完成 Pinocchio 在线 A/B 或动力学 WBC。
+- 最终回归：基础环境发现 90 项 UMI 测试，其中 86 项通过、4 项可选 Pinocchio 测试跳过；这 4 项在隔离环境单独全部通过，另有 10 项 lab 测试通过。Black 检查 37 个文件，格式无差异。
+- 修复后真实 run-003：1250 条命令、零超时/跳目标，源 41.666668 s / 实际 41.668407 s；双手最大位置误差 20.872 / 18.861 mm，最大腰 roll 0.214°。审计标记加速度检查完整，但仍不是物理加速度认证。
+- 无运动 CLI 验证 `initial-only-dry-run/report.json` 明确返回 `initial_pose_preflight_passed_no_execution` 和 `initial_pose_only`，不再误称整段预检。配置快照与 SHA256 从同一份读取字节产生。

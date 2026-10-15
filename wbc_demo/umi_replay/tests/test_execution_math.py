@@ -1,8 +1,12 @@
 import math
+import json
+import tempfile
 import unittest
+from pathlib import Path
 from types import SimpleNamespace
+from unittest.mock import patch
 
-from umi_replay.execution import posture_config, retime
+from umi_replay.execution import posture_config, retime, run
 
 
 class PosturePolicyTests(unittest.TestCase):
@@ -48,6 +52,45 @@ class RetimeTests(unittest.TestCase):
         for speed in [0, -1, 1.1, math.nan, math.inf]:
             with self.assertRaises(ValueError):
                 retime(None, [], [], speed)
+
+
+class EarlyRealtimeValidationTests(unittest.TestCase):
+    def test_invalid_profile_is_rejected_before_ros_or_motion(self):
+        pose = {"position": [0.0, 0.0, 0.0], "quaternion_xyzw": [0.0, 0.0, 0.0, 1.0]}
+        converted = {
+            "schema": "xense-umi-eef-v1",
+            "frame": "dataset_world",
+            "provenance": {},
+            "sampling": {"max_interval_seconds": 0.2},
+            "source_frames": [
+                {"timestamp": index / 30, "frame_index": index, "eef": [pose, pose], "gripper": [0.5, 0.5]}
+                for index in range(2)
+            ],
+        }
+        with tempfile.TemporaryDirectory() as temporary:
+            directory = Path(temporary)
+            source = directory / "input.json"
+            source.write_text(json.dumps(converted))
+            profile = directory / "bad-profile.json"
+            profile.write_text("{}")
+            args = SimpleNamespace(
+                input=source,
+                output=directory / "run",
+                speed=1.0,
+                execute=False,
+                playback_mode="realtime",
+                posture_policy="soft",
+                limits_profile=profile,
+            )
+            config = {
+                "max_joint_velocity_rad_s": 0.3,
+                "max_joint_acceleration_rad_s2": 0.5,
+                "max_tracking_error_m": 0.05,
+                "max_tracking_rotation_rad": 0.17,
+            }
+            with patch("umi_replay.execution.rclpy.init", side_effect=AssertionError("ROS initialized too early")):
+                with self.assertRaises(ValueError):
+                    run(args, converted, config)
 
 
 if __name__ == "__main__":

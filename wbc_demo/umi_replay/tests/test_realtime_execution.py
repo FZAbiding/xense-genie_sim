@@ -45,7 +45,9 @@ class RealtimeExecutionTests(unittest.TestCase):
             validate_constraints=Mock(),
             validity=SimpleNamespace(call_async=Mock(return_value=future)),
         )
-        with patch("umi_replay.realtime_execution.rclpy.spin_until_future_complete"):
+        with patch("umi_replay.realtime_execution.rclpy.spin_until_future_complete"), patch(
+            "umi_replay.realtime_execution.time.monotonic", return_value=99.0
+        ):
             with self.assertRaisesRegex(RuntimeError, "validity guard"):
                 checked_step(node, object(), object(), 100.0)
 
@@ -57,10 +59,19 @@ class RealtimeExecutionTests(unittest.TestCase):
             validate_constraints=Mock(),
             validity=SimpleNamespace(call_async=Mock(return_value=future)),
         )
-        with patch("umi_replay.realtime_execution.rclpy.spin_until_future_complete"):
+        with patch("umi_replay.realtime_execution.rclpy.spin_until_future_complete"), patch(
+            "umi_replay.realtime_execution.time.monotonic", return_value=99.0
+        ):
             with self.assertRaises(TimeoutError):
                 checked_step(node, object(), object(), 100.0)
         future.cancel.assert_called_once()
+
+    def test_expired_deadline_does_not_queue_a_new_collision_request(self):
+        node = SimpleNamespace(interpolate=Mock(), validity=SimpleNamespace(call_async=Mock()))
+        with patch("umi_replay.realtime_execution.time.monotonic", return_value=101.0):
+            with self.assertRaises(TimeoutError):
+                checked_step(node, object(), object(), 100.0)
+        node.validity.call_async.assert_not_called()
 
 
 if __name__ == "__main__":

@@ -1,5 +1,6 @@
 import copy
 import csv
+import hashlib
 import json
 import math
 import os
@@ -19,6 +20,7 @@ from .conversion import mapped_eef_frames, select_keyframes
 from .download import sha256
 from .geometry import check_transform, interpolate_pose, pose_error
 from .robot import GripperEEFLab
+from .validation import validate_realtime_profile, validate_realtime_source
 
 
 def ros_targets(poses):
@@ -307,6 +309,11 @@ def run(args, converted, config):
     policy = getattr(args, "posture_policy", "config")
     realtime = getattr(args, "playback_mode", "validated") == "realtime"
     config = posture_config(config, policy)
+    realtime_profile = None
+    if realtime:
+        profile_bytes = args.limits_profile.read_bytes()
+        realtime_profile = validate_realtime_profile(json.loads(profile_bytes))
+        validate_realtime_source(converted["source_frames"])
     converted = copy.deepcopy(converted)
     converted["keyframe_indexes"] = select_keyframes(
         converted["source_frames"], converted["sampling"]["max_interval_seconds"]
@@ -343,7 +350,11 @@ def run(args, converted, config):
         "effective_keyframes": len(converted["keyframe_indexes"]),
         "gripper_sampling_tolerance": 0.02,
         "playback_mode": "realtime" if realtime else "validated",
+        "preflight_scope": "initial_pose_only" if realtime else "all_sampled_keyframes",
     }
+    if realtime:
+        report["realtime_limits_profile"] = realtime_profile
+        report["realtime_limits_profile_sha256"] = hashlib.sha256(profile_bytes).hexdigest()
     report["backend_log_directory"] = os.environ.get("WBC_BACKEND_LOG_DIR")
     save_json(output / "report.json", report)
     os.environ.setdefault("ROS_DOMAIN_ID", "42")
@@ -416,12 +427,14 @@ def run(args, converted, config):
             if realtime:
                 from .realtime_execution import stream
 
-                report["replay"] = stream(node, frames, config, args.limits_profile, output, report)
+                report["replay"] = stream(node, frames, config, realtime_profile, output, report)
             else:
                 report["replay"] = execute(node, states, frames, scale, config, output)
             node.publish_progress(frames[-1]["timestamp"], "returning_home")
             report["return_home"] = node.return_home()
         report["status"] = "passed" if args.execute else "preflight_passed_no_execution"
+        if realtime and not args.execute:
+            report["status"] = "initial_pose_preflight_passed_no_execution"
         node.publish_progress(converted["source_duration_seconds"] if args.execute else 0.0, "finished")
         print(f"{report['status']}: {output}", flush=True)
     except BaseException as error:

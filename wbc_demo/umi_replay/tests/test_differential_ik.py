@@ -1,4 +1,5 @@
 import json
+import copy
 import unittest
 from pathlib import Path
 
@@ -93,6 +94,29 @@ class DifferentialIKTests(unittest.TestCase):
         self.assertTrue(np.all(values >= solver.lower - 1e-6))
         self.assertTrue(np.all(values <= solver.upper + 1e-6))
         self.assertTrue(np.all(solver.coupled @ values <= solver.ceiling + 1e-6))
+
+    def test_nonfinite_profile_velocity_is_not_masked_by_native_limit(self):
+        for value in (float("nan"), float("inf")):
+            profile = copy.deepcopy(self.profile)
+            profile["arm"]["velocity_rad_s"] = value
+            with self.subTest(value=value), self.assertRaises(ValueError):
+                DifferentialIK(self.model, self.positions, self.limits, self.velocities, self.coupled, profile)
+
+    def test_gripper_jacobian_preserves_measured_mimic_deflection(self):
+        positions = dict(self.positions)
+        positions["idx33_gripper_l_left_support_joint"] += 0.002
+        master = self.eef.master_names[0]
+        poses, jacobians = self.model.evaluate(positions)
+        shifted = dict(positions)
+        shifted[master] += 1e-6
+        for name, joint in self.eef.joints.items():
+            mimic = joint.find("mimic")
+            if mimic is not None and mimic.get("joint") == master:
+                shifted[name] += 1e-6 * float(mimic.get("multiplier", "1"))
+        moved, unused = self.model.evaluate(shifted, jacobian=False)
+        np.testing.assert_allclose(
+            matrix_error(poses[0], moved[0]) / 1e-6, jacobians[0][:, self.names.index(master)], atol=2e-6
+        )
 
     def test_roll_bound_is_preserved_and_gripper_mimics_follow_master(self):
         solver = DifferentialIK(

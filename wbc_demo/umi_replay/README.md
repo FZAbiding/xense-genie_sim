@@ -1,5 +1,8 @@
 # XTac UMI → 固定底盘 G2 回放
 
+**下一阶段研究**：[代码审计](CODE_AUDIT_ZH.md) · [Pinocchio 实测可行性](PINOCCHIO_STUDY_ZH.md) · [WBC 分阶段路线](WBC_NEXT_STAGE_ZH.md)。
+Pinocchio 仅接入离线模型验证与可选测试，未更换在线默认后端；当前可视化研究结果见 [模型对照验收页](media/pinocchio-study-v1/index.html)。
+
 **v5 原速在线 IK：[为什么慢、实时架构与核查方法](REALTIME_REPLAY_ZH.md)**。
 Web 默认 1× / 30 Hz 在线微分 IK，UMI 使用浏览器原生视频；旧的预计算慢放模式仍可选择。
 **直接看结果：[v5 自包含四分屏视频/图片验收页](media/episode-000-v5/index.html)**，本轮图像传输空档已修复，视频通过原有同步阈值。

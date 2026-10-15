@@ -145,6 +145,20 @@ class SwiftpickerEEF:
             mimic.get("offset", "0")
         )
 
+    def joint_motion_weights(self, name, command_names, visiting=()):
+        if name in visiting:
+            raise ValueError(f"Cyclic URDF mimic chain: {name}")
+        weights = np.zeros(len(command_names))
+        if name in command_names:
+            weights[command_names.index(name)] = 1.0
+            return weights
+        mimic = self.joints[name].find("mimic")
+        if mimic is None:
+            return weights
+        return float(mimic.get("multiplier", "1")) * self.joint_motion_weights(
+            mimic.get("joint"), command_names, (*visiting, name)
+        )
+
     def opening_positions(self, openings):
         values = np.asarray(openings, dtype=float)
         if values.shape != (2,) or not np.isfinite(values).all() or np.any(values < 0) or np.any(values > 1):

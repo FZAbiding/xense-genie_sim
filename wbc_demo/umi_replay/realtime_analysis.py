@@ -23,6 +23,32 @@ def analyze_realtime(directory):
     names = replay["active_joints"]
     positions = np.array([[float(row[name + "_position"]) for name in names] for row in commands])
     velocities = np.array([[float(row[name + "_velocity"]) for name in names] for row in commands])
+    if not rows or not commands or not np.isfinite(positions).all() or not np.isfinite(velocities).all():
+        raise ValueError("Finite nonempty command and tracking logs required")
+    finite_fields = [
+        "source_time_s",
+        "solve_ms",
+        "cycle_ms",
+        "position_error_left_m",
+        "position_error_right_m",
+        "rotation_error_left_rad",
+        "rotation_error_right_rad",
+        "roll_rad",
+    ]
+    if not np.isfinite([[float(row[field]) for field in finite_fields] for row in rows]).all():
+        raise ValueError("Nonfinite tracking sample")
+    for field in (
+        "planned_velocity_limits_rad_s",
+        "planned_acceleration_limits_rad_s2",
+        "joint_lower_limits_rad",
+        "joint_upper_limits_rad",
+        "coupled_matrix",
+        "coupled_ceiling",
+    ):
+        if not np.isfinite(np.asarray(replay[field], dtype=float)).all():
+            raise ValueError(f"Nonfinite constraint metadata: {field}")
+    if len(commands) != replay["commands"]:
+        raise ValueError("Command log length differs from the execution report")
     acceleration = np.diff(np.vstack([np.zeros(len(names)), velocities]), axis=0) * 30
     velocity_excess = float(np.max(np.abs(velocities) - replay["planned_velocity_limits_rad_s"]))
     acceleration_excess = float(np.max(np.abs(acceleration) - replay["planned_acceleration_limits_rad_s2"]))
@@ -33,14 +59,13 @@ def analyze_realtime(directory):
         )
     )
     coupling_excess = float(np.max(positions @ np.array(replay["coupled_matrix"]).T - replay["coupled_ceiling"]))
-    if (
-        replay["deadline_misses"] == 0
-        and max(velocity_excess, acceleration_excess, position_excess, coupling_excess) > 1e-3
+    if max(velocity_excess, position_excess, coupling_excess) > 1e-3 or (
+        replay["deadline_misses"] == 0 and acceleration_excess > 1e-3
     ):
         raise ValueError("Recorded commands violate their planned discrete constraints")
     phases = np.array([float(row["source_time_s"]) for row in rows])
     metrics = {
-        "status": "passed",
+        "status": "passed" if replay["deadline_misses"] == 0 else "passed_with_incomplete_acceleration_audit",
         "report_status": report["status"],
         "source_seconds": replay["source_duration_seconds"],
         "active_wall_seconds": replay["active_wall_seconds"],
@@ -53,6 +78,7 @@ def analyze_realtime(directory):
         "joint_position_excess_rad": max(0.0, position_excess),
         "coupling_excess": max(0.0, coupling_excess),
         "constraint_audit": "nominal 1/30 s command integration; not a certification of physical acceleration or wall-clock jitter",
+        "acceleration_audit_complete": replay["deadline_misses"] == 0,
         "per_side": {},
         "max_abs_roll_deg": float(np.max(np.abs([float(row["roll_rad"]) for row in rows])) * 180 / np.pi),
     }

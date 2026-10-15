@@ -1,6 +1,5 @@
 import copy
 import csv
-import json
 import math
 import time
 
@@ -12,7 +11,8 @@ from dual_arm_ik import GROUP
 from lab_core import pose_values, save_json
 
 from .differential_ik import DifferentialIK, PlaybackClock, URDFKinematics, matrix_error
-from .geometry import interpolate_pose, pose_dict, pose_matrix
+from .geometry import interpolate_pose, pose_matrix
+from .validation import validate_realtime_profile, validate_realtime_source
 
 
 def state_positions(state):
@@ -55,6 +55,8 @@ def sample_targets(frames, phase):
 
 def checked_step(node, previous, candidate, deadline):
     for state in (node.interpolate(previous, candidate, 0.5), candidate):
+        if time.monotonic() >= deadline:
+            raise TimeoutError("Collision request deadline already expired")
         node.validate_constraints(state, GROUP, tolerance=1e-4)
         future = node.validity.call_async(GetStateValidity.Request(robot_state=state, group_name=GROUP))
         rclpy.spin_until_future_complete(node, future, timeout_sec=max(0.0, deadline - time.monotonic()))
@@ -66,17 +68,11 @@ def checked_step(node, previous, candidate, deadline):
             raise RuntimeError("Online collision/state validity guard rejected the next command")
 
 
-def stream(node, frames, config, profile_path, output, report):
-    profile = json.loads(profile_path.read_text())
+def stream(node, frames, config, profile, output, report):
+    validate_realtime_profile(profile)
     period = 1 / 30
     lookahead = profile.get("lookahead_seconds", 0.0)
-    if not math.isfinite(lookahead) or not 0 <= lookahead <= period:
-        raise ValueError("Replay target lookahead must be between zero and one source frame")
-    timestamps = np.array([frame["timestamp"] for frame in frames])
-    if len(frames) < 2 or np.any(np.diff(timestamps) <= 0):
-        raise ValueError("Realtime replay requires strictly increasing source timestamps")
-    if abs(timestamps[0]) > 1e-5 or not np.allclose(np.diff(timestamps), period, atol=2e-5):
-        raise ValueError("Realtime mode currently requires the full 30 Hz episode, not sampled keyframes")
+    timestamps = validate_realtime_source(frames)
     duration = float(timestamps[-1] + period)
     positions = state_positions(node.state)
     names = [name for name in node.state.joint_state.name if node.is_command_joint(name)]

@@ -1,0 +1,58 @@
+{
+  "status": "passed",
+  "kind": "offline kinematic model compatibility; no robot command published",
+  "reference_run": "wbc_demo/logs/umi-realtime-web-reliable-01/run-001",
+  "sampled_actual_joint_states": 100,
+  "command_dofs": 21,
+  "pinocchio_version": "4.1.0",
+  "python_version": "3.12.15",
+  "pinocchio_nq": 46,
+  "pinocchio_nv": 42,
+  "mimic_policy": "independent URDF joints retain measured follower deflections; command velocities mapped through URDF mimic multipliers",
+  "synthetic_base_link_to_odom_for_frame_convention_test": [
+    [
+      0.9333503028012241,
+      -0.32701123071532934,
+      -0.14805697297631432,
+      0.12
+    ],
+    [
+      0.2989777738600412,
+      0.9364410977112779,
+      -0.18354934283453886,
+      -0.07
+    ],
+    [
+      0.19866933079506122,
+      0.1270500905286678,
+      0.9717966718908334,
+      0.8
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ]
+  ],
+  "max_eef_position_difference_m": 1.912568624487675e-15,
+  "max_eef_rotation_difference_rad": 1.3016078085347065e-15,
+  "max_jacobian_element_difference": 2.4092094000772307e-08,
+  "min_reduced_mass_matrix_eigenvalue": 0.000609006021655172,
+  "reference_fk_jacobian_ms_p50_p95_max": [
+    1.1494760037749074,
+    2.6138813991565257,
+    2.920969986007549
+  ],
+  "pinocchio_fk_jacobian_ms_p50_p95_max": [
+    0.09236400364898145,
+    0.22987700067460537,
+    0.28503801149781793
+  ],
+  "limits": "Model check only: not an IK convergence, collision, torque tracking, or hard realtime validation",
+  "inputs_sha256": {
+    "wbc_demo/logs/umi-realtime-web-reliable-01/run-001/report.json": "7d3ae77e6bed60bf42ada7516144772e6064a0ae6982431791cf20955bd19df6",
+    "wbc_demo/logs/umi-realtime-web-reliable-01/run-001/joint_trace.csv": "378dce9514bf08820cde99f211e3fea724a33fd9ab6a794e7df4a37f2926e154",
+    "/home/xense/src/xense-genie_sim/source/geniesim_ros/src/ros_ws/src/genie_sim_robot_model/urdf/genie_g2_crsB_swiftpicker.urdf": "a78d5055fa9b66dc73bc7f8a62e71cf8f58795512945f5ee9d99ed15bf419cb2"
+  }
+}
