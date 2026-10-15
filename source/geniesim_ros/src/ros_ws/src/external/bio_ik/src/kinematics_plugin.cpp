@@ -118,6 +118,17 @@ struct BioIKKinematicsPlugin : kinematics::KinematicsBase
   bool enable_profiler;
   rclcpp::Node::SharedPtr node_;
 
+  template<class Value>
+  void lookupParam(
+    const rclcpp::Node::SharedPtr & node,
+    const std::string & parameter, Value & value,
+    const Value & default_value) const
+  {
+    bio_ik_kinematics_plugin::lookupParam(
+      node, "robot_description_kinematics." + group_name_ + "." + parameter,
+      value, default_value);
+  }
+
   BioIKKinematicsPlugin() {enable_profiler = false;}
 
   const std::vector<std::string> & getJointNames() const override

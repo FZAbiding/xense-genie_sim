@@ -1,5 +1,14 @@
 # bio_ik
 
+## GenieSim ROS 2 parameter scope
+
+The vendored plugin reads per-group parameters from
+`robot_description_kinematics.<group>.<parameter>`, matching MoveIt's
+kinematics YAML namespace. Root-level parameters such as `posture_weight`
+are not substitutes for this group-specific configuration. Initialization
+logs report the resolved posture weight and joint count; verify those logs
+before concluding that a configured upright-posture prior is active.
+
 ## Disclaimer
 
 This repository provides a BSD-licensed standalone implementation

@@ -223,9 +223,9 @@ wbc_fixed_headless:
   kinematics_solver_ik_links:
     - arm_l_end_link
     - arm_r_end_link
-  posture_joints: ["idx04_body_joint4", "idx05_body_joint5"]
-  posture_targets: [0.0, 0.0]
-  posture_weight: 0.3
+  posture_joints: ["idx04_body_joint4"]
+  posture_targets: [0.0]
+  posture_weight: 5.0
 # wbc_fixed_arms: dual-arm only, NO body torso, NO head, NO chassis. Same
 # multi-tip BioIK tuning, but no priors apply (torso joints and chassis
 # joints are absent from this planning group).

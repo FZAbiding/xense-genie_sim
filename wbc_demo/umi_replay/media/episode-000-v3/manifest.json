@@ -1,0 +1,274 @@
+{
+  "run_directory": "wbc_demo/logs/umi-web-session-04/run-001",
+  "report_sha256": "c9929c2290db4011e3653501f0e4fdb26da73bcfe7b312ec3f75c9721286634f",
+  "status": "passed",
+  "started_at": "2026-10-14T15:01:46.180872+00:00",
+  "finished_at": "2026-10-14T15:08:56.992838+00:00",
+  "posture_policy": "soft",
+  "roll_hard_bound_present": false,
+  "metrics": {
+    "comparison": "actual model gripper EEF vs full 30Hz original EEF interpolated at commanded source phase",
+    "sides": {
+      "left": {
+        "samples": 1877,
+        "max_position_error_m": 0.013683295934055822,
+        "p95_position_error_m": 0.008548162245615429,
+        "max_rotation_error_rad": 0.03271908133797275,
+        "source_time_start": 2.558305032823497e-11,
+        "source_time_end": 41.63333511352539
+      },
+      "right": {
+        "samples": 1877,
+        "max_position_error_m": 0.015072032730016971,
+        "p95_position_error_m": 0.007247203264515799,
+        "max_rotation_error_rad": 0.027353339236362142,
+        "source_time_start": 2.558305032823497e-11,
+        "source_time_end": 41.63333511352539
+      }
+    },
+    "body_joint_range_rad": {
+      "idx01_body_joint1": 0.2384732211829983,
+      "idx02_body_joint2": 0.25794209856579225,
+      "idx03_body_joint3": 0.34992803215702223,
+      "idx04_body_joint4": 0.0011192539153864096,
+      "idx05_body_joint5": 0.888117218748186
+    }
+  },
+  "video_manifest": {
+    "comparison": "UMI head_left vs actual physical replay, nearest image ROS timestamp at each commanded source phase",
+    "frames": 1250,
+    "fps": 30,
+    "duration_seconds": 41.666666666666664,
+    "source_phase_end_seconds": 41.63333511352539,
+    "physical_replay_seconds": 394.0594646520003,
+    "max_camera_timestamp_gap_seconds": 0.26221179962158203,
+    "p95_camera_timestamp_gap_seconds": 0.1148647665977478,
+    "allowed_max_camera_timestamp_gap_seconds": 0.4,
+    "max_source_phase_gap_seconds": 0.0410979172087238,
+    "p95_source_phase_gap_seconds": 0.015120096478861806,
+    "allowed_max_source_phase_gap_seconds": 0.1,
+    "real_time_control": false,
+    "layout": "quad",
+    "views": [
+      "UMI head_left",
+      "virtual head-pose-aligned ego",
+      "external A",
+      "external B"
+    ],
+    "alignment_limitations": "Camera timestamps label rendered TF state; this is command-phase alignment, not calibrated sensor latency or identical viewpoints.",
+    "source_license": "TacVerse/xtac-umi-g1-block-to-box / CC-BY-SA-4.0; head_left excerpt resized and composed",
+    "provenance": {
+      "dataset": "TacVerse/xtac-umi-g1-block-to-box",
+      "revision": "8ad651578fda4724514387e2d3d3551c3c9631f9",
+      "data_file": "data/chunk-000/file-000.parquet",
+      "data_sha256": "bc3165d4d981926fe2af052b612381384a5789226f30d2fae0f2e9ed29660ef4",
+      "feature": "observation.state",
+      "source_episode_id": "EP-1788246093295-0001",
+      "fps": 30,
+      "source_frames": 1250,
+      "extrinsics_already_applied": true,
+      "max_source_step_m": 0.013381546623244832,
+      "max_source_rotation_step_rad": 0.03257997144927967
+    },
+    "robot_model": {
+      "definition": "midpoint of the two distal fingertip faces at the held URDF zero-joint (open) configuration",
+      "axes": "X toward fingertips; Z toward the wrist-camera side; Y = Z cross X (opposite URDF left_support)",
+      "axis_revision": "camera_side_up_v2",
+      "urdf_sha256": "a78d5055fa9b66dc73bc7f8a62e71cf8f58795512945f5ee9d99ed15bf419cb2",
+      "hardware_calibration": false,
+      "sides": [
+        {
+          "side": "l",
+          "base_to_eef": [
+            [
+              0.0,
+              -1.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              -1.0,
+              1.7250422388316068e-05
+            ],
+            [
+              1.0,
+              0.0,
+              0.0,
+              0.20500573350429535
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ],
+          "tip_to_eef": [
+            [
+              0.0,
+              -2.220446049250313e-16,
+              1.0,
+              -1.7250422388316068e-05
+            ],
+            [
+              0.0,
+              -1.0,
+              -2.220446049250313e-16,
+              3.830363224003556e-21
+            ],
+            [
+              1.0,
+              0.0,
+              0.0,
+              0.21200573350429536
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ],
+          "meshes": [
+            {
+              "resource": "package://genie_sim_robot_model/robots/genie/g2/meshes/gripper/swiftpicker/left_support_link.STL",
+              "sha256": "a4c3248cf9f2c925d18aa9bb2e3659ef0d6a703252b006a3d9f1bc8ec2e917fb",
+              "distal_face_center_in_base_m": [
+                0.04867500028759242,
+                6.86751445755588e-05,
+                0.20500573350429535
+              ]
+            },
+            {
+              "resource": "package://genie_sim_robot_model/robots/genie/g2/meshes/gripper/swiftpicker/right_support_link.STL",
+              "sha256": "136475599e901768a0195df51634cb3f007d0d5a0c647855056aac31dc62a73b",
+              "distal_face_center_in_base_m": [
+                -0.04867500028759242,
+                -3.4174299798926666e-05,
+                0.20500573350429535
+              ]
+            }
+          ],
+          "camera_housing": {
+            "resource": "package://genie_sim_robot_model/robots/genie/g2/meshes/gripper/swiftpicker/camera_link.STL",
+            "sha256": "750873a92e9b23af434b29478c0be1cf54c4501bd05e092f4877a8718878cd25",
+            "bbox_center_in_eef_m": [
+              -0.15911583357151599,
+              0.005589677020907402,
+              0.03197862068191171
+            ]
+          }
+        },
+        {
+          "side": "r",
+          "base_to_eef": [
+            [
+              0.0,
+              -1.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              -1.0,
+              1.7250422388316068e-05
+            ],
+            [
+              1.0,
+              0.0,
+              0.0,
+              0.20500573350429535
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ],
+          "tip_to_eef": [
+            [
+              0.0,
+              -2.220446049250313e-16,
+              1.0,
+              -1.7250422388316068e-05
+            ],
+            [
+              0.0,
+              -1.0,
+              -2.220446049250313e-16,
+              3.830363224003556e-21
+            ],
+            [
+              1.0,
+              0.0,
+              0.0,
+              0.21200573350429536
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ],
+          "meshes": [
+            {
+              "resource": "package://genie_sim_robot_model/robots/genie/g2/meshes/gripper/swiftpicker/left_support_link.STL",
+              "sha256": "a4c3248cf9f2c925d18aa9bb2e3659ef0d6a703252b006a3d9f1bc8ec2e917fb",
+              "distal_face_center_in_base_m": [
+                0.04867500028759242,
+                6.86751445755588e-05,
+                0.20500573350429535
+              ]
+            },
+            {
+              "resource": "package://genie_sim_robot_model/robots/genie/g2/meshes/gripper/swiftpicker/right_support_link.STL",
+              "sha256": "136475599e901768a0195df51634cb3f007d0d5a0c647855056aac31dc62a73b",
+              "distal_face_center_in_base_m": [
+                -0.04867500028759242,
+                -3.4174299798926666e-05,
+                0.20500573350429535
+              ]
+            }
+          ],
+          "camera_housing": {
+            "resource": "package://genie_sim_robot_model/robots/genie/g2/meshes/gripper/swiftpicker/camera_link.STL",
+            "sha256": "750873a92e9b23af434b29478c0be1cf54c4501bd05e092f4877a8718878cd25",
+            "bbox_center_in_eef_m": [
+              -0.15911583357151599,
+              0.005589677020907402,
+              0.03197862068191171
+            ]
+          }
+        }
+      ]
+    },
+    "inputs": {
+      "wbc_demo/data/converted/episode-000.json": "aaad631763b3899223043ee7f94589a22c5d4517630e968a7e4c5b569345ae29",
+      "wbc_demo/logs/umi-web-session-04/run-001/report.json": "c9929c2290db4011e3653501f0e4fdb26da73bcfe7b312ec3f75c9721286634f",
+      "wbc_demo/logs/umi-web-session-04/run-001/command_phase.csv": "b6d1286e023b103a2c981f57883a8502aa3c12b3c4f5598491642e25dc1339b4",
+      "wbc_demo/logs/umi-web-session-04/recording-001/frames.csv": "73fdb29f6afde8ec157b515a9d1b97a0456066c88b9381c05c94eca0f2e3085f",
+      "wbc_demo/logs/umi-web-session-04/recording-001/views.mp4": "993ff4497fddf0ac90d9267abab9e11f003972ba4a8aa26a233b4316ea92846e",
+      "/home/xense/src/xense-genie_sim/wbc_demo/data/xtac-umi-g1-block-to-box/videos/observation.images.head_left/chunk-000/file-000.mp4": "fbfd668f3a7497648399ec046c0cecb895a559d819588fb10050f2f14597502a"
+    },
+    "output_sha256": "693e62d3a1a9de62ca89301eccb316bea1eaf0d5bfd40e9c2d5bd5ae601e3d67"
+  },
+  "pause_orbit_validation": {
+    "phase_before": 1.399999976158142,
+    "phase_after": 1.399999976158142,
+    "phase_delta_s": 0.0,
+    "external_view_mean_absolute_pixel_change": 10.496655815972222,
+    "paused_stage": "paused"
+  },
+  "image_sha256": {
+    "web-live-ui.png": "3c13da234a4e44354ca40aebcbde984be0ea455320c5713b7c33b46e59c11ac3",
+    "quad-start.png": "fb685282c59d8e5968b5872e559e52989d2823b66d020c2df4df086a20b620a0",
+    "quad-middle.png": "e7218e08743304e1bd731a4773522a7c4a6efa47a4595812a846a0412031c12d",
+    "tracking-summary.png": "ae74dc23539b21da7cc8107dd65670c7c334d11e6e5086e9fef719488accd0ff",
+    "quad-end.png": "cf9bbe1265b1e1ff3d1af30e586424c213d202e122a0f8787b471d2148b28571"
+  }
+}

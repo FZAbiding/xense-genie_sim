@@ -1,0 +1,14 @@
+{
+  "mode": "shared_world_gripper_eef",
+  "initial_midpoint_odom_m": [0.3, 0.0, 1.05],
+  "world_yaw_deg": 0.0,
+  "tool_frame_source": "swiftpicker_urdf_and_fingertip_mesh_geometry",
+  "calibration_status": "model_based_gripper_eef_not_hardware_calibration",
+  "joint_position_bounds_rad": {
+    "idx04_body_joint4": [-0.008726646259971648, 0.008726646259971648]
+  },
+  "max_joint_velocity_rad_s": 0.3,
+  "max_joint_acceleration_rad_s2": 0.5,
+  "max_tracking_error_m": 0.05,
+  "max_tracking_rotation_rad": 0.17453292519943295
+}

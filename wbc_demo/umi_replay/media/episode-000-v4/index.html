@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>UMI / G2 v4：夹爪与 Web 交互验收</title>
+<style>
+body{margin:0;background:#101822;color:#e3edf5;font:16px/1.7 system-ui,sans-serif}main{max-width:1300px;margin:auto;padding:24px}h1{font-size:28px}h2{margin-top:30px}a{color:#87dae7}video,img{display:block;width:100%;border-radius:10px;background:#05080c}table{border-collapse:collapse;width:100%;background:#1c2a38}td,th{text-align:left;border-bottom:1px solid #405361;padding:10px}.notice{padding:16px;background:#263e4d;border-left:4px solid #87dae7}.grid{display:grid;grid-template-columns:1fr 1fr;gap:15px}figure{margin:0}figcaption{color:#b6c7d4}code{overflow-wrap:anywhere}@media(max-width:800px){.grid{grid-template-columns:1fr}main{padding:12px}}
+</style></head><body><main>
+<h1>UMI → G2 · v4：开合＋真实 Web 交互</h1>
+<p>2026-10-15 · 固定底盘 · 双臂＋腰部＋夹爪 · 动态指尖 TCP · 0 闭合 / 1 开启</p>
+<div class="notice"><strong>本页是离线验收资料，截图不能点击/拖动。</strong><br>真正的在线控制：在仓库根目录运行 <code>mamba activate xense-wbc</code>，接受 EULA 后执行 <code>bash wbc_demo/run.sh umi-web</code>，再打开 <a href="http://127.0.0.1:8765">在线控制台</a>。</div>
+<h2>一个文件里的 2 × 2 四视角</h2>
+<video controls preload="metadata" poster="quad-middle.png"><source src="head_left.mp4" type="video/mp4"></video>
+<p>左上原始 UMI；右上同向虚拟 ego；下方两个外部镜头。1,250 帧 / 30 fps / 41.666667 s，按源相位重定时，非机器人原速。视频与图片都在本目录内，可整体复制后离线观看。</p>
+<p><a href="README.md">完整验收记录</a> · <a href="../../GRIPPER_AND_WEB_FIX_ZH.md">修复原理与启动说明</a> · <a href="manifest.json">来源与 SHA256</a> · <a href="head_left.mp4">直接播放 MP4</a></p>
+<table><tr><th>实际检查</th><th>结果</th></tr>
+<tr><td>预检、回放、回家</td><td>228/228，通过；回放段 933.970 s</td></tr>
+<tr><td>原始 EEF 位置误差，左 / 右</td><td>最大 10.895 / 10.845 mm；P95 7.146 / 6.259 mm</td></tr>
+<tr><td>归一化开度对原始数据最大误差</td><td>左 0.01824 / 右 0.02094</td></tr>
+<tr><td>腰部侧倾 / 底盘漂移</td><td>最大 roll 0.01876°，平移 1.228 μm</td></tr>
+<tr><td>真实鼠标 / 滚轮 / 按钮</td><td>拖动、缩放、重置、播放、暂停、继续通过；暂停相位变化 0 s</td></tr>
+<tr><td>实际全闭 / 半开 / 全开</td><td>0、0.5、1 均通过；仅允许同一夹爪两指垫的预期接触</td></tr></table>
+<h2>指尖 EEF 与开度实际跟踪</h2>
+<img src="gripper-summary.png" alt="左右夹爪原始、命令和实测开度曲线">
+<img src="tracking-summary.png" alt="动态指尖EEF轨迹与实测误差">
+<h2>全闭、半开、全开补测</h2>
+<img src="gripper-endpoints.png" alt="实际仿真中的闭合、半开、全开，目标指尖EEF固定">
+<p>全闭 q=-0.91 时网格有约 0.195 mm 指垫交叠；SRDF 仅新增左右各一对指垫允许接触，不关闭其他碰撞。该策略在整段源轨迹通过之后加入，0 端点独立补测。完整说明见 README。</p>
+<h2>真实鼠标拖动前 / 后</h2>
+<div class="grid"><figure><img src="web-before-drag.png" alt="浏览器真实鼠标拖动前"><figcaption>静态验收截图：拖动之前。</figcaption></figure><figure><img src="web-after-drag.png" alt="浏览器真实鼠标拖动后"><figcaption>静态验收截图：A 方位角变化 -0.8 rad，B 未联动。</figcaption></figure></div>
+<p>由 Firefox WebDriver BiDi 原生输入完成，不是合成 DOM 点击或直接 API 代替按钮。原生图片拖拽已禁用，实时页显示后端操作计数、连接状态与渲染新鲜度。</p>
+<h2>源首帧 / 末帧</h2><div class="grid"><img src="quad-start.png" alt="首帧四视角"><img src="quad-end.png" alt="末帧四视角"></div>
+<p>源：TacVerse/xtac-umi-g1-block-to-box，CC-BY-SA-4.0；含源画面的图片/视频进行了缩放与拼接。虚拟 ego 未标定光学内外参；空场景不代表抓取成功。本页可离线观看，但不能控制仿真。</p>
+</main></body></html>

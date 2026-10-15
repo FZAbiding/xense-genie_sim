@@ -1,4 +1,5 @@
 import argparse
+import csv
 import json
 import os
 import time
@@ -25,6 +26,13 @@ class CameraRecorder(Node):
         self.frames = 0
         self.received_frames = 0
         self.latest_frame = None
+        self.latest_image_time = None
+        self.latest_receive_time = None
+        self.frame_trace = (output / (self.name + "-frames.csv")).open("w")
+        self.frame_trace_writer = csv.writer(self.frame_trace)
+        self.frame_trace_writer.writerow(
+            ["video_frame", "capture_wall_time_s", "image_ros_time_s", "image_receive_wall_time_s"]
+        )
         self.ready_after = time.monotonic() + 2.0
         self.camera_pose = self.create_publisher(
             PoseStamped,
@@ -79,14 +87,18 @@ class CameraRecorder(Node):
             cv2.imwrite(str(self.output / (self.image_prefix + "-start.png")), frame)
             print(f"Camera ready: {message.width}x{message.height}, {message.encoding}", flush=True)
         self.latest_frame = frame
+        self.latest_image_time = message.header.stamp.sec + message.header.stamp.nanosec * 1e-9
+        self.latest_receive_time = time.time()
         self.received_frames += 1
 
     def capture(self):
         if self.latest_frame is None:
             return
         self.writer.write(self.latest_frame)
+        self.frame_trace_writer.writerow([self.frames, time.time(), self.latest_image_time, self.latest_receive_time])
         self.frames += 1
         if self.frames % 30 == 0:
+            self.frame_trace.flush()
             cv2.imwrite(str(self.output / (self.image_prefix + "-latest.png")), self.latest_frame)
 
 
@@ -95,6 +107,7 @@ def main():
     parser.add_argument("--seconds", type=float, default=90.0)
     parser.add_argument("--output-name", default="physx-demo")
     parser.add_argument("--scene", default="scene_stress.yaml")
+    parser.add_argument("--stop-after-report", type=Path)
     args = parser.parse_args()
     if "/" in args.output_name or args.output_name in (".", "..") or args.seconds <= 0:
         parser.error("Use a simple output name and positive duration")
@@ -105,8 +118,17 @@ def main():
     node = CameraRecorder(output, args.output_name, args.scene)
     beginning = time.monotonic()
     next_capture = beginning
+    stop_reason = "duration_limit"
     try:
         while time.monotonic() - beginning < args.seconds:
+            if args.stop_after_report is not None and args.stop_after_report.exists():
+                try:
+                    status = json.loads(args.stop_after_report.read_text()).get("status")
+                except json.JSONDecodeError:
+                    status = None
+                if status in ("passed", "failed"):
+                    stop_reason = "report_" + status
+                    break
             rclpy.spin_once(node, timeout_sec=max(0.0, min(0.01, next_capture - time.monotonic())))
             if time.monotonic() >= next_capture:
                 node.capture()
@@ -116,6 +138,7 @@ def main():
     finally:
         if node.writer is not None:
             node.writer.release()
+        node.frame_trace.close()
         node.destroy_node()
         rclpy.shutdown()
     report = {
@@ -124,6 +147,8 @@ def main():
         "received_frames": node.received_frames,
         "elapsed_seconds": time.monotonic() - beginning,
         "video_fps": 30,
+        "stop_reason": stop_reason,
+        "frame_timestamps": args.output_name + "-frames.csv",
     }
     metadata = "camera-recording.json" if args.output_name == "physx-demo" else args.output_name + ".json"
     (output / metadata).write_text(json.dumps(report, indent=2) + "\n")

@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>UMI / G2 四视角回放验收 v3</title>
+<style>
+body{margin:0;background:#101822;color:#e3edf5;font:16px/1.7 system-ui,sans-serif}main{max-width:1300px;margin:auto;padding:24px}h1{font-size:28px}h2{margin-top:30px}a{color:#87dae7}video,img{display:block;width:100%;border-radius:10px;background:#05080c}table{border-collapse:collapse;width:100%;background:#1c2a38}td,th{text-align:left;border-bottom:1px solid #405361;padding:10px}.notice{padding:16px;background:#263e4d;border-left:4px solid #87dae7}.grid{display:grid;grid-template-columns:1fr 1fr;gap:15px}.grid img{border-radius:8px}figcaption{color:#b6c7d4}code{overflow-wrap:anywhere}@media(max-width:800px){.grid{grid-template-columns:1fr}main{padding:12px}}
+</style>
+</head>
+<body><main>
+<h1>UMI → G2：2 × 2 四视角验收</h1>
+<p class="notice">本页是离线验收资料，下面的 Web 界面是截图，不可点击/拖动。实时控制请先运行 <code>bash wbc_demo/run.sh umi-web</code>，再打开 <a href="http://127.0.0.1:8765">在线控制台</a>。</p>
+<p>2026-10-14 23:01–23:09 · 固定底盘 · 双臂＋腰部 · 夹爪 EEF · 软直腰偏好（无 ±0.5° 硬边界）</p>
+<p class="notice">左上：UMI head_left；右上：虚拟头部同向镜头；下方：两个外部镜头。右上使用源 head 位姿和共享世界变换，不是标定后的 G2 相机。空场景没有复现物体、桌面或接触。</p>
+<video controls preload="metadata" poster="quad-middle.png"><source src="../../../logs/umi-web-head-left-v3/head_left.mp4" type="video/mp4">请直接打开下方 MP4 链接。</video>
+<p><a href="../../../logs/umi-web-head-left-v3/head_left.mp4">打开四分屏 MP4</a> · 1,250 帧 / 30 fps / 41.666667 秒。按源相位重定时，非机器人原速录像。</p>
+<p><a href="../../MULTIVIEW_RESULTS_ZH.md">完整验收说明</a> · <a href="../../ONLINE_IK_AND_VIEWS_ZH.md">IK 原理与 Web 启动教程</a> · <a href="manifest.json">图片来源 / SHA256</a></p>
+<h2>实测，而非仅检查 IK 残差</h2>
+<table><tr><th>检查</th><th>结果</th></tr>
+<tr><td>预检、实际回放、回家</td><td>215 / 215，通过</td></tr>
+<tr><td>原始 EEF 位置误差，左 / 右</td><td>最大 13.683 / 15.072 mm；P95 8.548 / 7.247 mm</td></tr>
+<tr><td>原始 EEF 朝向误差，左 / 右</td><td>最大 1.875° / 1.567°</td></tr>
+<tr><td>计划 / 实测 roll 最大绝对值</td><td>0.04334° / 0.04380°；这段不必加半度硬边界</td></tr>
+<tr><td>实测腰部 yaw 使用范围</td><td>50.885°，腰没有整体锁死</td></tr>
+<tr><td>底盘漂移</td><td>最大平移 1.379 μm，旋转 0 rad</td></tr>
+<tr><td>最大视频时间差</td><td>相机 262.212 ms / 源相位 41.098 ms；不是严格硬件同步</td></tr>
+<tr><td>Web 暂停与外部镜头</td><td>暂停源相位差 0 s；相机图像像素平均变化 10.497/255；随后恢复并完成</td></tr></table>
+<h2>同一输出帧的四个方向</h2>
+<img src="quad-middle.png" alt="源相位20.833秒的UMI、同向虚拟ego、两个外部视角">
+<div class="grid"><figure><img src="quad-start.png" alt="源首帧四视角"><figcaption>源首帧，机器人已经靠近首个 EEF 目标。</figcaption></figure><figure><img src="quad-end.png" alt="源末帧四视角"><figcaption>源末帧，返回初始姿态之前。</figcaption></figure></div>
+<h2>轨迹与误差</h2><img src="tracking-summary.png" alt="原始与实测EEF轨迹、位置朝向误差与五个腰部关节">
+<h2>本地 Web 在线界面</h2><img src="web-live-ui.png" alt="Firefox中实际显示四路图像的在线回放界面">
+<p>截图在 finished 阶段，机器人已回家，源画面停在末帧；用来验收界面，不能作为末帧动作同步对照。在线支持暂停、恢复、停止与外部镜头拖动/缩放。没有 PyQt/PySide。</p>
+<h2>核查入口</h2><p><a href="../../../logs/umi-web-session-04/run-001/report.json">执行报告</a> · <a href="../../../logs/umi-web-session-04/run-001/eef-metrics.json">EEF 指标</a> · <a href="../../../logs/umi-web-head-left-v3/frame_alignment.csv">逐帧时间匹配</a> · <a href="../../../logs/umi-web-head-left-v3/manifest.json">视频哈希</a> · <a href="../../../logs/umi-web-session-04/session.json">会话操作记录</a></p>
+<p>源：TacVerse/xtac-umi-g1-block-to-box，CC-BY-SA-4.0；源图片经过缩放与拼接。视频和原始日志仅在本机 logs 中；克隆代码后如未复制日志，仍可看版本化 PNG，不能播放视频。当前本机在线会话已关闭，按教程重新启动。</p>
+</main></body></html>

@@ -23,6 +23,13 @@ ros2 launch genie_sim_moveit wbc.launch.py
 An optional `rviz_config:=/path/to/layout.rviz` selects a custom RViz
 layout; an empty value keeps the packaged `config/moveit.rviz` default.
 
+The fixed-base `wbc_fixed_headless` group biases waist roll
+(`idx04_body_joint4`) toward zero with a secondary posture weight of 5.0;
+waist yaw remains free. This is a redundancy preference, not a hard
+position constraint. Callers requiring a bounded roll must also send
+joint constraints in their IK request and verify the returned state.
+Other groups retain their existing posture settings.
+
 Brings up `move_group` + the WBC-configured RViz with the Genie's full
 mobile-base + dual-arm planning groups.  See `launch/wbc.launch.py` for
 the parameter knobs (workspace bounds, start-state tolerance, etc.).
@@ -243,6 +250,14 @@ ros2 launch genie_sim_moveit wbc.launch.py
 ---
 
 ## Native joint limits
+
+The Swiftpicker SRDF permits contact only between the two opposing fingertip
+support links of each individual gripper. At the native closed endpoint
+(`q=-0.91 rad`), their collision meshes overlap by approximately 0.195 mm;
+rejecting that intended contact makes a normalized zero-opening IK goal fail.
+This adds two specific allowed pairs, not a blanket gripper/arm/world exemption.
+The diagnostic and actual opening/closing checks are recorded in
+`wbc_demo/umi_replay/GRIPPER_AND_WEB_FIX_ZH.md` in the repository root.
 
 `wbc.launch.py pad_joint_limits:=false` keeps the native URDF joint bounds for IK.
 The default remains `true`, retaining the existing padding for soft-limit drift.

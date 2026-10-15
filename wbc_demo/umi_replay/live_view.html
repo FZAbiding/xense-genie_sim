@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>UMI 在线全身 IK · 四视图</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#101822;color:#e3edf5;font:15px/1.6 system-ui,sans-serif}main{max-width:1500px;margin:auto;padding:18px}h1{font-size:24px;margin:0 0 8px}.toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:14px 0}button,select{padding:9px 14px;border:1px solid #446071;border-radius:7px;background:#233546;color:#fff;font-size:14px;cursor:pointer}button:disabled{opacity:.45;cursor:not-allowed}button.primary{background:#15758a}button.stop{background:#783845}.status{padding:10px;background:#1c2a38;border-radius:8px}.notice{color:#afc3d1;margin:8px 0 14px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.card{margin:0;border:1px solid #354757;border-radius:9px;overflow:hidden;background:#03070c}.card figcaption{padding:8px 12px;font-weight:600;background:#1c2a38}.card img{width:100%;aspect-ratio:4/3;object-fit:contain;display:block}.orbit{cursor:grab;touch-action:none;user-select:none;-webkit-user-drag:none}.orbit:active{cursor:grabbing}.tag{font-size:12px;font-weight:400;color:#a5c0ce}#error{color:#ff9fa6}.phase{color:#87dae7;font-variant-numeric:tabular-nums}a{color:#87dae7}#connection{padding:14px;border:1px solid #e6bb6a;background:#342d20}code{overflow-wrap:anywhere}@media(max-width:750px){.grid{grid-template-columns:1fr}main{padding:10px}}
+</style>
+<script src="live_view.js" defer></script>
+</head>
+<body><main>
+<h1>UMI 在线全身 IK · 2 × 2 四视图</h1>
+<p class="notice">实时服务，不是验收页里的截图。左上 UMI；右上同向虚拟 ego；只可拖动下方两个外部镜头，操作不改变机器人目标。</p>
+<div id="connection">启动方法：在仓库根目录运行 <code>mamba activate xense-wbc</code>，接受 EULA 后运行 <code>bash wbc_demo/run.sh umi-web</code>。然后打开 <a href="http://127.0.0.1:8765">http://127.0.0.1:8765</a>。离线图片和 MP4 不能交互控制。</div>
+<div class="toolbar">
+<button id="start" class="primary" type="button" disabled>完整预检＋播放 / 再播放</button>
+<button data-command="pause" type="button" disabled>暂停</button>
+<button data-command="resume" type="button" disabled>继续</button>
+<button class="stop" data-command="stop" type="button" disabled>停止并保持</button>
+<select id="policy"><option value="soft">软直腰偏好（默认）</option><option value="upright">直腰对照：roll ±0.5°</option></select>
+<button data-command="reset_views" type="button" disabled>重置外部视角</button>
+<button data-command="shutdown" type="button" disabled>关闭本次后端</button>
+</div>
+<div class="status">阶段 <span id="stage">连接中</span> · 源相位 <span class="phase" id="phase">0.000 s</span> · <span id="ready">等待三路相机</span><div id="action"></div><div id="error" role="alert"></div></div>
+<p class="notice">下方镜头：左键拖动旋转、滚轮缩放。源数据夹爪按 0 闭合 / 1 开启回放。ego 未做硬件相机标定；播放受限速，源视频随源相位推进。</p>
+<div class="grid">
+<figure class="card"><figcaption>① UMI head_left <span class="tag">原视频 · 当前源相位</span></figcaption><img src="/frame/Source" data-view="Source" alt="UMI 源 head_left"></figure>
+<figure class="card"><figcaption>② 同向虚拟 ego <span class="tag">源 head 位姿 · 非硬件标定</span></figcaption><img src="/frame/UmiEgo" data-view="UmiEgo" alt="虚拟第一视角"></figure>
+<figure class="card"><figcaption>③ 外部 A <span class="tag">左键拖动 / 滚轮缩放</span></figcaption><img src="/frame/ExternalA" class="orbit" draggable="false" data-view="ExternalA" data-orbit="0" alt="可拖动外部视角 A"></figure>
+<figure class="card"><figcaption>④ 外部 B <span class="tag">独立拖动 / 缩放</span></figcaption><img src="/frame/ExternalB" class="orbit" draggable="false" data-view="ExternalB" data-orbit="1" alt="可拖动外部视角 B"></figure>
+</div>
+</main></body></html>

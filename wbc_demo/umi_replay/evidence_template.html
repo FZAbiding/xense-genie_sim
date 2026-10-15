@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="zh-CN">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>UMI → G2 夹爪 EEF：可视化验收</title>
+<style>
+body{font-family:system-ui,sans-serif;background:#eef3f8;color:#182638;margin:0;line-height:1.7}
+main{max-width:1280px;margin:auto;padding:24px}h1,h2,h3{line-height:1.35}
+section,.notice{background:white;border-radius:12px;padding:22px;margin:20px 0}
+.notice{border-left:6px solid #d38b17;background:#fff7e7}
+.cards,.videos{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.cards strong{font-size:26px;color:#16647a;display:block}.cards div{background:#e9f5f5;border-radius:8px;padding:14px}
+video,img{max-width:100%;height:auto;border-radius:6px}video{width:100%;background:#172536}
+a{color:#125c96}table{border-collapse:collapse;width:100%}th,td{border:1px solid #d5e0e8;padding:10px;text-align:left}
+code{overflow-wrap:anywhere}small{color:#46576b}.scroll{overflow-x:auto}
+@media(max-width:780px){.cards,.videos{grid-template-columns:1fr}main{padding:12px}section{padding:15px}}
+</style>
+<main>
+<h1>UMI → 固定底盘 G2：夹爪 EEF 可视化验收</h1>
+<p>实测运行：<code>{{RUN_TIME}}</code>（UTC；北京时间 +8 小时）。本页只整理既有实测，没有重新运行或合成机器人画面。</p>
+<div class="notice"><strong>验收边界：</strong>只验收第 0 段的模型夹爪 EEF 轨迹回放；不是方块入盒任务复现。空场景、固定底盘、腰部与双臂参与；不回放夹爪开合。模型 TCP 不是实机标定。只有这一段实际运动过，其余 10 段仅完成转换。</div>
+<div class="cards">
+<div>完整源轨迹最大 EEF 位置误差<strong>{{POSITION_MM}} mm</strong>由实际关节反馈 FK 与完整 30 Hz 源轨迹对比</div>
+<div>完整源轨迹最大 EEF 朝向误差<strong>{{ROTATION_DEG}}°</strong>不是关键帧 IK 求解残差</div>
+<div>单个腰部关节最大变化范围<strong>{{BODY_DEG}}°</strong>底盘最大 TF 平移漂移 {{BASE_UM}} 微米</div>
+<div>执行与返回<strong>通过 / {{PREFLIGHT_COUNT}} 个联合目标</strong>源相位 {{SOURCE_END}} s；实际回放耗时 {{WALL_SECONDS}} s</div>
+</div>
+{{SYNCHRONIZED_SECTION}}
+{{REVIEW_SECTION}}
+<section><h2>1. 先看运动：原始采集与机器人回放</h2>
+<div class="videos">
+<div><h3>HF 原始采集 · 1 倍速</h3><video controls preload="metadata" playsinline src="source-1x.mp4"></video>
+<p>头显 / 左腕 / 右腕三路视频。来源：TacVerse / <code>xtac-umi-g1-block-to-box</code>，CC-BY-SA-4.0；三联预览经缩放、拼接和 H.264 转码。</p></div>
+<div><h3>PhysX 原生相机 · 8 倍速概览</h3><video controls preload="metadata" playsinline src="robot-8x.mp4"></video>
+<p>G2 + 双臂 + Swiftpicker。观察躯干前倾、转腰与双臂联合运动；摄像机未截取桌面，没有其他窗口遮挡。</p></div>
+</div>
+<div class="notice">这里的两段<strong>概览视频不做逐帧同步比较</strong>：源视频是源时间，机器人视频是实际慢速运动的 8 倍速概览；原始相机录制含重复帧，缩略图只标各自视频时间/帧号。若本页提供了单独的 head_left 同源相位分屏，则按它的 ROS 时间戳和逐帧索引核查；不能把这两段概览直接当作同步视频。完整轨迹覆盖与毫米误差必须查 CSV，不能靠录像证明。</div>
+<h3>机器人六帧对照：看腰部和双臂姿态变化</h3><a href="robot-storyboard.png"><img src="robot-storyboard.png" alt="实测机器人录像六帧，含视频时间与帧号"></a>
+<h3>源采集首、中、末帧：看任务与手持 EEF</h3><a href="source-storyboard.png"><img src="source-storyboard.png" alt="HF 源采集三联相机首、中、末帧"></a>
+</section>
+<section><h2>2. 再核对控制点：不是法兰</h2>
+<a href="gripper-eef-frame.png"><img src="gripper-eef-frame.png" alt="由真实模型生成的法兰与夹爪 EEF 图"></a>
+<p>两指尖远端面中心的中点是 EEF，距法兰约 212 mm。轴为 +X 朝指尖、+Z 朝腕部相机一侧、+Y = +Z × +X（对应 URDF 的 right_support 一侧）。图来自 URDF/STL 几何计算，不是 AI 生成示意图。当前仅对保持初始开度的模型 TCP 有效。</p></section>
+<section><h2>3. 定量核查：轨迹、误差与腰部参与</h2>
+<a href="tracking-summary.png"><img src="tracking-summary.png" alt="实际 EEF 与源轨迹、位置姿态误差和五个腰部关节曲线"></a>
+<ul><li>左上：共享世界变换后的完整源 EEF 与实际模型 EEF 轨迹，不是法兰。</li>
+<li>右上 / 左下：完整源轨迹位置 / 姿态误差，包括关键帧近似、关节插值、实际跟踪。</li>
+<li>右下：实际反馈的五个腰部关节，说明腰部确实参与，不是单纯移动机械臂。</li>
+<li>横轴是命令的源相位，不是视频时间；基座漂移为固定底盘仿真 TF 数值，不代表实机微米级精度。</li></ul>
+</section>
+<section><h2>4. 验收表：什么证据能证明什么？</h2><div class="scroll"><table>
+<tr><th>检查项</th><th>观察 / 复核入口</th><th>不能据此推断</th></tr>
+<tr><td>机器人确实运动</td><td>原生相机视频与六帧图</td><td>毫米精度、连续无碰撞、抓放成功</td></tr>
+<tr><td>控制参考是夹爪 EEF</td><td>模型图；report 的 tracking_pose_frame / gripper_eef_model</td><td>厂家实测 TCP 标定</td></tr>
+<tr><td>腰部参与、底盘固定</td><td>腰部反馈曲线；report.replay 中的底盘漂移</td><td>动态平衡或力矩级 WBC</td></tr>
+<tr><td>完整回放、最终回家</td><td>CSV 源相位 0 至 {{SOURCE_END}} s；report 的 replay / return_home</td><td>录像无缺口或其他 10 段通过</td></tr>
+<tr><td>源 EEF 跟踪误差</td><td>eef_tracking.csv 与 eef-metrics.json；生成时已交叉核对</td><td>实时跟踪能力或真实物体操作成功率</td></tr>
+</table></div>
+<h3>原始数值证据（随本页打包，可离线查看）</h3>
+<p><a href="report.json">运行报告</a> · <a href="eef-metrics.json">完整源轨迹指标</a> · <a href="tracking.csv">实际 EEF / 腰部 CSV</a> · <a href="eef_tracking.csv">完整源轨迹误差 CSV</a> · <a href="manifest.json">素材来源、帧号、SHA256 清单</a></p>
+<p>源 episode ID：<code>{{EPISODE_ID}}</code><br>HF revision：<code>{{REVISION}}</code></p>
+<small>这是一份可整体复制的离线精简验收包；不含原始慢速录像、完整 HF 数据、joint_trace 或全部后端日志。它们仍在仓库本地 logs/data 中。SHA256 用于核查打包前后文件一致性，不是第三方认证，也不证明不存在模型误差。</small>
+</section>
+</main>
+</html>

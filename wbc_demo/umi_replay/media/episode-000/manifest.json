@@ -1,0 +1,160 @@
+{
+  "generated_at": "2026-10-14T05:38:53.280779+00:00",
+  "simulation_rerun": false,
+  "tracking_pose_frame": "gripper_eef",
+  "run_provenance": {
+    "dataset": "TacVerse/xtac-umi-g1-block-to-box",
+    "revision": "8ad651578fda4724514387e2d3d3551c3c9631f9",
+    "data_file": "data/chunk-000/file-000.parquet",
+    "data_sha256": "bc3165d4d981926fe2af052b612381384a5789226f30d2fae0f2e9ed29660ef4",
+    "feature": "observation.state",
+    "source_episode_id": "EP-1788246093295-0001",
+    "fps": 30,
+    "source_frames": 1250,
+    "extrinsics_already_applied": true,
+    "max_source_step_m": 0.013381546623244832,
+    "max_source_rotation_step_rad": 0.03257997144927967
+  },
+  "video_timeline": "Independent video PTS only; NOT source-phase synchronized. Robot summary has a recorder-switch gap.",
+  "source_license": "TacVerse/xtac-umi-g1-block-to-box / CC-BY-SA-4.0; preview resized and H264 encoded",
+  "video_info": {
+    "robot": {
+      "fps": 30.0,
+      "frames": 1983,
+      "duration_s": 66.1,
+      "thumbnails": [
+        {
+          "video_time_s": 0.0,
+          "video_frame": 0
+        },
+        {
+          "video_time_s": 13.2,
+          "video_frame": 396
+        },
+        {
+          "video_time_s": 26.4,
+          "video_frame": 792
+        },
+        {
+          "video_time_s": 39.63333333333333,
+          "video_frame": 1189
+        },
+        {
+          "video_time_s": 52.833333333333336,
+          "video_frame": 1585
+        },
+        {
+          "video_time_s": 66.06666666666666,
+          "video_frame": 1982
+        }
+      ]
+    },
+    "source": {
+      "fps": 30.0,
+      "frames": 1250,
+      "duration_s": 41.666666666666664,
+      "thumbnails": [
+        {
+          "video_time_s": 0.0,
+          "video_frame": 0
+        },
+        {
+          "video_time_s": 20.8,
+          "video_frame": 624
+        },
+        {
+          "video_time_s": 41.63333333333333,
+          "video_frame": 1249
+        }
+      ]
+    }
+  },
+  "inputs": {
+    "robot-summary-input": {
+      "path": "wbc_demo/logs/umi-gripper-eef-summary-8x.mp4",
+      "sha256": "ab8a53e9d3126d61f25094e78a8381c073b54157ecfcc1fdeee7f852a620ccf6"
+    },
+    "source-preview-input": {
+      "path": "wbc_demo/logs/umi-source-episode-000/source-episode.mp4",
+      "sha256": "2199e2d77481df7208c0b75802ad2699ae577a6032e7e1791472cc5542cf2e23"
+    },
+    "model-diagram-input": {
+      "path": "wbc_demo/logs/gripper-eef-correction/gripper-eef-frame.png",
+      "sha256": "2f5cae0ee0bfda09d43f65a8c0931e59a67199a4484ec9674b0c7626bdf98bc5"
+    },
+    "report.json": {
+      "path": "wbc_demo/logs/umi-gripper-eef-execute-01/report.json",
+      "sha256": "0424d9842e60ea637e86b806d0d4d21e5674b653ac87e4be331c8a4738b0bb19"
+    },
+    "eef-metrics.json": {
+      "path": "wbc_demo/logs/umi-gripper-eef-execute-01/eef-metrics.json",
+      "sha256": "f8b549df9c5f97569abf82b95d2a0a05a3aab93ac817617404200ce07c0065ff"
+    },
+    "tracking.csv": {
+      "path": "wbc_demo/logs/umi-gripper-eef-execute-01/tracking.csv",
+      "sha256": "9fcede46a91e218c4ef4bc58542ae2be83e5229e601f0c64ae7cd5d091b8b2f0"
+    },
+    "eef_tracking.csv": {
+      "path": "wbc_demo/logs/umi-gripper-eef-execute-01/eef_tracking.csv",
+      "sha256": "5855b7cdac8ca856bfbc5a2e5ed8d7f7d38509ba7f2455dd3d8504636e4ccc94"
+    },
+    "tracking-summary.png": {
+      "path": "wbc_demo/logs/umi-gripper-eef-execute-01/tracking-summary.png",
+      "sha256": "e3408225523ede29316d20ea7fdf67c9662aee70a27328887374432091cb4020"
+    }
+  },
+  "files": {
+    "eef-metrics.json": {
+      "bytes": 977,
+      "sha256": "f8b549df9c5f97569abf82b95d2a0a05a3aab93ac817617404200ce07c0065ff"
+    },
+    "eef_tracking.csv": {
+      "bytes": 480003,
+      "sha256": "5855b7cdac8ca856bfbc5a2e5ed8d7f7d38509ba7f2455dd3d8504636e4ccc94"
+    },
+    "encoding.log": {
+      "bytes": 14923,
+      "sha256": "46a32c1852fb27b4ec94de75ac6567a7f3ec892dcb556e19bf3f1a5b82a414ed"
+    },
+    "gripper-eef-frame.png": {
+      "bytes": 255230,
+      "sha256": "2f5cae0ee0bfda09d43f65a8c0931e59a67199a4484ec9674b0c7626bdf98bc5"
+    },
+    "index.html": {
+      "bytes": 6603,
+      "sha256": "15f6c5f9a79292d90f85432d1b055c8edf3041ce1379adba2104d442cdc4b3a5"
+    },
+    "report.json": {
+      "bytes": 79394,
+      "sha256": "0424d9842e60ea637e86b806d0d4d21e5674b653ac87e4be331c8a4738b0bb19"
+    },
+    "robot-8x.mp4": {
+      "bytes": 2693033,
+      "sha256": "9689c0b287a3affa7873437b2af6b12d5bda847b963fc5ad767d6115c3cd6c3e"
+    },
+    "robot-preview.gif": {
+      "bytes": 2835185,
+      "sha256": "d70421e9cfd77549f97f448a02854846508d88c7b46421cc4116f8ef0931587a"
+    },
+    "robot-storyboard.png": {
+      "bytes": 260657,
+      "sha256": "73dd89c49dbaac3b2f77cfad0e78e3d2c9202d358368c444cb9c6ad2fc269631"
+    },
+    "source-1x.mp4": {
+      "bytes": 4842195,
+      "sha256": "c4dcf1728b6d6c5709b8aaa96698ddfe509ddffc2c4617b338654a6bc206ee60"
+    },
+    "source-storyboard.png": {
+      "bytes": 714473,
+      "sha256": "27b5fbfa6210f5594e30b2ac35c8697c009993cf92db06181854cc42afc7ca52"
+    },
+    "tracking-summary.png": {
+      "bytes": 639709,
+      "sha256": "e3408225523ede29316d20ea7fdf67c9662aee70a27328887374432091cb4020"
+    },
+    "tracking.csv": {
+      "bytes": 2221770,
+      "sha256": "9fcede46a91e218c4ef4bc58542ae2be83e5229e601f0c64ae7cd5d091b8b2f0"
+    }
+  }
+}

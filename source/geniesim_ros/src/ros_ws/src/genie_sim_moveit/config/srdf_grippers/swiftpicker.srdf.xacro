@@ -86,4 +86,6 @@
     <disable_collisions link1="gripper_r_camera_link" link2="gripper_r_left_inner_link" reason="Never"/>
     <disable_collisions link1="gripper_r_camera_link" link2="gripper_r_left_outer_link" reason="Never"/>
     <disable_collisions link1="gripper_r_left_inner_link" link2="gripper_r_left_outer_link" reason="Never"/>
+    <disable_collisions link1="gripper_l_left_support_link" link2="gripper_l_right_support_link" reason="Default"/>
+    <disable_collisions link1="gripper_r_left_support_link" link2="gripper_r_right_support_link" reason="Default"/>
 </robot>

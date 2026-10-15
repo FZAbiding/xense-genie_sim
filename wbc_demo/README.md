@@ -8,6 +8,13 @@
 
 ## 升级版：大范围测试与交互实验台
 
+新增 **[XTac UMI 数据回放](umi_replay/README.md)**：完整数据下载、坐标定义、转换脚本、
+固定底盘双臂/腰部预检和回放；先看 [坐标说明](umi_replay/COORDINATES_ZH.md)，
+核查 [执行记录](umi_replay/WORK_LOG.md)。这是本地新增的数据适配，不是官方原封不动的回放 demo。
+
+UMI 新增 **[Web 四视角在线回放](umi_replay/ONLINE_IK_AND_VIEWS_ZH.md)**：原始头显视频、同向虚拟第一视角、
+两个可拖动外部视角；默认软直腰偏好，可选 ±0.5° 对照策略，无需 PyQt/PySide。
+
 当前目录是 `xense-genie_sim`，迁移版本 `d975634` 已推送到私人仓库 `main`。
 升级版操作说明见 **[LAB_USAGE.md](LAB_USAGE.md)**，测试结果见 [EXPERIMENT_RESULTS.md](EXPERIMENT_RESULTS.md)。
 

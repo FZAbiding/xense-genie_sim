@@ -1,0 +1,643 @@
+{
+  "status": "passed",
+  "run_directory": "wbc_demo/logs/umi-web-20261015-093806-993509/run-001",
+  "report_sha256": "fc6d8b8e75ada434d2076d7fd1f382d07ab3601a3931e0f8e86273f16e192f60",
+  "started_at": "2026-10-15T01:41:08.350040+00:00",
+  "finished_at": "2026-10-15T01:57:26.004885+00:00",
+  "keyframes": 228,
+  "posture_policy": "soft",
+  "max_absolute_roll_deg": 0.018763529136776924,
+  "metrics": {
+    "comparison": "actual model gripper EEF vs full 30Hz original EEF interpolated at commanded source phase",
+    "sides": {
+      "left": {
+        "samples": 4379,
+        "max_position_error_m": 0.01089503928935437,
+        "p95_position_error_m": 0.007146204976611186,
+        "max_rotation_error_rad": 0.025319373019246017,
+        "source_time_start": 6.927800029453444e-12,
+        "source_time_end": 41.63333511352539
+      },
+      "right": {
+        "samples": 4379,
+        "max_position_error_m": 0.010844682012606568,
+        "p95_position_error_m": 0.006258767474977214,
+        "max_rotation_error_rad": 0.027370008771777508,
+        "source_time_start": 6.927800029453444e-12,
+        "source_time_end": 41.63333511352539
+      }
+    },
+    "body_joint_range_rad": {
+      "idx01_body_joint1": 0.2762202552991172,
+      "idx02_body_joint2": 0.1688319092576166,
+      "idx03_body_joint3": 0.3745557641403413,
+      "idx04_body_joint4": 0.0004637691123847389,
+      "idx05_body_joint5": 1.00858943855761
+    },
+    "grippers": {
+      "left": {
+        "samples": 4379,
+        "max_error_vs_original_normalized": 0.018241229045692975,
+        "p95_error_vs_original_normalized": 0.006489890816724663,
+        "measured_opening_min_max": [
+          0.15917631822161482,
+          0.999982194633601
+        ],
+        "max_command_tracking_error": 0.009908963465383086
+      },
+      "right": {
+        "samples": 4379,
+        "max_error_vs_original_normalized": 0.02093648971343831,
+        "p95_error_vs_original_normalized": 0.0050182949965866756,
+        "measured_opening_min_max": [
+          0.16822755406710602,
+          0.9996590712821529
+        ],
+        "max_command_tracking_error": 0.018351518583226978
+      }
+    }
+  },
+  "video_manifest": {
+    "comparison": "UMI head_left vs actual physical replay, nearest image ROS timestamp at each commanded source phase",
+    "frames": 1250,
+    "fps": 30,
+    "duration_seconds": 41.666666666666664,
+    "source_phase_end_seconds": 41.63333511352539,
+    "physical_replay_seconds": 933.9701955060009,
+    "max_camera_timestamp_gap_seconds": 0.3139524459838867,
+    "p95_camera_timestamp_gap_seconds": 0.1314632654190063,
+    "allowed_max_camera_timestamp_gap_seconds": 0.4,
+    "max_source_phase_gap_seconds": 0.021034824618659798,
+    "p95_source_phase_gap_seconds": 0.007461137862023113,
+    "allowed_max_source_phase_gap_seconds": 0.1,
+    "real_time_control": false,
+    "layout": "quad",
+    "views": [
+      "UMI head_left",
+      "virtual head-pose-aligned ego",
+      "external A",
+      "external B"
+    ],
+    "alignment_limitations": "Camera timestamps label rendered TF state; this is command-phase alignment, not calibrated sensor latency or identical viewpoints.",
+    "source_license": "TacVerse/xtac-umi-g1-block-to-box / CC-BY-SA-4.0; head_left excerpt resized and composed",
+    "provenance": {
+      "dataset": "TacVerse/xtac-umi-g1-block-to-box",
+      "revision": "8ad651578fda4724514387e2d3d3551c3c9631f9",
+      "data_file": "data/chunk-000/file-000.parquet",
+      "data_sha256": "bc3165d4d981926fe2af052b612381384a5789226f30d2fae0f2e9ed29660ef4",
+      "feature": "observation.state",
+      "source_episode_id": "EP-1788246093295-0001",
+      "fps": 30,
+      "source_frames": 1250,
+      "extrinsics_already_applied": true,
+      "max_source_step_m": 0.013381546623244832,
+      "max_source_rotation_step_rad": 0.03257997144927967
+    },
+    "robot_model": {
+      "definition": "midpoint of the two distal fingertip faces at the held URDF zero-joint (open) configuration",
+      "axes": "X toward fingertips; Z toward the wrist-camera side; Y = Z cross X (opposite URDF left_support)",
+      "axis_revision": "camera_side_up_v2",
+      "urdf_sha256": "a78d5055fa9b66dc73bc7f8a62e71cf8f58795512945f5ee9d99ed15bf419cb2",
+      "hardware_calibration": false,
+      "sides": [
+        {
+          "side": "l",
+          "base_to_eef": [
+            [
+              0.0,
+              -1.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              -1.0,
+              1.7250422388316068e-05
+            ],
+            [
+              1.0,
+              0.0,
+              0.0,
+              0.20500573350429535
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ],
+          "tip_to_eef": [
+            [
+              0.0,
+              -2.220446049250313e-16,
+              1.0,
+              -1.7250422388316068e-05
+            ],
+            [
+              0.0,
+              -1.0,
+              -2.220446049250313e-16,
+              3.830363224003556e-21
+            ],
+            [
+              1.0,
+              0.0,
+              0.0,
+              0.21200573350429536
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ],
+          "meshes": [
+            {
+              "resource": "package://genie_sim_robot_model/robots/genie/g2/meshes/gripper/swiftpicker/left_support_link.STL",
+              "sha256": "a4c3248cf9f2c925d18aa9bb2e3659ef0d6a703252b006a3d9f1bc8ec2e917fb",
+              "distal_face_center_in_base_m": [
+                0.04867500028759242,
+                6.86751445755588e-05,
+                0.20500573350429535
+              ]
+            },
+            {
+              "resource": "package://genie_sim_robot_model/robots/genie/g2/meshes/gripper/swiftpicker/right_support_link.STL",
+              "sha256": "136475599e901768a0195df51634cb3f007d0d5a0c647855056aac31dc62a73b",
+              "distal_face_center_in_base_m": [
+                -0.04867500028759242,
+                -3.4174299798926666e-05,
+                0.20500573350429535
+              ]
+            }
+          ],
+          "camera_housing": {
+            "resource": "package://genie_sim_robot_model/robots/genie/g2/meshes/gripper/swiftpicker/camera_link.STL",
+            "sha256": "750873a92e9b23af434b29478c0be1cf54c4501bd05e092f4877a8718878cd25",
+            "bbox_center_in_eef_m": [
+              -0.15911583357151599,
+              0.005589677020907402,
+              0.03197862068191171
+            ]
+          }
+        },
+        {
+          "side": "r",
+          "base_to_eef": [
+            [
+              0.0,
+              -1.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              -1.0,
+              1.7250422388316068e-05
+            ],
+            [
+              1.0,
+              0.0,
+              0.0,
+              0.20500573350429535
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ],
+          "tip_to_eef": [
+            [
+              0.0,
+              -2.220446049250313e-16,
+              1.0,
+              -1.7250422388316068e-05
+            ],
+            [
+              0.0,
+              -1.0,
+              -2.220446049250313e-16,
+              3.830363224003556e-21
+            ],
+            [
+              1.0,
+              0.0,
+              0.0,
+              0.21200573350429536
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ],
+          "meshes": [
+            {
+              "resource": "package://genie_sim_robot_model/robots/genie/g2/meshes/gripper/swiftpicker/left_support_link.STL",
+              "sha256": "a4c3248cf9f2c925d18aa9bb2e3659ef0d6a703252b006a3d9f1bc8ec2e917fb",
+              "distal_face_center_in_base_m": [
+                0.04867500028759242,
+                6.86751445755588e-05,
+                0.20500573350429535
+              ]
+            },
+            {
+              "resource": "package://genie_sim_robot_model/robots/genie/g2/meshes/gripper/swiftpicker/right_support_link.STL",
+              "sha256": "136475599e901768a0195df51634cb3f007d0d5a0c647855056aac31dc62a73b",
+              "distal_face_center_in_base_m": [
+                -0.04867500028759242,
+                -3.4174299798926666e-05,
+                0.20500573350429535
+              ]
+            }
+          ],
+          "camera_housing": {
+            "resource": "package://genie_sim_robot_model/robots/genie/g2/meshes/gripper/swiftpicker/camera_link.STL",
+            "sha256": "750873a92e9b23af434b29478c0be1cf54c4501bd05e092f4877a8718878cd25",
+            "bbox_center_in_eef_m": [
+              -0.15911583357151599,
+              0.005589677020907402,
+              0.03197862068191171
+            ]
+          }
+        }
+      ],
+      "runtime_tcp": "fingertip midpoint recomputed from measured gripper joints; zero-joint fully-open reference retained above"
+    },
+    "inputs": {
+      "wbc_demo/data/converted/episode-000.json": "aaad631763b3899223043ee7f94589a22c5d4517630e968a7e4c5b569345ae29",
+      "wbc_demo/logs/umi-web-20261015-093806-993509/run-001/report.json": "fc6d8b8e75ada434d2076d7fd1f382d07ab3601a3931e0f8e86273f16e192f60",
+      "wbc_demo/logs/umi-web-20261015-093806-993509/run-001/command_phase.csv": "d2c7a209fecab55338baf2e96d853730bb9bd6744d4dfa55ae9326432ff8e1c4",
+      "wbc_demo/logs/umi-web-20261015-093806-993509/recording-001/frames.csv": "bc3af16fc75b5f1826f038212a6cb49c6e658f1948fbf2e8721548bf9f0888c4",
+      "wbc_demo/logs/umi-web-20261015-093806-993509/recording-001/views.mp4": "0d08672b38f26be725058a4fc988a726500bc11789f8f5b1d2e71dca9f0cbf45",
+      "/home/xense/src/xense-genie_sim/wbc_demo/data/xtac-umi-g1-block-to-box/videos/observation.images.head_left/chunk-000/file-000.mp4": "fbfd668f3a7497648399ec046c0cecb895a559d819588fb10050f2f14597502a"
+    },
+    "output_sha256": "b2a67219a9bdcce9ddbdfb5a967ad8ae9df48dcd68cdfb78dfc23febbd8ecffa"
+  },
+  "browser_acceptance": {
+    "trusted_pointer_actions": true,
+    "executed_motion": true,
+    "browser": "157.0.1",
+    "loaded_image_widths": [
+      640,
+      640,
+      640,
+      640
+    ],
+    "drag": {
+      "before": [
+        0.7853981633974483,
+        0.35,
+        2.4
+      ],
+      "after": [
+        -0.014601836602551689,
+        0.5500000000000002,
+        2.4
+      ],
+      "mean_absolute_pixel_change": 24.181920572916667
+    },
+    "wheel": {
+      "before_distance": 1.9,
+      "after_distance": 1.443187034127439
+    },
+    "reset_button": "passed",
+    "pause_button_phase_delta_s": 0.0,
+    "resume_button": "passed",
+    "final_status": {
+      "stage": "finished",
+      "source_time_s": 41.63333511352539,
+      "ready": true,
+      "busy": false,
+      "run": 1,
+      "received": {
+        "UmiEgo": 19555,
+        "ExternalA": 19761,
+        "ExternalB": 19878
+      },
+      "record_frames": 27542,
+      "policy": "soft",
+      "camera_orbits": [
+        [
+          0.7853981633974483,
+          0.35,
+          2.4
+        ],
+        [
+          -1.5707963267948966,
+          0.25,
+          1.9
+        ]
+      ],
+      "output": "wbc_demo/logs/umi-web-20261015-093806-993509",
+      "command_count": 27,
+      "last_command": "resume"
+    }
+  },
+  "gripper_endpoints": {
+    "steps": [
+      {
+        "label": "closed",
+        "target_opening": 0.0,
+        "actual_openings": [
+          -1.18595125234308e-06,
+          5.1792964079926226e-06
+        ],
+        "master_angles_rad": [
+          -0.9100010792156397,
+          -0.9099952868402688
+        ],
+        "eef_errors_m_rad": [
+          [
+            0.004358177046810844,
+            0.005212077391952414
+          ],
+          [
+            0.004379941604065814,
+            0.00524782842556442
+          ]
+        ],
+        "motion": {
+          "group": "wbc_fixed_headless",
+          "planning_method": "joint_interpolation",
+          "collision_samples": 38,
+          "ik_error_m": [
+            4.03893814540909e-06,
+            2.3016216860685603e-06
+          ],
+          "ik_orientation_error_rad": [
+            9.317742682874644e-06,
+            8.636659552268547e-06
+          ],
+          "solve_seconds": 0.14315524000267033,
+          "attempts": 3,
+          "status": "passed",
+          "targets": [
+            {
+              "position": [
+                0.3798063370005301,
+                0.0402765578753585,
+                1.3687631193346357
+              ],
+              "quaternion_xyzw": [
+                0.5163518647259643,
+                -0.47109540654230203,
+                -0.4841138056564885,
+                0.52638739812191
+              ]
+            },
+            {
+              "position": [
+                0.37982166672363643,
+                -0.0401527631488815,
+                1.3685189354769707
+              ],
+              "quaternion_xyzw": [
+                -0.5163289301830548,
+                -0.4709690057906085,
+                0.48431342707465164,
+                0.5263393732145013
+              ]
+            }
+          ],
+          "measured_tcp_error_m": [
+            0.004358177413869839,
+            0.004379941347474783
+          ],
+          "measured_tcp_orientation_error_rad": [
+            0.005212076213415292,
+            0.005247828102008059
+          ],
+          "body_joint_delta_rad": {
+            "idx01_body_joint1": -0.00041803650489382276,
+            "idx02_body_joint2": 0.019620972489213292,
+            "idx03_body_joint3": -0.0023784570760936453,
+            "idx04_body_joint4": 1.1386975011628178e-05,
+            "idx05_body_joint5": 0.000489606678781819
+          },
+          "locked_body_drift_rad": null,
+          "max_command_step_rad": 0.0003399696165955222,
+          "retimed_seconds": 4.549997283957977,
+          "execution_seconds": 6.562798304003081,
+          "max_base_translation_drift_m": 6.648261309340087e-07,
+          "max_base_rotation_drift_rad": 0.0
+        }
+      },
+      {
+        "label": "half",
+        "target_opening": 0.5,
+        "actual_openings": [
+          0.4999980169128158,
+          0.5000000289163866
+        ],
+        "master_angles_rad": [
+          -0.45500180460933765,
+          -0.4549999736860882
+        ],
+        "eef_errors_m_rad": [
+          [
+            0.004324623573239802,
+            0.005184333106474283
+          ],
+          [
+            0.004344912451324063,
+            0.005210166043657316
+          ]
+        ],
+        "motion": {
+          "group": "wbc_fixed_headless",
+          "planning_method": "joint_interpolation",
+          "collision_samples": 21,
+          "ik_error_m": [
+            2.075936348046003e-06,
+            2.938111546489528e-06
+          ],
+          "ik_orientation_error_rad": [
+            9.63209953048737e-06,
+            9.76970857778491e-06
+          ],
+          "solve_seconds": 0.07557166799961124,
+          "attempts": 1,
+          "status": "passed",
+          "targets": [
+            {
+              "position": [
+                0.3798063370005301,
+                0.0402765578753585,
+                1.3687631193346357
+              ],
+              "quaternion_xyzw": [
+                0.5163518647259643,
+                -0.47109540654230203,
+                -0.4841138056564885,
+                0.52638739812191
+              ]
+            },
+            {
+              "position": [
+                0.37982166672363643,
+                -0.0401527631488815,
+                1.3685189354769707
+              ],
+              "quaternion_xyzw": [
+                -0.5163289301830548,
+                -0.4709690057906085,
+                0.48431342707465164,
+                0.5263393732145013
+              ]
+            }
+          ],
+          "measured_tcp_error_m": [
+            0.0043247724483656425,
+            0.004345059677652879
+          ],
+          "measured_tcp_orientation_error_rad": [
+            0.0051843868316737,
+            0.005210215309616663
+          ],
+          "body_joint_delta_rad": {
+            "idx01_body_joint1": 0.0011179405484934956,
+            "idx02_body_joint2": 0.016235824266424368,
+            "idx03_body_joint3": -0.005288130655613896,
+            "idx04_body_joint4": -1.3616554485737195e-07,
+            "idx05_body_joint5": -0.0007125623449548414
+          },
+          "locked_body_drift_rad": null,
+          "max_command_step_rad": 0.00010839093069384156,
+          "retimed_seconds": 4.0,
+          "execution_seconds": 6.006564945004357,
+          "max_base_translation_drift_m": 6.861643220345321e-07,
+          "max_base_rotation_drift_rad": 0.0
+        }
+      },
+      {
+        "label": "open",
+        "target_opening": 1.0,
+        "actual_openings": [
+          0.9999997652443642,
+          0.9999997335286352
+        ],
+        "master_angles_rad": [
+          -2.1362762860694282e-07,
+          -2.424889419075995e-07
+        ],
+        "eef_errors_m_rad": [
+          [
+            0.004379413505278707,
+            0.005219932635680802
+          ],
+          [
+            0.004403474293514637,
+            0.005272952707719753
+          ]
+        ],
+        "motion": {
+          "group": "wbc_fixed_headless",
+          "planning_method": "joint_interpolation",
+          "collision_samples": 21,
+          "ik_error_m": [
+            1.2141959772713073e-06,
+            1.4114033515704213e-06
+          ],
+          "ik_orientation_error_rad": [
+            4.400865667114681e-06,
+            3.158483815072333e-06
+          ],
+          "solve_seconds": 0.08420096200279659,
+          "attempts": 1,
+          "status": "passed",
+          "targets": [
+            {
+              "position": [
+                0.3798063370005301,
+                0.0402765578753585,
+                1.3687631193346357
+              ],
+              "quaternion_xyzw": [
+                0.5163518647259643,
+                -0.47109540654230203,
+                -0.4841138056564885,
+                0.52638739812191
+              ]
+            },
+            {
+              "position": [
+                0.37982166672363643,
+                -0.0401527631488815,
+                1.3685189354769707
+              ],
+              "quaternion_xyzw": [
+                -0.5163289301830548,
+                -0.4709690057906085,
+                0.48431342707465164,
+                0.5263393732145013
+              ]
+            }
+          ],
+          "measured_tcp_error_m": [
+            0.00437941525004005,
+            0.004403477454212967
+          ],
+          "measured_tcp_orientation_error_rad": [
+            0.005219933938690766,
+            0.005272956954949853
+          ],
+          "body_joint_delta_rad": {
+            "idx01_body_joint1": -0.0036347278903348557,
+            "idx02_body_joint2": 0.017321135231442714,
+            "idx03_body_joint3": 0.005890946400991876,
+            "idx04_body_joint4": 1.691723914710516e-05,
+            "idx05_body_joint5": 0.003233344288879082
+          },
+          "locked_body_drift_rad": null,
+          "max_command_step_rad": 0.0003197446418872496,
+          "retimed_seconds": 4.0,
+          "execution_seconds": 6.030035987998417,
+          "max_base_translation_drift_m": 7.084134046787404e-07,
+          "max_base_rotation_drift_rad": 0.0
+        }
+      }
+    ],
+    "mapping": "normalized 0 closed / 1 open; linear native master-joint range",
+    "status": "passed"
+  },
+  "source_license": "TacVerse/xtac-umi-g1-block-to-box / CC-BY-SA-4.0; source images resized and composed",
+  "files_sha256": {
+    "gripper-summary.png": "f56a83d70838851747c745c6cee5dc3d1bbe3f279c871bbe3792dc7af87a3f6a",
+    "head_left.mp4": "b2a67219a9bdcce9ddbdfb5a967ad8ae9df48dcd68cdfb78dfc23febbd8ecffa",
+    "web-after-drag.png": "503208cfcd84cf9ea0de9139349a9e9708515296f0919575ff331033561c4c0d",
+    "quad-start.png": "7a2dc6ec7564ffaeb85f4814f3698e901e42da53fbab54417f3a96badc2d602a",
+    "quad-middle.png": "a87b72549e62c75325c6ebc43d279ff376292c983bbc5cba98b5073125d6e233",
+    "web-before-drag.png": "ffa2560d70f2413d7d25f397ea3f8aea1aff127b088c77c5d096ac60638f71ff",
+    "gripper-endpoints.png": "b7094410115682eddffcded5e7307758a5eaa7dffa834b74da65da4adc8b0f22",
+    "tracking-summary.png": "1a383ccc3a8199ff624a65d9b40bf8a7da5fea646c9a4e2913b80f186835ba94",
+    "quad-end.png": "faca9d18ff17030837716b13260a5bc69b0a4e189970a189af38c4d4220b4c83"
+  },
+  "decoded_video_validation": {
+    "frames": 1250,
+    "minimum_panel_mean_intensity": [
+      135.64934678819444,
+      126.31606336805555,
+      165.99339409722222,
+      163.03608072916666
+    ],
+    "near_black_frame_counts": [
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  "model_sources_sha256": {
+    "wbc_demo/umi_replay/gripper_eef.py": "f24150bb2e4721c80a77d21c74258b9fc99c2ec4cf8e54e7a525a0ba4201b779",
+    "source/geniesim_ros/src/ros_ws/src/genie_sim_moveit/config/srdf_grippers/swiftpicker.srdf.xacro": "b567d87d4604262e685d3d1ee5813d5fe6e2939020b808e249c34245add89c11"
+  },
+  "collision_policy_note": "Full source replay passed before adding the two intended same-gripper fingertip contacts; endpoint test 03 passed after that explicit SRDF change."
+}

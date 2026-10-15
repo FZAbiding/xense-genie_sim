@@ -1,0 +1,216 @@
+{
+  "generated_at": "2026-10-14T11:24:27.735880+00:00",
+  "simulation_rerun": false,
+  "tracking_pose_frame": "gripper_eef",
+  "run_provenance": {
+    "dataset": "TacVerse/xtac-umi-g1-block-to-box",
+    "revision": "8ad651578fda4724514387e2d3d3551c3c9631f9",
+    "data_file": "data/chunk-000/file-000.parquet",
+    "data_sha256": "bc3165d4d981926fe2af052b612381384a5789226f30d2fae0f2e9ed29660ef4",
+    "feature": "observation.state",
+    "source_episode_id": "EP-1788246093295-0001",
+    "fps": 30,
+    "source_frames": 1250,
+    "extrinsics_already_applied": true,
+    "max_source_step_m": 0.013381546623244832,
+    "max_source_rotation_step_rad": 0.03257997144927967
+  },
+  "video_timeline": "Overview videos use independent PTS; only head_left split-screen, when provided, is command-source-phase aligned using ROS timestamps.",
+  "source_license": "TacVerse/xtac-umi-g1-block-to-box / CC-BY-SA-4.0; preview resized and H264 encoded",
+  "video_info": {
+    "robot": {
+      "fps": 30.0,
+      "frames": 1644,
+      "duration_s": 54.8,
+      "thumbnails": [
+        {
+          "video_time_s": 0.0,
+          "video_frame": 0
+        },
+        {
+          "video_time_s": 10.933333333333334,
+          "video_frame": 328
+        },
+        {
+          "video_time_s": 21.9,
+          "video_frame": 657
+        },
+        {
+          "video_time_s": 32.833333333333336,
+          "video_frame": 985
+        },
+        {
+          "video_time_s": 43.8,
+          "video_frame": 1314
+        },
+        {
+          "video_time_s": 54.766666666666666,
+          "video_frame": 1643
+        }
+      ]
+    },
+    "source": {
+      "fps": 30.0,
+      "frames": 1250,
+      "duration_s": 41.666666666666664,
+      "thumbnails": [
+        {
+          "video_time_s": 0.0,
+          "video_frame": 0
+        },
+        {
+          "video_time_s": 20.8,
+          "video_frame": 624
+        },
+        {
+          "video_time_s": 41.63333333333333,
+          "video_frame": 1249
+        }
+      ]
+    }
+  },
+  "inputs": {
+    "robot-summary-input": {
+      "path": "wbc_demo/logs/umi-upright-summary-8x.mp4",
+      "sha256": "508d98a39d489f81b6c546421cf4a9603b797d0a06232b926abda8b3518a077e"
+    },
+    "source-preview-input": {
+      "path": "wbc_demo/logs/umi-source-episode-000/source-episode.mp4",
+      "sha256": "2199e2d77481df7208c0b75802ad2699ae577a6032e7e1791472cc5542cf2e23"
+    },
+    "model-diagram-input": {
+      "path": "wbc_demo/logs/umi-upright-review/camera-axis-before-after.png",
+      "sha256": "482f82b24af4ad344b6c7176e1bd24bf6e280df16b9e9e26602b871c4c8ce6a8"
+    },
+    "report.json": {
+      "path": "wbc_demo/logs/umi-upright-execute-02/report.json",
+      "sha256": "def2d70a406467dcfcbb616ebb3c5c6a47fa11badf61e4ff653bef9525c9c9b9"
+    },
+    "eef-metrics.json": {
+      "path": "wbc_demo/logs/umi-upright-execute-02/eef-metrics.json",
+      "sha256": "9b8926f8c9146637264f071265683cedc5d17fc99cb2a989dc92b5a221e9a9c9"
+    },
+    "tracking.csv": {
+      "path": "wbc_demo/logs/umi-upright-execute-02/tracking.csv",
+      "sha256": "a7018ac2ed567d8a7d9bec4fa04d7acdda41a07e7d9589382859b77749bda602"
+    },
+    "eef_tracking.csv": {
+      "path": "wbc_demo/logs/umi-upright-execute-02/eef_tracking.csv",
+      "sha256": "7467654c4f3f78d535f82002b2e0b96151bbd655d14a4e0aec655d167bcf2d2a"
+    },
+    "tracking-summary.png": {
+      "path": "wbc_demo/logs/umi-upright-execute-02/tracking-summary.png",
+      "sha256": "5f20e12be053fc75210e2909cd641f03ea7b9ee727604c1f57b9ad2f64313c2e"
+    },
+    "head_left.mp4": {
+      "path": "wbc_demo/logs/umi-upright-head-left/head_left.mp4",
+      "sha256": "266093220f84397244501ff31bf2ec8357fd3c8bc53957a5f740fc029bd1652e"
+    },
+    "head-left-frame.png": {
+      "path": "wbc_demo/logs/umi-upright-head-left/head_left-frame-00625.png",
+      "sha256": "82efcca6c3e7748eb5f83ba2141b84f9e246e82c9d3d638d1ff1559072a32b9e"
+    },
+    "frame_alignment.csv": {
+      "path": "wbc_demo/logs/umi-upright-head-left/frame_alignment.csv",
+      "sha256": "91a76de2eb23e9b03a1ca1a5aa3d4b763b970bd788c1b2cd8661cc844cb697fd"
+    },
+    "alignment-manifest.json": {
+      "path": "wbc_demo/logs/umi-upright-head-left/manifest.json",
+      "sha256": "8ece537e44aed4f2f3d1bd84959cac914dbc4a662fbe706ba0c0c783c9ce4f69"
+    },
+    "waist-roll-before-after.png": {
+      "path": "wbc_demo/logs/umi-upright-review/waist-roll-before-after.png",
+      "sha256": "6cd82b1ef5cc2f925ccd69be23b6c3bc5a51ee80cdd5c316667ef2eda6c38c52"
+    },
+    "camera-axis-before-after.png": {
+      "path": "wbc_demo/logs/umi-upright-review/camera-axis-before-after.png",
+      "sha256": "482f82b24af4ad344b6c7176e1bd24bf6e280df16b9e9e26602b871c4c8ce6a8"
+    },
+    "review.json": {
+      "path": "wbc_demo/logs/umi-upright-review/review.json",
+      "sha256": "7067c8e3a82d7df8e57faf1b2274fc0d604f1499e5c9a649a71dadeddbbd276c"
+    }
+  },
+  "files": {
+    "alignment-manifest.json": {
+      "bytes": 7232,
+      "sha256": "8ece537e44aed4f2f3d1bd84959cac914dbc4a662fbe706ba0c0c783c9ce4f69"
+    },
+    "camera-axis-before-after.png": {
+      "bytes": 112293,
+      "sha256": "482f82b24af4ad344b6c7176e1bd24bf6e280df16b9e9e26602b871c4c8ce6a8"
+    },
+    "eef-metrics.json": {
+      "bytes": 975,
+      "sha256": "9b8926f8c9146637264f071265683cedc5d17fc99cb2a989dc92b5a221e9a9c9"
+    },
+    "eef_tracking.csv": {
+      "bytes": 391553,
+      "sha256": "7467654c4f3f78d535f82002b2e0b96151bbd655d14a4e0aec655d167bcf2d2a"
+    },
+    "encoding.log": {
+      "bytes": 14688,
+      "sha256": "00e0a9444617c5073c61133296bdff2aaccda2909677ded125dc566629fecd26"
+    },
+    "frame_alignment.csv": {
+      "bytes": 163272,
+      "sha256": "91a76de2eb23e9b03a1ca1a5aa3d4b763b970bd788c1b2cd8661cc844cb697fd"
+    },
+    "gripper-eef-frame.png": {
+      "bytes": 112293,
+      "sha256": "482f82b24af4ad344b6c7176e1bd24bf6e280df16b9e9e26602b871c4c8ce6a8"
+    },
+    "head-left-frame.png": {
+      "bytes": 276582,
+      "sha256": "82efcca6c3e7748eb5f83ba2141b84f9e246e82c9d3d638d1ff1559072a32b9e"
+    },
+    "head_left.mp4": {
+      "bytes": 5372885,
+      "sha256": "266093220f84397244501ff31bf2ec8357fd3c8bc53957a5f740fc029bd1652e"
+    },
+    "index.html": {
+      "bytes": 7936,
+      "sha256": "ae58d7a74ec99ee56579a80f81233556a64f6fae6df9a80f3b35d951784048e6"
+    },
+    "report.json": {
+      "bytes": 80477,
+      "sha256": "def2d70a406467dcfcbb616ebb3c5c6a47fa11badf61e4ff653bef9525c9c9b9"
+    },
+    "review.json": {
+      "bytes": 1246,
+      "sha256": "7067c8e3a82d7df8e57faf1b2274fc0d604f1499e5c9a649a71dadeddbbd276c"
+    },
+    "robot-8x.mp4": {
+      "bytes": 2273245,
+      "sha256": "15cc4016d1d7f056520792b61c106fee7fbce6ed842ca9adb38f7050878891a0"
+    },
+    "robot-preview.gif": {
+      "bytes": 2260442,
+      "sha256": "27fe84f0c9f57fbd2f890ea60966c25e7d18a76d38029faab3fdf047fb1fed89"
+    },
+    "robot-storyboard.png": {
+      "bytes": 256932,
+      "sha256": "9e7d830e25755fff909a090f78268f24ba1760a9b706b84639bae8a21b0d7083"
+    },
+    "source-1x.mp4": {
+      "bytes": 4842195,
+      "sha256": "c4dcf1728b6d6c5709b8aaa96698ddfe509ddffc2c4617b338654a6bc206ee60"
+    },
+    "source-storyboard.png": {
+      "bytes": 714473,
+      "sha256": "27b5fbfa6210f5594e30b2ac35c8697c009993cf92db06181854cc42afc7ca52"
+    },
+    "tracking-summary.png": {
+      "bytes": 604368,
+      "sha256": "5f20e12be053fc75210e2909cd641f03ea7b9ee727604c1f57b9ad2f64313c2e"
+    },
+    "tracking.csv": {
+      "bytes": 1823817,
+      "sha256": "a7018ac2ed567d8a7d9bec4fa04d7acdda41a07e7d9589382859b77749bda602"
+    },
+    "waist-roll-before-after.png": {
+      "bytes": 160046,
+      "sha256": "6cd82b1ef5cc2f925ccd69be23b6c3bc5a51ee80cdd5c316667ef2eda6c38c52"
+    }
+  }
+}

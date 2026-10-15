@@ -132,13 +132,14 @@ class DualArmDemo(Node):
             raise RuntimeError(f"FK failed: {response.error_code.val}")
         return response.pose_stamped
 
-    def solve(self, state, targets):
+    def solve(self, state, targets, joint_constraints=()):
         request = GetPositionIK.Request()
         request.ik_request.group_name = self.group
         request.ik_request.robot_state = state
         request.ik_request.avoid_collisions = True
         request.ik_request.ik_link_names = TIPS
         request.ik_request.pose_stamped_vector = targets
+        request.ik_request.constraints.joint_constraints = list(joint_constraints)
         request.ik_request.timeout.sec = 2
         response = self.call(self.ik, request)
         if response.error_code.val != 1:
