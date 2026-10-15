@@ -98,9 +98,10 @@ class GripperEEFLab(WholeBodyLab):
         else:
             self.pause_requested = command == "pause"
 
-    def publish_progress(self, source_time, stage):
+    def publish_progress(self, source_time, stage, **metrics):
         import json
 
+        self.last_source_time = source_time
         self.progress_publisher.publish(
             String(
                 data=json.dumps(
@@ -108,6 +109,7 @@ class GripperEEFLab(WholeBodyLab):
                         "source_time_s": source_time,
                         "stage": stage,
                         "paused": self.pause_requested,
+                        **metrics,
                     }
                 )
             )

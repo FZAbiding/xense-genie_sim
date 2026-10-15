@@ -3,6 +3,7 @@ import json
 import math
 import os
 import queue
+import re
 import signal
 import subprocess
 import sys
@@ -17,14 +18,16 @@ import numpy as np
 import rclpy
 from geometry_msgs.msg import TransformStamped
 from rclpy.node import Node
-from rclpy.qos import qos_profile_sensor_data
+from rclpy.qos import QoSProfile, ReliabilityPolicy
 from sensor_msgs.msg import Image
 from std_msgs.msg import String
 from tf2_msgs.msg import TFMessage
 
-from .camera_views import VIEW_NAMES, VIEW_TOPICS, ego_camera, look_at, source_capture
+from .camera_views import VIEW_NAMES, VIEW_TOPICS, ego_camera, look_at, source_video_info
 from .download import sha256
 from .geometry import pose_dict, pose_matrix
+
+IMAGE_QOS = QoSProfile(depth=3, reliability=ReliabilityPolicy.RELIABLE)
 
 
 class ViewNode(Node):
@@ -35,6 +38,7 @@ class ViewNode(Node):
         self.render_root = audit["render_robot_root"]
         self.source_time = 0.0
         self.stage = "waiting_for_operator"
+        self.metrics = {}
         self.frames = {}
         self.pending = {}
         self.bundle = None
@@ -46,15 +50,27 @@ class ViewNode(Node):
         self.control_publisher = self.create_publisher(String, "/umi_replay/control", 10)
         self.create_subscription(String, "/umi_replay/progress", self.on_progress, 10)
         for name, topic in zip(VIEW_NAMES, VIEW_TOPICS):
-            self.create_subscription(
-                Image, topic, lambda message, view=name: self.on_image(view, message), qos_profile_sensor_data
-            )
-        self.create_timer(0.05, self.move_cameras)
+            self.create_subscription(Image, topic, lambda message, view=name: self.on_image(view, message), IMAGE_QOS)
+        self.create_timer(1 / 30, self.move_cameras)
+
+    @property
+    def source_time(self):
+        phase = self._source_time
+        if self.stage == "replaying" and self.metrics.get("playback_rate") == 1.0:
+            phase += max(0.0, time.monotonic() - self.metrics["phase_monotonic_s"])
+            phase = min(phase, self.metrics["source_duration_s"])
+        return phase
+
+    @source_time.setter
+    def source_time(self, value):
+        self._source_time = value
+        self.metrics = {}
 
     def on_progress(self, message):
         value = json.loads(message.data)
         self.source_time = float(value["source_time_s"])
         self.stage = value["stage"]
+        self.metrics = {key: item for key, item in value.items() if key not in ("source_time_s", "stage")}
 
     def on_image(self, name, message):
         conversions = {"rgb8": (3, cv2.COLOR_RGB2BGR), "rgba8": (4, cv2.COLOR_RGBA2BGR), "bgr8": (3, None)}
@@ -123,21 +139,24 @@ class LiveSession:
             raise ValueError("Camera scene and EEF source differ")
         args.output.mkdir(parents=True, exist_ok=False)
         self.node = ViewNode(self.audit)
-        self.capture, self.source_start, self.source_fps = source_capture(args.root, converted)
-        self.source_index = -1
+        self.source_path, self.source_start, self.source_fps = source_video_info(args.root, converted)
         self.process = None
         self.process_log = None
         self.run_count = 0
         self.active_policy = args.posture_policy
+        self.active_mode = args.playback_mode
         self.run_directory = None
         self.writer = None
         self.record_frames = 0
         self.frame_trace = None
         self.last_record = 0.0
         self.last_preview = 0.0
+        self.preview_received = {}
         self.running = True
         self.events = []
         self.jpeg = {}
+        self.jpeg_versions = {}
+        self.stream_condition = threading.Condition()
         self.requests = queue.Queue()
         self.state = {"stage": "waiting_for_cameras", "source_time_s": 0, "ready": False, "busy": False}
         self.autoplay_pending = args.autoplay
@@ -145,7 +164,7 @@ class LiveSession:
     def command(self, value):
         kind = value.get("command")
         if kind == "start":
-            self.start_replay(value.get("policy", self.args.posture_policy))
+            self.start_replay(value.get("policy", self.args.posture_policy), value.get("mode", self.args.playback_mode))
         elif kind in ("pause", "resume", "stop"):
             self.node.control_publisher.publish(String(data=kind))
         elif kind == "reset_views":
@@ -173,15 +192,19 @@ class LiveSession:
         self.state["command_count"] = len(self.events)
         self.state["last_command"] = kind
 
-    def start_replay(self, policy):
+    def start_replay(self, policy, mode=None):
         if policy not in ("soft", "upright"):
             raise ValueError("Choose soft or upright explicitly")
+        mode = self.args.playback_mode if mode is None else mode
+        if mode not in ("realtime", "validated"):
+            raise ValueError("Choose realtime or validated playback")
         if self.process is not None and self.process.poll() is None:
             return
         if not self.node.cameras_ready():
             raise RuntimeError("All three cameras must be ready before motion")
         self.run_count += 1
         self.active_policy = policy
+        self.active_mode = mode
         self.node.stage = "initializing"
         self.node.source_time = 0.0
         self.run_directory = self.args.output / f"run-{self.run_count:03d}"
@@ -211,6 +234,10 @@ class LiveSession:
             "--interactive-controls",
             "--posture-policy",
             policy,
+            "--playback-mode",
+            mode,
+            "--limits-profile",
+            str(self.args.limits_profile),
         ]
         self.process = subprocess.Popen(
             command, stdout=self.process_log, stderr=self.process_log, start_new_session=True
@@ -231,6 +258,7 @@ class LiveSession:
             "camera_audit": self.audit,
             "session_events": self.events,
             "frame_time_policy": "all three panels require the same rendered ROS image timestamp; repeated bundles allowed",
+            "playback_mode": self.active_mode,
         }
         (self.record_path / "metadata.json").write_text(json.dumps(metadata, ensure_ascii=False, indent=2) + "\n")
 
@@ -247,19 +275,15 @@ class LiveSession:
             self.autoplay_pending = False
             self.start_replay(self.args.posture_policy)
         now = time.monotonic()
-        if now - self.last_preview >= 0.08:
-            index = min(
-                len(self.converted["source_frames"]) - 1, max(0, round(self.node.source_time * self.source_fps))
-            )
-            if index != self.source_index:
-                self.capture.set(cv2.CAP_PROP_POS_FRAMES, self.source_start + index)
-                success, source = self.capture.read()
-                if not success:
-                    raise RuntimeError("Cannot decode source head_left")
-                self.source_index = index
-                self.jpeg["Source"] = cv2.imencode(".jpg", source, [cv2.IMWRITE_JPEG_QUALITY, 85])[1].tobytes()
+        if now - self.last_preview >= 1 / 30:
             for name, frame in self.node.frames.items():
+                if self.preview_received.get(name) == self.node.received[name]:
+                    continue
                 self.jpeg[name] = cv2.imencode(".jpg", frame, [cv2.IMWRITE_JPEG_QUALITY, 85])[1].tobytes()
+                self.jpeg_versions[name] = self.jpeg_versions.get(name, 0) + 1
+                self.preview_received[name] = self.node.received[name]
+            with self.stream_condition:
+                self.stream_condition.notify_all()
             self.last_preview = now
         if self.writer is not None and self.node.bundle is not None and now - self.last_record >= 1 / 30:
             self.writer.write(self.node.bundle)
@@ -290,6 +314,16 @@ class LiveSession:
                 "received": self.node.received.copy(),
                 "record_frames": self.record_frames,
                 "policy": self.active_policy,
+                "playback_mode": self.active_mode,
+                "source_duration_s": len(self.converted["source_frames"]) / self.source_fps,
+                "source_video_start_s": self.source_start / self.source_fps,
+                "playback_rate": self.node.metrics.get("playback_rate", 0.0),
+                "deadline_misses": self.node.metrics.get("deadline_misses", 0),
+                "render_bundle_age_s": (
+                    max(0.0, self.node.get_clock().now().nanoseconds * 1e-9 - self.node.bundle_time)
+                    if self.node.bundle_time is not None
+                    else None
+                ),
                 "camera_orbits": [list(orbit) for orbit in self.node.orbits],
                 "output": str(self.args.output),
             }
@@ -304,7 +338,6 @@ class LiveSession:
                 os.killpg(self.process.pid, signal.SIGTERM)
                 self.process.wait(timeout=10)
         self.stop_recording()
-        self.capture.release()
         (self.args.output / "session.json").write_text(
             json.dumps({"events": self.events, "runs": self.run_count}, ensure_ascii=False, indent=2) + "\n"
         )
@@ -336,6 +369,7 @@ def live_handler(session, port):
                 payload = Path(__file__).with_name("live_view.html").read_bytes()
                 self.send_response(200)
                 self.send_header("Content-Type", "text/html; charset=utf-8")
+                self.send_header("Cache-Control", "no-store")
                 self.send_header("Content-Length", str(len(payload)))
                 self.end_headers()
                 self.wfile.write(payload)
@@ -349,7 +383,72 @@ def live_handler(session, port):
                 self.wfile.write(payload)
             elif path == "/api/status":
                 self.send_json(session.state.copy())
-            elif path.startswith("/frame/") and path.removeprefix("/frame/") in ("Source", *VIEW_NAMES):
+            elif path == "/source.mp4":
+                size = session.source_path.stat().st_size
+                start, end = 0, size - 1
+                requested = self.headers.get("Range")
+                if requested:
+                    match = re.fullmatch(r"bytes=(\d+)-(\d*)", requested)
+                    if match is None:
+                        self.send_json({"error": "Only one explicit byte range is supported"}, 416)
+                        return
+                    start = int(match[1])
+                    end = min(end, int(match[2])) if match[2] else end
+                    if not 0 <= start <= end < size:
+                        self.send_json({"error": "Byte range outside video"}, 416)
+                        return
+                self.send_response(206 if requested else 200)
+                self.send_header("Content-Type", "video/mp4")
+                self.send_header("Accept-Ranges", "bytes")
+                self.send_header("Content-Length", str(end - start + 1))
+                if requested:
+                    self.send_header("Content-Range", f"bytes {start}-{end}/{size}")
+                self.end_headers()
+                try:
+                    with session.source_path.open("rb") as stream:
+                        stream.seek(start)
+                        remaining = end - start + 1
+                        while remaining > 0:
+                            payload = stream.read(min(remaining, 256 * 1024))
+                            if not payload:
+                                break
+                            self.wfile.write(payload)
+                            remaining -= len(payload)
+                except (BrokenPipeError, ConnectionResetError):
+                    pass
+            elif path.startswith("/stream/") and path.removeprefix("/stream/") in VIEW_NAMES:
+                name = path.removeprefix("/stream/")
+                self.send_response(200)
+                self.send_header("Content-Type", "multipart/x-mixed-replace; boundary=frame")
+                self.send_header("Cache-Control", "no-store")
+                self.end_headers()
+                version = -1
+                try:
+                    while session.running:
+                        with session.stream_condition:
+                            session.stream_condition.wait_for(
+                                lambda: (
+                                    session.jpeg.get(name) is not None and session.jpeg_versions.get(name, 0) != version
+                                )
+                                or not session.running,
+                                timeout=1,
+                            )
+                        payload = session.jpeg.get(name)
+                        current = session.jpeg_versions.get(name, 0)
+                        if payload is None or current == version:
+                            continue
+                        version = current
+                        self.wfile.write(
+                            b"--frame\r\nContent-Type: image/jpeg\r\nContent-Length: "
+                            + str(len(payload)).encode()
+                            + b"\r\n\r\n"
+                            + payload
+                            + b"\r\n"
+                        )
+                        self.wfile.flush()
+                except (BrokenPipeError, ConnectionResetError):
+                    pass
+            elif path.startswith("/frame/") and path.removeprefix("/frame/") in VIEW_NAMES:
                 payload = session.jpeg.get(path.removeprefix("/frame/"))
                 if payload is None:
                     self.send_json({"error": "Camera not ready"}, 503)

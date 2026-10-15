@@ -64,6 +64,8 @@ def main():
     live_parser.add_argument("--auto-close", action="store_true")
     live_parser.add_argument("--posture-policy", choices=("soft", "upright"), default="soft")
     live_parser.add_argument("--port", type=int, default=8765)
+    live_parser.add_argument("--playback-mode", choices=("realtime", "validated"), default="realtime")
+    live_parser.add_argument("--limits-profile", type=Path, default=ROOT / "umi_replay/configs/g2_realtime_limits.json")
     replay = commands.add_parser("replay")
     replay.add_argument("--input", type=Path, required=True)
     replay.add_argument("--config", type=Path, default=ROOT / "umi_replay/configs/g2_shared_world.json")
@@ -72,6 +74,8 @@ def main():
     replay.add_argument("--speed", type=float, default=0.5)
     replay.add_argument("--posture-policy", choices=("config", "soft", "upright"), default="config")
     replay.add_argument("--interactive-controls", action="store_true")
+    replay.add_argument("--playback-mode", choices=("validated", "realtime"), default="validated")
+    replay.add_argument("--limits-profile", type=Path, default=ROOT / "umi_replay/configs/g2_realtime_limits.json")
     args = parser.parse_args()
     if args.command == "download":
         download(args.root, args.revision, metadata_only=args.metadata_only)

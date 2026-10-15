@@ -78,9 +78,7 @@ def ego_camera(track, source_time, world):
     return head
 
 
-def source_capture(root, converted):
-    import cv2
-
+def source_video_info(root, converted):
     root = Path(root)
     info = json.loads((root / "meta/info.json").read_text())
     episodes = []
@@ -91,10 +89,17 @@ def source_capture(root, converted):
     path = root / info["video_path"].format(
         video_key=key, chunk_index=episode[f"videos/{key}/chunk_index"], file_index=episode[f"videos/{key}/file_index"]
     )
+    return path, round(episode[f"videos/{key}/from_timestamp"] * info["fps"]), info["fps"]
+
+
+def source_capture(root, converted):
+    import cv2
+
+    path, start, fps = source_video_info(root, converted)
     capture = cv2.VideoCapture(str(path))
     if not capture.isOpened():
         raise RuntimeError(f"Cannot open source head_left: {path}")
-    return capture, round(episode[f"videos/{key}/from_timestamp"] * info["fps"]), info["fps"]
+    return capture, start, fps
 
 
 def make_scene(base_scene, root, converted, config, output):

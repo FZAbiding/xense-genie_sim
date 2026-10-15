@@ -1,0 +1,7 @@
+{
+  "scope": "fixed-base simulation only; not hardware-certified",
+  "lookahead_seconds": 0.03333333333333333,
+  "waist": {"velocity_rad_s": 0.6, "acceleration_rad_s2": 3.0},
+  "arm": {"velocity_rad_s": 1.2, "acceleration_rad_s2": 8.0},
+  "gripper": {"velocity_rad_s": 1.8, "acceleration_rad_s2": 30.0}
+}

@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>UMI / G2 v5：原速在线 IK 验收</title>
+<style>
+body{margin:0;background:#101822;color:#e3edf5;font:16px/1.7 system-ui,sans-serif}main{max-width:1300px;margin:auto;padding:24px}h1{font-size:28px}h2{margin-top:30px}a{color:#87dae7}video,img{display:block;width:100%;border-radius:10px;background:#05080c}table{border-collapse:collapse;width:100%;background:#1c2a38}td,th{text-align:left;border-bottom:1px solid #405361;padding:10px}.notice{padding:16px;background:#263e4d;border-left:4px solid #87dae7}.grid{display:grid;grid-template-columns:1fr 1fr;gap:15px}figure{margin:0}figcaption{color:#b6c7d4}code{overflow-wrap:anywhere}@media(max-width:800px){.grid{grid-template-columns:1fr}main{padding:12px}}
+</style></head><body><main>
+<h1>UMI → G2 · v5：原速在线全身 IK</h1>
+<p>2026-10-15 · 固定底盘 · 腰部＋双臂＋夹爪 · 动态指尖 EEF · 真实 PhysX 反馈</p>
+<div class="notice"><strong>本轮修复并验收通过：慢放、非逐周期 IK、三视图传输空档。</strong><br>
+源片段 41.6667 秒，实际执行 41.6700 秒，1250 次在线命令，零超时。这不是把旧的 934 秒运动加速成 42 秒。<br>
+本页是离线验收资料。真正可拖动的仿真入口：<a href="http://127.0.0.1:8765">在线四视图控制台</a>，选择“在线 IK：原速 1× / 30 Hz”后点击播放。</div>
+<h2>直接播放：原速 2 × 2 四分屏</h2>
+<video controls preload="metadata" poster="quad-middle.png"><source src="head_left.mp4" type="video/mp4"></video>
+<p>左上原始 UMI head_left；右上同向虚拟 ego；下方两个外部镜头。1250 帧 / 30 fps / 41.666667 秒，机器人实际执行片段同为约 41.67 秒。渲染帧按真实 ROS 时间戳匹配，最大相位误差 41.1 ms；原有 100 ms 阈值未放宽。</p>
+<p><a href="head_left.mp4">直接打开视频</a> · <a href="README.md">完整验收说明</a> · <a href="metrics.json">机器可读指标</a> · <a href="replay-report.json">实际执行报告</a> · <a href="manifest.json">来源和 SHA256</a></p>
+<table><tr><th>本轮验收</th><th>结果</th></tr>
+<tr><td>在线 IK / 控制周期</td><td>目标 30 Hz；1250 次命令，零超时、零跳目标</td></tr>
+<tr><td>IK 求解 / 含碰撞检查的周期 P95</td><td>4.94 ms / 13.38 ms；周期最大 16.72 ms，小于 33.33 ms 预算</td></tr>
+<tr><td>实际 EEF 最大位置误差，左 / 右</td><td>21.410 / 18.359 mm；P95 11.355 / 8.585 mm</td></tr>
+<tr><td>结束时实际 EEF 位置误差，左 / 右</td><td>1.600 / 1.591 mm</td></tr>
+<tr><td>腰 roll / 底盘漂移</td><td>最大绝对 roll 0.1641°，最大平移漂移 2.047 μm</td></tr>
+<tr><td>三路图像传输修复</td><td>同场景 6 秒：完整束帧 35 → 176；最大束帧间隔 967 → 42 ms</td></tr>
+<tr><td>原生浏览器操作</td><td>真实鼠标拖动、滚轮、重置、播放、暂停、继续与整段结束通过</td></tr>
+</table>
+<h2>真实跟踪与计算耗时</h2><img src="realtime-summary.png" alt="实际在线IK耗时、指尖EEF误差、夹爪开度和腰部roll曲线">
+<h2>运行中的真实 Web 界面</h2><img src="web-realtime.png" alt="本轮原生UMI视频和三路真实仿真图像的Firefox运行截图">
+<p>在线浏览器实测：源相位 / 墙钟倍率 1.000021；视频时钟相位差最大 110.2 ms；实际呈现约 24.58 fps。时钟原速不等于每个浏览器都能完整显示全部 30 fps，不能混淆这两个指标。</p>
+<h2>首帧 / 中间帧 / 末帧</h2><div class="grid"><figure><img src="quad-start.png" alt="源首帧与机器人同相位四视图"><figcaption>首帧，源相位 0 s。</figcaption></figure><figure><img src="quad-end.png" alt="源末帧与机器人同相位四视图"><figcaption>末帧，源相位 41.633 s；最后一帧显示时长另有 1/30 s。</figcaption></figure></div>
+<img src="quad-middle.png" alt="源20.833秒与机器人同相位四视图">
+<h2>边界条件</h2>
+<p>新周期求解器是本仓库的 URDF Jacobian＋OSQP 微分 IK；BioIK 只负责首帧姿态准备。使用单独的仿真限速配置和一帧目标前瞻，保留关节、耦合、离散碰撞与反馈误差保护。这是软实时运动学仿真，不是厂商硬实时控制或力矩级 WBC。</p>
+<p>ego 未标定光学内外参；机器人空场景没有重建方块/箱子，因此不代表抓取成功。原始数据：TacVerse/xtac-umi-g1-block-to-box，CC-BY-SA-4.0；含源画面的图片/视频进行了缩放与拼接。详细原理见 <a href="../../REALTIME_REPLAY_ZH.md">实时回放说明</a>。本目录可整体复制后离线观看。</p>
+</main></body></html>

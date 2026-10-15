@@ -210,3 +210,30 @@
 - 临时QA浏览器清理；最终在线服务保持待命、未自动播放，用户可打开localhost:8765，或用“关闭本次后端”结束。
 
 阅读 [原理与在线使用](ONLINE_IK_AND_VIEWS_ZH.md)、[四视角结果与证据](MULTIVIEW_RESULTS_ZH.md)。
+## 2026-10-15：原速在线 IK 与原生 Web 视频，阶段记录
+
+- 已确认旧方案是 BioIK 全量预检 + 全局重定时：41.67 s 源片段实际约 933.97 s，不是逐周期在线 IK。
+- 新增 `differential_ik.py`：从 G2 URDF 构造双手 Jacobian，OSQP 联合求腰、双臂、两夹爪主关节的速度；保留原生限位、机构耦合与软直腰偏好。
+- 新增 `realtime_execution.py`：单调墙钟原速、30 Hz 目标、每条命令发送前检查中点与端点碰撞，实际 PhysX 反馈误差保护。不是力矩 WBC。
+- 分离仿真限速配置，保留旧 `validated` 模式；已知文件回放前瞻一帧，实际误差对当前相位统计，不对未来目标统计。
+- 首次在线实验因 QP 的 solved inaccurate 状态停止；后续增加迭代预算，并独立校验约束残差。最终 run-005 的该状态计数为零。
+- 无前瞻时夹爪实际开度误差 0.1064 触发原有 0.1 保护；加入明确记录的一帧前瞻后整段通过，没有放宽夹爪保护阈值。
+- 首帧曾落入多段 RRT 路径，按原有夹爪完整性契约拒绝执行；新增仅接受经过夹爪完整插值检查的直接路径，安全重试，不放行未验证的 RRT 夹爪插值。
+- Web 原始 UMI 画面改为原生 H.264 video + HTTP Range，机器人三路画面改为只发送最新帧的 MJPEG，不再用 10 Hz 图片轮询模拟视频。
+- run-005：`wbc_demo/logs/umi-realtime-web-native-01/run-005/`，1250 条在线命令，41.668278 s，零超时/零跳目标，IK P95 4.830 ms，整个命令周期 P95 13.054 ms；位置误差最大约 20.26 mm，最终约 1.50 mm。
+- Firefox 验收 `wbc_demo/logs/umi-realtime-work/browser-native-05/`：真实拖动/按钮及整段回放通过，原速倍率 1.000087，源视频时钟误差最大 30.495 ms，暂停相位不变；浏览器呈现约 24.85 fps，不能冒称全帧 30 fps。
+- 单测 75 项 UMI + 10 项 lab 通过；Black 32 文件检查通过、JS 语法检查通过。曾使用不存在的 `wbc_demo/tests` 路径造成一次测试命令失败，已改用实际存在的 `wbc_demo/test_lab.py`，10 项通过。
+- v5 四分屏导出未通过原有 0.1 s 相位阈值：检测到 0.268 s 空档，拒绝生成，失败日志为 `wbc_demo/logs/umi-realtime-work/sync-video-v5.log`。不放宽验收阈值、不复用旧视频伪装新结果。
+- 清理重复 UMI JPEG 解码后，`umi-realtime-web-native-02` 仍有束帧空档；渲染器自身日志约 30 Hz。已查到图像发布者 RELIABLE、接收者 BEST_EFFORT，下一步核查压缩传输和接收 QoS，不修改系统网络参数，不触碰其他工作区任务。
+- 最后两次诊断命令自动权限审批超时，未执行。当前只完成已验证结果文档；等待继续执行诊断/仿真验收的确认。本轮未 commit / push。
+- 原理、实测、失败项和复跑入口见 [REALTIME_REPLAY_ZH.md](REALTIME_REPLAY_ZH.md)。
+
+## 2026-10-15 18:42 后：完成 QoS 根因修复与 v5 验收包
+
+- 前述审批中断已恢复；同场景只读 A/B：6 秒 BEST_EFFORT 收全 35 组、最大间隔 966.6 ms；RELIABLE 收全 176 组、最大间隔 42.1 ms。记录 `wbc_demo/logs/umi-realtime-work/qos-probe.json`。
+- 仅把 Web 三路图像接收改为 RELIABLE、队列深度 3，匹配现有可靠发布者；新增单测固定接收契约。未修改系统网络参数或其他工作区任务。
+- 修复后主运行 `wbc_demo/logs/umi-realtime-web-reliable-01/run-001/`：就位、回放、回零通过，1250 条在线命令、零超时/跳目标，实际片段 41.670043 s。IK P95 4.941 ms，完整命令周期 P95 13.377 ms、最大 16.716 ms。
+- 四分屏导出 `wbc_demo/logs/umi-realtime-quad-v5-reliable-01/` 通过未改动的 0.1 s 源相位阈值：最大相机时间戳差 40.431 ms、源相位差 41.095 ms。1250 帧 / 30 fps / 41.666667 s，实际控制段同为约 41.67 s；全帧解码检查通过。
+- 最新 Firefox 原生输入验收 `wbc_demo/logs/umi-realtime-work/browser-reliable-01/` 完成：拖动、缩放、重置、播放、暂停/恢复、整段结束通过。源 / 墙钟倍率 1.000021，视频时钟差最大 110.2 ms；浏览器实际呈现约 24.58 fps，不冒称全帧 30 fps。
+- 76 项 UMI + 10 项 lab 单测通过。完整结果、视频、首中末帧、实际跟踪曲线、真实浏览器截图、报告和 SHA256 收到 [episode-000-v5/index.html](media/episode-000-v5/index.html)，不覆盖 v4 历史媒体。
+- 此节取代上一节“未完成图像传输验收”的当前状态；历史失败日志继续保留。当前结果是固定底盘的软实时运动学仿真，不是真机认证或力矩 WBC。

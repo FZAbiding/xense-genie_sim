@@ -24,6 +24,10 @@ def analyze(run_directory, converted):
     report = json.loads((output / "report.json").read_text())
     if converted["provenance"] != report["provenance"]:
         raise ValueError("Converted source does not match this run's recorded provenance")
+    if report.get("playback_mode") == "realtime":
+        from .realtime_analysis import analyze_realtime
+
+        return analyze_realtime(output)
     world = np.array(report["resolved_alignment"]["world_to_odom"])
     offsets = [np.array(item) for item in report["resolved_alignment"]["tip_to_eef"]]
     gripper_eef_tracking = report.get("tracking_pose_frame") == "gripper_eef"

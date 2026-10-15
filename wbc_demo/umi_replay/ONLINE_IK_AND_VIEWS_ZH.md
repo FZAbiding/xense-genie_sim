@@ -1,5 +1,7 @@
 # 全身 IK、腰部约束与 Web 四视角：给 VLA 工程师的说明
 
+**更新：本页原有 BioIK 全量预检流程属于旧慢放模式。当前 Web 默认的逐周期在线 IK 与原生视频见 [v5 实时回放说明](REALTIME_REPLAY_ZH.md)。**
+
 **v4：[开合映射、动态 TCP、浏览器交互修复](GRIPPER_AND_WEB_FIX_ZH.md)**。
 快速启动：`mamba activate xense-wbc`，接受 EULA 后运行 `bash wbc_demo/run.sh umi-web`，打开 `http://127.0.0.1:8765`。
 

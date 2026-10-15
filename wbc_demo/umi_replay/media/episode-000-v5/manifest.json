@@ -1,0 +1,242 @@
+{
+  "comparison": "UMI head_left vs actual physical replay, nearest image ROS timestamp at each commanded source phase",
+  "frames": 1250,
+  "fps": 30,
+  "duration_seconds": 41.666666666666664,
+  "source_phase_end_seconds": 41.63333511352539,
+  "physical_replay_seconds": 41.67004167000414,
+  "max_camera_timestamp_gap_seconds": 0.04043102264404297,
+  "p95_camera_timestamp_gap_seconds": 0.03038275241851806,
+  "allowed_max_camera_timestamp_gap_seconds": 0.4,
+  "max_source_phase_gap_seconds": 0.04109466846656673,
+  "p95_source_phase_gap_seconds": 0.03098551470435988,
+  "allowed_max_source_phase_gap_seconds": 0.1,
+  "real_time_control": true,
+  "control_contract": "soft realtime differential IK",
+  "layout": "quad",
+  "views": [
+    "UMI head_left",
+    "virtual head-pose-aligned ego",
+    "external A",
+    "external B"
+  ],
+  "alignment_limitations": "Camera timestamps label rendered TF state; this is command-phase alignment, not calibrated sensor latency or identical viewpoints.",
+  "source_license": "TacVerse/xtac-umi-g1-block-to-box / CC-BY-SA-4.0; head_left excerpt resized and composed",
+  "provenance": {
+    "dataset": "TacVerse/xtac-umi-g1-block-to-box",
+    "revision": "8ad651578fda4724514387e2d3d3551c3c9631f9",
+    "data_file": "data/chunk-000/file-000.parquet",
+    "data_sha256": "bc3165d4d981926fe2af052b612381384a5789226f30d2fae0f2e9ed29660ef4",
+    "feature": "observation.state",
+    "source_episode_id": "EP-1788246093295-0001",
+    "fps": 30,
+    "source_frames": 1250,
+    "extrinsics_already_applied": true,
+    "max_source_step_m": 0.013381546623244832,
+    "max_source_rotation_step_rad": 0.03257997144927967
+  },
+  "robot_model": {
+    "definition": "midpoint of the two distal fingertip faces at the held URDF zero-joint (open) configuration",
+    "axes": "X toward fingertips; Z toward the wrist-camera side; Y = Z cross X (opposite URDF left_support)",
+    "axis_revision": "camera_side_up_v2",
+    "urdf_sha256": "a78d5055fa9b66dc73bc7f8a62e71cf8f58795512945f5ee9d99ed15bf419cb2",
+    "hardware_calibration": false,
+    "sides": [
+      {
+        "side": "l",
+        "base_to_eef": [
+          [
+            0.0,
+            -1.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            -1.0,
+            1.7250422388316068e-05
+          ],
+          [
+            1.0,
+            0.0,
+            0.0,
+            0.20500573350429535
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "tip_to_eef": [
+          [
+            0.0,
+            -2.220446049250313e-16,
+            1.0,
+            -1.7250422388316068e-05
+          ],
+          [
+            0.0,
+            -1.0,
+            -2.220446049250313e-16,
+            3.830363224003556e-21
+          ],
+          [
+            1.0,
+            0.0,
+            0.0,
+            0.21200573350429536
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "meshes": [
+          {
+            "resource": "package://genie_sim_robot_model/robots/genie/g2/meshes/gripper/swiftpicker/left_support_link.STL",
+            "sha256": "a4c3248cf9f2c925d18aa9bb2e3659ef0d6a703252b006a3d9f1bc8ec2e917fb",
+            "distal_face_center_in_base_m": [
+              0.04867500028759242,
+              6.86751445755588e-05,
+              0.20500573350429535
+            ]
+          },
+          {
+            "resource": "package://genie_sim_robot_model/robots/genie/g2/meshes/gripper/swiftpicker/right_support_link.STL",
+            "sha256": "136475599e901768a0195df51634cb3f007d0d5a0c647855056aac31dc62a73b",
+            "distal_face_center_in_base_m": [
+              -0.04867500028759242,
+              -3.4174299798926666e-05,
+              0.20500573350429535
+            ]
+          }
+        ],
+        "camera_housing": {
+          "resource": "package://genie_sim_robot_model/robots/genie/g2/meshes/gripper/swiftpicker/camera_link.STL",
+          "sha256": "750873a92e9b23af434b29478c0be1cf54c4501bd05e092f4877a8718878cd25",
+          "bbox_center_in_eef_m": [
+            -0.15911583357151599,
+            0.005589677020907402,
+            0.03197862068191171
+          ]
+        }
+      },
+      {
+        "side": "r",
+        "base_to_eef": [
+          [
+            0.0,
+            -1.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            -1.0,
+            1.7250422388316068e-05
+          ],
+          [
+            1.0,
+            0.0,
+            0.0,
+            0.20500573350429535
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "tip_to_eef": [
+          [
+            0.0,
+            -2.220446049250313e-16,
+            1.0,
+            -1.7250422388316068e-05
+          ],
+          [
+            0.0,
+            -1.0,
+            -2.220446049250313e-16,
+            3.830363224003556e-21
+          ],
+          [
+            1.0,
+            0.0,
+            0.0,
+            0.21200573350429536
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "meshes": [
+          {
+            "resource": "package://genie_sim_robot_model/robots/genie/g2/meshes/gripper/swiftpicker/left_support_link.STL",
+            "sha256": "a4c3248cf9f2c925d18aa9bb2e3659ef0d6a703252b006a3d9f1bc8ec2e917fb",
+            "distal_face_center_in_base_m": [
+              0.04867500028759242,
+              6.86751445755588e-05,
+              0.20500573350429535
+            ]
+          },
+          {
+            "resource": "package://genie_sim_robot_model/robots/genie/g2/meshes/gripper/swiftpicker/right_support_link.STL",
+            "sha256": "136475599e901768a0195df51634cb3f007d0d5a0c647855056aac31dc62a73b",
+            "distal_face_center_in_base_m": [
+              -0.04867500028759242,
+              -3.4174299798926666e-05,
+              0.20500573350429535
+            ]
+          }
+        ],
+        "camera_housing": {
+          "resource": "package://genie_sim_robot_model/robots/genie/g2/meshes/gripper/swiftpicker/camera_link.STL",
+          "sha256": "750873a92e9b23af434b29478c0be1cf54c4501bd05e092f4877a8718878cd25",
+          "bbox_center_in_eef_m": [
+            -0.15911583357151599,
+            0.005589677020907402,
+            0.03197862068191171
+          ]
+        }
+      }
+    ],
+    "runtime_tcp": "fingertip midpoint recomputed from measured gripper joints; zero-joint fully-open reference retained above"
+  },
+  "inputs": {
+    "wbc_demo/data/converted/episode-000.json": "aaad631763b3899223043ee7f94589a22c5d4517630e968a7e4c5b569345ae29",
+    "wbc_demo/logs/umi-realtime-web-reliable-01/run-001/report.json": "7d3ae77e6bed60bf42ada7516144772e6064a0ae6982431791cf20955bd19df6",
+    "wbc_demo/logs/umi-realtime-web-reliable-01/run-001/command_phase.csv": "474c2b255a1b84ebc2508122df7f1f68626ec14c3a88f84570e2e43b48be9596",
+    "wbc_demo/logs/umi-realtime-web-reliable-01/recording-001/frames.csv": "55c7850355abe67f82d5374ffa0ef27276b4b8bdb2f643d55295c13cff87d866",
+    "wbc_demo/logs/umi-realtime-web-reliable-01/recording-001/views.mp4": "802274ff9e6599979e24cf50457e4f000559979b9a6b4b267e5e74dc5d37797a",
+    "/home/xense/src/xense-genie_sim/wbc_demo/data/xtac-umi-g1-block-to-box/videos/observation.images.head_left/chunk-000/file-000.mp4": "fbfd668f3a7497648399ec046c0cecb895a559d819588fb10050f2f14597502a"
+  },
+  "output_sha256": "891018d37ee793f9e5d337172958c416325ab47edbd4cc4f24332b467904b6f7",
+  "evidence_directory": "wbc_demo/umi_replay/media/episode-000-v5",
+  "image_subscription_qos": {
+    "reliability": "RELIABLE",
+    "depth": 3
+  },
+  "files": {
+    "README.md": "a5a353b2de75b83910c682ab9656104dd9e2a302f7e7b6cebad80f3bfa1e0555",
+    "head_left.mp4": "891018d37ee793f9e5d337172958c416325ab47edbd4cc4f24332b467904b6f7",
+    "index.html": "766db93817020a00302e7455210effcdcf1301fe2981c44a376b1d9e79f70f26",
+    "metrics.json": "6c5d4d5d6e03632d25746f307e6debf91aca2dfe55a3994b30598394def3e412",
+    "quad-end.png": "ba315839a91f8c92e1586d2c6af54c532e631936fc8920834753cc9dd2e6182d",
+    "quad-middle.png": "96564c82326775511bf93bc0e54554fd0645c43b5609a581fc9d09249ea9c291",
+    "quad-start.png": "f635803dfaaff5b53698489618be09205c18ab71925d8eac12e40a2ab124ebf6",
+    "realtime-summary.png": "4d156d640deec9634ea006a4b38934e452cf5b5bf1bfe41cfbfc7fc45c74ad73",
+    "replay-report.json": "7d3ae77e6bed60bf42ada7516144772e6064a0ae6982431791cf20955bd19df6",
+    "web-realtime.png": "6a90bb27ab3c88cee254bcac9e48f06756109c2bd36c0f1c4b9f7ab204b705a2"
+  }
+}

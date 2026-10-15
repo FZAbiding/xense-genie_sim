@@ -33,6 +33,7 @@ async def validate(args):
         context = (await call("browsingContext.getTree", {}))["contexts"][0]["context"]
         await call("browsingContext.setViewport", {"context": context, "viewport": {"width": 1400, "height": 1400}})
         await call("browsingContext.navigate", {"context": context, "url": args.url, "wait": "complete"})
+        await call("browsingContext.activate", {"context": context})
 
         async def evaluate(expression):
             value = await call(
@@ -96,7 +97,9 @@ async def validate(args):
 
         await wait_for(lambda state: state["ready"])
         await asyncio.sleep(1)
-        loaded = await evaluate("JSON.stringify([...document.querySelectorAll('img')].map(image=>image.naturalWidth))")
+        loaded = await evaluate(
+            "JSON.stringify([...document.querySelectorAll('.grid img,.grid video')].map(media=>media.naturalWidth||media.videoWidth))"
+        )
         assert len(loaded) == 4 and min(loaded) > 0, loaded
         result["loaded_image_widths"] = loaded
         await screenshot("web-before-drag.png")
@@ -167,6 +170,50 @@ async def validate(args):
             await click('[data-command="resume"]')
             await wait_for(lambda state: state["stage"] == "replaying")
             result["resume_button"] = "passed"
+            if status().get("playback_mode") == "realtime":
+                await evaluate(
+                    "JSON.stringify((()=>{window.sourcePresentations=[];function record(now,metadata){window.sourcePresentations.push({wall_ms:now,media_time_s:metadata.mediaTime});document.getElementById('source-video').requestVideoFrameCallback(record);}document.getElementById('source-video').requestVideoFrameCallback(record);return true;})())"
+                )
+                samples = []
+                for sample in range(12):
+                    await asyncio.sleep(1)
+                    state = status()
+                    video = await evaluate(
+                        "JSON.stringify((()=>{const video=document.getElementById('source-video');return {current_time_s:video.currentTime,playback_rate:video.playbackRate,paused:video.paused,quality:video.getVideoPlaybackQuality()};})())"
+                    )
+                    samples.append(
+                        {
+                            "wall_monotonic_s": time.monotonic(),
+                            "source_time_s": state["source_time_s"],
+                            "stage": state["stage"],
+                            "video": video,
+                        }
+                    )
+                shown = await evaluate("JSON.stringify(window.sourcePresentations)")
+                (args.output / "video-samples.json").write_text(
+                    json.dumps({"samples": samples, "presentations": shown}, indent=2) + "\n"
+                )
+                source_rate = (samples[-1]["source_time_s"] - samples[0]["source_time_s"]) / (
+                    samples[-1]["wall_monotonic_s"] - samples[0]["wall_monotonic_s"]
+                )
+                max_gap = max(
+                    abs(item["video"]["current_time_s"] - item["source_time_s"] - state["source_video_start_s"])
+                    for item in samples
+                )
+                assert len(shown) > 1, "Native video did not present frames; inspect video-samples.json"
+                display_fps = (len(shown) - 1) / ((shown[-1]["wall_ms"] - shown[0]["wall_ms"]) / 1000)
+                assert 0.95 < source_rate < 1.05, source_rate
+                assert max_gap < 0.2, max_gap
+                assert all(
+                    not item["video"]["paused"] and item["video"]["playback_rate"] == 1 for item in samples
+                ), samples
+                result["realtime_video"] = {
+                    "source_wall_speed_ratio": source_rate,
+                    "max_video_phase_gap_s": max_gap,
+                    "presented_video_fps": display_fps,
+                    "samples": samples,
+                }
+                await screenshot("web-realtime.png")
             (args.output / "browser-validation.json").write_text(json.dumps(result, indent=2) + "\n")
             completed = await wait_for(lambda state: not state["busy"], timeout=1200)
             assert completed["stage"] == "finished", completed

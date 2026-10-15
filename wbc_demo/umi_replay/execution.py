@@ -305,11 +305,14 @@ def posture_config(config, policy):
 
 def run(args, converted, config):
     policy = getattr(args, "posture_policy", "config")
+    realtime = getattr(args, "playback_mode", "validated") == "realtime"
     config = posture_config(config, policy)
     converted = copy.deepcopy(converted)
     converted["keyframe_indexes"] = select_keyframes(
         converted["source_frames"], converted["sampling"]["max_interval_seconds"]
     )
+    if realtime:
+        converted["keyframe_indexes"] = list(range(len(converted["source_frames"])))
     if converted["schema"] != "xense-umi-eef-v1" or converted["frame"] != "dataset_world":
         raise ValueError("Unsupported converted trajectory")
     if not math.isfinite(args.speed) or not 0 < args.speed <= 1:
@@ -339,6 +342,7 @@ def run(args, converted, config):
         "posture_policy": policy,
         "effective_keyframes": len(converted["keyframe_indexes"]),
         "gripper_sampling_tolerance": 0.02,
+        "playback_mode": "realtime" if realtime else "validated",
     }
     report["backend_log_directory"] = os.environ.get("WBC_BACKEND_LOG_DIR")
     save_json(output / "report.json", report)
@@ -381,33 +385,47 @@ def run(args, converted, config):
         save_json(output / "mapped_targets.json", frames)
         report["status"] = "preflight_running"
         node.publish_progress(0.0, "preflight")
-        states, first = preflight(node, frames, report, output)
-        scale = retime(node, states, frames, args.speed)
-        report["retimed_duration_seconds"] = scale * converted["source_duration_seconds"]
-        report["time_scale"] = scale
-        save_json(
-            output / "joint_plan.json",
-            {
-                "joint_names": states[0].joint_state.name,
-                "positions": [list(state.joint_state.position) for state in states],
-                "source_times": [frame["timestamp"] for frame in frames],
-                "time_scale": scale,
-            },
-        )
+        if realtime:
+            from .realtime_execution import prepare_initial
+
+            first = prepare_initial(node, frames[0])
+            report["initial_approach_ik"] = {
+                key: first[key] for key in ("ik_error_m", "ik_orientation_error_rad", "solve_seconds")
+            }
+            report["time_scale"] = 1.0
+        else:
+            states, first = preflight(node, frames, report, output)
+            scale = retime(node, states, frames, args.speed)
+            report["retimed_duration_seconds"] = scale * converted["source_duration_seconds"]
+            report["time_scale"] = scale
+            save_json(
+                output / "joint_plan.json",
+                {
+                    "joint_names": states[0].joint_state.name,
+                    "positions": [list(state.joint_state.position) for state in states],
+                    "source_times": [frame["timestamp"] for frame in frames],
+                    "time_scale": scale,
+                },
+            )
         if args.execute:
             report["status"] = "executing"
             save_json(output / "report.json", report)
             motion_started = True
             node.publish_progress(0.0, "approaching")
             report["approach"] = node.execute_prepared(first)
-            report["replay"] = execute(node, states, frames, scale, config, output)
+            if realtime:
+                from .realtime_execution import stream
+
+                report["replay"] = stream(node, frames, config, args.limits_profile, output, report)
+            else:
+                report["replay"] = execute(node, states, frames, scale, config, output)
             node.publish_progress(frames[-1]["timestamp"], "returning_home")
             report["return_home"] = node.return_home()
         report["status"] = "passed" if args.execute else "preflight_passed_no_execution"
         node.publish_progress(converted["source_duration_seconds"] if args.execute else 0.0, "finished")
         print(f"{report['status']}: {output}", flush=True)
     except BaseException as error:
-        node.publish_progress(0.0, "failed")
+        node.publish_progress(getattr(node, "last_source_time", 0.0), "failed")
         report["status"] = "failed"
         report["error"] = str(error)
         if motion_started and node.command_lock is not None:

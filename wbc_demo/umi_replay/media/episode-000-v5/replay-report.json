@@ -1,0 +1,1073 @@
+{
+  "status": "passed",
+  "started_at": "2026-10-15T10:42:17.183982+00:00",
+  "input_sha256": "aaad631763b3899223043ee7f94589a22c5d4517630e968a7e4c5b569345ae29",
+  "provenance": {
+    "dataset": "TacVerse/xtac-umi-g1-block-to-box",
+    "revision": "8ad651578fda4724514387e2d3d3551c3c9631f9",
+    "data_file": "data/chunk-000/file-000.parquet",
+    "data_sha256": "bc3165d4d981926fe2af052b612381384a5789226f30d2fae0f2e9ed29660ef4",
+    "feature": "observation.state",
+    "source_episode_id": "EP-1788246093295-0001",
+    "fps": 30,
+    "source_frames": 1250,
+    "extrinsics_already_applied": true,
+    "max_source_step_m": 0.013381546623244832,
+    "max_source_rotation_step_rad": 0.03257997144927967
+  },
+  "config": {
+    "mode": "shared_world_gripper_eef",
+    "initial_midpoint_odom_m": [
+      0.3,
+      0.0,
+      1.05
+    ],
+    "world_yaw_deg": 0.0,
+    "tool_frame_source": "swiftpicker_urdf_and_fingertip_mesh_geometry",
+    "calibration_status": "model_based_gripper_eef_not_hardware_calibration",
+    "max_joint_velocity_rad_s": 0.3,
+    "max_joint_acceleration_rad_s2": 0.5,
+    "max_tracking_error_m": 0.05,
+    "max_tracking_rotation_rad": 0.17453292519943295
+  },
+  "preflight": [],
+  "execution_requested": true,
+  "planning_group": "wbc_fixed_headless",
+  "physical_chassis": "must be pinned to world by scene_stress.yaml",
+  "grippers": "0 closed / 1 open; linear native master-joint mapping; mimic followers; dynamic fingertip-midpoint TCP",
+  "head": "not replayed",
+  "posture_policy": "soft",
+  "effective_keyframes": 1250,
+  "gripper_sampling_tolerance": 0.02,
+  "playback_mode": "realtime",
+  "backend_log_directory": "wbc_demo/logs/umi-backend-20261015-184210",
+  "interactive_control_events": [],
+  "tracking_pose_frame": "gripper_eef",
+  "robot_eef_frames": [
+    "gripper_l_eef",
+    "gripper_r_eef"
+  ],
+  "solver_internal_links": [
+    "arm_l_end_link",
+    "arm_r_end_link"
+  ],
+  "gripper_eef_model": {
+    "definition": "midpoint of the two distal fingertip faces at the held URDF zero-joint (open) configuration",
+    "axes": "X toward fingertips; Z toward the wrist-camera side; Y = Z cross X (opposite URDF left_support)",
+    "axis_revision": "camera_side_up_v2",
+    "urdf_sha256": "a78d5055fa9b66dc73bc7f8a62e71cf8f58795512945f5ee9d99ed15bf419cb2",
+    "hardware_calibration": false,
+    "sides": [
+      {
+        "side": "l",
+        "base_to_eef": [
+          [
+            0.0,
+            -1.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            -1.0,
+            1.7250422388316068e-05
+          ],
+          [
+            1.0,
+            0.0,
+            0.0,
+            0.20500573350429535
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "tip_to_eef": [
+          [
+            0.0,
+            -2.220446049250313e-16,
+            1.0,
+            -1.7250422388316068e-05
+          ],
+          [
+            0.0,
+            -1.0,
+            -2.220446049250313e-16,
+            3.830363224003556e-21
+          ],
+          [
+            1.0,
+            0.0,
+            0.0,
+            0.21200573350429536
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "meshes": [
+          {
+            "resource": "package://genie_sim_robot_model/robots/genie/g2/meshes/gripper/swiftpicker/left_support_link.STL",
+            "sha256": "a4c3248cf9f2c925d18aa9bb2e3659ef0d6a703252b006a3d9f1bc8ec2e917fb",
+            "distal_face_center_in_base_m": [
+              0.04867500028759242,
+              6.86751445755588e-05,
+              0.20500573350429535
+            ]
+          },
+          {
+            "resource": "package://genie_sim_robot_model/robots/genie/g2/meshes/gripper/swiftpicker/right_support_link.STL",
+            "sha256": "136475599e901768a0195df51634cb3f007d0d5a0c647855056aac31dc62a73b",
+            "distal_face_center_in_base_m": [
+              -0.04867500028759242,
+              -3.4174299798926666e-05,
+              0.20500573350429535
+            ]
+          }
+        ],
+        "camera_housing": {
+          "resource": "package://genie_sim_robot_model/robots/genie/g2/meshes/gripper/swiftpicker/camera_link.STL",
+          "sha256": "750873a92e9b23af434b29478c0be1cf54c4501bd05e092f4877a8718878cd25",
+          "bbox_center_in_eef_m": [
+            -0.15911583357151599,
+            0.005589677020907402,
+            0.03197862068191171
+          ]
+        }
+      },
+      {
+        "side": "r",
+        "base_to_eef": [
+          [
+            0.0,
+            -1.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            -1.0,
+            1.7250422388316068e-05
+          ],
+          [
+            1.0,
+            0.0,
+            0.0,
+            0.20500573350429535
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "tip_to_eef": [
+          [
+            0.0,
+            -2.220446049250313e-16,
+            1.0,
+            -1.7250422388316068e-05
+          ],
+          [
+            0.0,
+            -1.0,
+            -2.220446049250313e-16,
+            3.830363224003556e-21
+          ],
+          [
+            1.0,
+            0.0,
+            0.0,
+            0.21200573350429536
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "meshes": [
+          {
+            "resource": "package://genie_sim_robot_model/robots/genie/g2/meshes/gripper/swiftpicker/left_support_link.STL",
+            "sha256": "a4c3248cf9f2c925d18aa9bb2e3659ef0d6a703252b006a3d9f1bc8ec2e917fb",
+            "distal_face_center_in_base_m": [
+              0.04867500028759242,
+              6.86751445755588e-05,
+              0.20500573350429535
+            ]
+          },
+          {
+            "resource": "package://genie_sim_robot_model/robots/genie/g2/meshes/gripper/swiftpicker/right_support_link.STL",
+            "sha256": "136475599e901768a0195df51634cb3f007d0d5a0c647855056aac31dc62a73b",
+            "distal_face_center_in_base_m": [
+              -0.04867500028759242,
+              -3.4174299798926666e-05,
+              0.20500573350429535
+            ]
+          }
+        ],
+        "camera_housing": {
+          "resource": "package://genie_sim_robot_model/robots/genie/g2/meshes/gripper/swiftpicker/camera_link.STL",
+          "sha256": "750873a92e9b23af434b29478c0be1cf54c4501bd05e092f4877a8718878cd25",
+          "bbox_center_in_eef_m": [
+            -0.15911583357151599,
+            0.005589677020907402,
+            0.03197862068191171
+          ]
+        }
+      }
+    ],
+    "runtime_tcp": "fingertip midpoint recomputed from measured gripper joints; zero-joint fully-open reference retained above"
+  },
+  "resolved_alignment": {
+    "world_to_odom": [
+      [
+        1.0,
+        0.0,
+        0.0,
+        0.08631185740232467
+      ],
+      [
+        0.0,
+        1.0,
+        0.0,
+        0.013737443834543228
+      ],
+      [
+        0.0,
+        0.0,
+        1.0,
+        1.754931527376175
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "tip_to_eef": [
+      [
+        [
+          0.0,
+          -2.220446049250313e-16,
+          1.0,
+          -1.7250422388316068e-05
+        ],
+        [
+          0.0,
+          -1.0,
+          -2.220446049250313e-16,
+          3.830363224003556e-21
+        ],
+        [
+          1.0,
+          0.0,
+          0.0,
+          0.21200573350429536
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      [
+        [
+          0.0,
+          -2.220446049250313e-16,
+          1.0,
+          -1.7250422388316068e-05
+        ],
+        [
+          0.0,
+          -1.0,
+          -2.220446049250313e-16,
+          3.830363224003556e-21
+        ],
+        [
+          1.0,
+          0.0,
+          0.0,
+          0.21200573350429536
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    ],
+    "source_start_midpoint_m": [
+      0.21368814259767532,
+      -0.013737443834543228,
+      -0.7049315273761749
+    ]
+  },
+  "initial_approach_ik": {
+    "ik_error_m": [
+      7.120417313442854e-07,
+      7.128532667236591e-07
+    ],
+    "ik_orientation_error_rad": [
+      7.815541853135612e-06,
+      7.881573362844956e-06
+    ],
+    "solve_seconds": 0.014185161999193951
+  },
+  "time_scale": 1.0,
+  "approach": {
+    "group": "wbc_fixed_headless",
+    "planning_method": "checked_direct_joint_interpolation",
+    "collision_samples": 78,
+    "ik_error_m": [
+      7.120417313442854e-07,
+      7.128532667236591e-07
+    ],
+    "ik_orientation_error_rad": [
+      7.815541853135612e-06,
+      7.881573362844956e-06
+    ],
+    "solve_seconds": 0.014185161999193951,
+    "attempts": 1,
+    "status": "passed",
+    "targets": [
+      {
+        "position": [
+          0.32019812911748885,
+          0.12006792053580284,
+          1.0640396654605866
+        ],
+        "quaternion_xyzw": [
+          0.04107297319999123,
+          0.26575096251768227,
+          -0.2851020493953679,
+          0.9200034012024083
+        ]
+      },
+      {
+        "position": [
+          0.27980187088251113,
+          -0.12006792053580284,
+          1.0359603345394135
+        ],
+        "quaternion_xyzw": [
+          -0.028433054613318857,
+          0.32540640089790923,
+          0.25996889982338817,
+          0.9086904900925521
+        ]
+      }
+    ],
+    "measured_tcp_error_m": [
+      0.0013650340502035891,
+      0.001052374172598667
+    ],
+    "measured_tcp_orientation_error_rad": [
+      0.002395584955625887,
+      0.002069978544548355
+    ],
+    "body_joint_delta_rad": {
+      "idx01_body_joint1": -0.16184678920033987,
+      "idx02_body_joint2": 0.2431781823678344,
+      "idx03_body_joint3": -0.28698281916272106,
+      "idx04_body_joint4": -2.6298673286572624e-05,
+      "idx05_body_joint5": 0.2039392216488253
+    },
+    "locked_body_drift_rad": null,
+    "max_command_step_rad": 0.006023292354371872,
+    "retimed_seconds": 9.539124661803417,
+    "execution_seconds": 11.560386714001652,
+    "max_base_translation_drift_m": 8.148175372077241e-07,
+    "max_base_rotation_drift_rad": 0.0
+  },
+  "replay": {
+    "control_hz_requested": 30,
+    "source_duration_seconds": 41.66666844685872,
+    "time_scale": 1.0,
+    "solver": "repository differential Cartesian IK + OSQP; BioIK only for the initial approach",
+    "limits_profile": {
+      "scope": "fixed-base simulation only; not hardware-certified",
+      "lookahead_seconds": 0.03333333333333333,
+      "waist": {
+        "velocity_rad_s": 0.6,
+        "acceleration_rad_s2": 3.0
+      },
+      "arm": {
+        "velocity_rad_s": 1.2,
+        "acceleration_rad_s2": 8.0
+      },
+      "gripper": {
+        "velocity_rad_s": 1.8,
+        "acceleration_rad_s2": 30.0
+      }
+    },
+    "active_joints": [
+      "idx01_body_joint1",
+      "idx02_body_joint2",
+      "idx03_body_joint3",
+      "idx04_body_joint4",
+      "idx05_body_joint5",
+      "idx21_arm_l_joint1",
+      "idx61_arm_r_joint1",
+      "idx22_arm_l_joint2",
+      "idx23_arm_l_joint3",
+      "idx24_arm_l_joint4",
+      "idx25_arm_l_joint5",
+      "idx26_arm_l_joint6",
+      "idx27_arm_l_joint7",
+      "idx31_gripper_l_inner_joint1",
+      "idx62_arm_r_joint2",
+      "idx63_arm_r_joint3",
+      "idx64_arm_r_joint4",
+      "idx65_arm_r_joint5",
+      "idx66_arm_r_joint6",
+      "idx67_arm_r_joint7",
+      "idx71_gripper_r_inner_joint1"
+    ],
+    "planned_velocity_limits_rad_s": [
+      0.6,
+      0.6,
+      0.6,
+      0.6,
+      0.6,
+      1.2,
+      1.2,
+      1.2,
+      1.2,
+      1.2,
+      1.2,
+      1.2,
+      1.2,
+      1.8,
+      1.2,
+      1.2,
+      1.2,
+      1.2,
+      1.2,
+      1.2,
+      1.8
+    ],
+    "planned_acceleration_limits_rad_s2": [
+      3.0,
+      3.0,
+      3.0,
+      3.0,
+      3.0,
+      8.0,
+      8.0,
+      8.0,
+      8.0,
+      8.0,
+      8.0,
+      8.0,
+      8.0,
+      30.0,
+      8.0,
+      8.0,
+      8.0,
+      8.0,
+      8.0,
+      8.0,
+      30.0
+    ],
+    "joint_lower_limits_rad": [
+      -1.0822,
+      -0.0001,
+      -1.907,
+      -0.4364,
+      -3.0456,
+      -3.0718,
+      -3.0718,
+      -2.0595,
+      -3.0718,
+      -2.4959,
+      -3.0718,
+      -1.0123,
+      -1.5359,
+      -0.91,
+      -2.0595,
+      -3.0718,
+      -2.4959,
+      -3.0718,
+      -1.0123,
+      -1.5359,
+      -0.91
+    ],
+    "joint_upper_limits_rad": [
+      0.0001,
+      2.653,
+      1.039,
+      0.4364,
+      3.0456,
+      3.0718,
+      3.0718,
+      2.0595,
+      3.0718,
+      1.0123,
+      3.0718,
+      1.0123,
+      1.5359,
+      0.0,
+      2.0595,
+      3.0718,
+      1.0123,
+      3.0718,
+      1.0123,
+      1.5359,
+      0.0
+    ],
+    "coupled_matrix": [
+      [
+        0.0,
+        0.022,
+        0.449,
+        -0.8933,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.024,
+        0.4737,
+        0.8804,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0073,
+        -0.7246,
+        0.6892,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.01,
+        -0.7124,
+        -0.7017,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0031,
+        1.0,
+        0.008,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.994,
+        0.1093,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.9685,
+        0.1293,
+        0.2127,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.9616,
+        0.1262,
+        -0.2435,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.5559,
+        0.8232,
+        0.1156,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      [
+        -0.0421,
+        0.9991,
+        -0.0006,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.7409,
+        0.6716,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        -0.7403,
+        -0.6723,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.599,
+        -0.8008,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        -0.7401,
+        0.6725,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.7409,
+        0.6716,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        -0.7403,
+        -0.6723,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.599,
+        -0.8008,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        -0.7401,
+        0.6725,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    ],
+    "coupled_ceiling": [
+      0.47,
+      0.4923,
+      1.3822,
+      1.3781,
+      1.5073,
+      2.4851,
+      2.5318,
+      2.5292,
+      1.4981,
+      2.6859,
+      1.243,
+      1.2427,
+      1.3267,
+      1.2452,
+      1.243,
+      1.2427,
+      1.3267,
+      1.2452
+    ],
+    "target_lookahead_s": 0.03333333333333333,
+    "fk_crosscheck_max_position_m": 5.757191532588119e-16,
+    "commands": 1250,
+    "deadline_misses": 0,
+    "skipped_source_ticks": 0,
+    "qp_solved_inaccurate": 2,
+    "max_position_error_m": 0.021409703459024296,
+    "max_rotation_error_rad": 0.02688467268270892,
+    "max_gripper_opening_error": 0.08420053041104553,
+    "max_command_velocity_rad_s": 1.3563248372982306,
+    "max_command_acceleration_rad_s2": 30.00000000423793,
+    "max_command_step_rad": 0.04521082790994102,
+    "clock_policy": "monotonic wall clock at source 1x; pauses excluded; no backlog or global retiming",
+    "collision_policy": "MoveIt midpoint and endpoint checks before each command; not continuous swept-volume checking",
+    "feedback_policy": "warm-started command-space differential IK; actual PhysX joint feedback monitored for tracking and base drift",
+    "final_position_errors_m": [
+      0.0015999509127410307,
+      0.0015912289771074974
+    ],
+    "final_rotation_errors_rad": [
+      0.0024675244290335435,
+      0.0025235697256364275
+    ],
+    "wall_seconds": 41.67004167000414,
+    "pause_seconds": 0.0,
+    "active_wall_seconds": 41.67004277301021,
+    "solve_ms_p50_p95_max": [
+      2.498229492630344,
+      4.941353642789181,
+      6.274769999436103
+    ],
+    "cycle_ms_p50_p95_max": [
+      9.575118499924429,
+      13.377334544929907,
+      16.715923004085198
+    ],
+    "max_base_translation_drift_m": 2.046654316446792e-06,
+    "max_base_rotation_drift_rad": 0.0
+  },
+  "return_home": {
+    "group": "wbc_fixed_headless",
+    "planning_method": "joint_interpolation",
+    "collision_samples": 72,
+    "ik_error_m": [
+      0.0,
+      0.0
+    ],
+    "ik_orientation_error_rad": [
+      0.0,
+      0.0
+    ],
+    "solve_seconds": 0.0,
+    "attempts": 0,
+    "status": "passed",
+    "targets": [
+      {
+        "position": [
+          0.36899051055670173,
+          0.040097140531303255,
+          1.3782936907798895
+        ],
+        "quaternion_xyzw": [
+          0.5202152486629432,
+          -0.4760627623151872,
+          -0.479350669875513,
+          0.5224588755924072
+        ]
+      },
+      {
+        "position": [
+          0.36899392206207676,
+          -0.04008018347902334,
+          1.3781554753153478
+        ],
+        "quaternion_xyzw": [
+          -0.5202222524053285,
+          -0.47597308298119223,
+          0.4794503311835645,
+          0.5224421616865126
+        ]
+      }
+    ],
+    "measured_tcp_error_m": [
+      0.0040221059538062594,
+      0.004045126741546916
+    ],
+    "measured_tcp_orientation_error_rad": [
+      0.004876688723616511,
+      0.004918917495340093
+    ],
+    "body_joint_delta_rad": {
+      "idx01_body_joint1": 0.0010548151782430485,
+      "idx02_body_joint2": 0.0016575577042491226,
+      "idx03_body_joint3": 0.0008924662429917721,
+      "idx04_body_joint4": -2.0702335351237626e-07,
+      "idx05_body_joint5": 1.5161759167174806e-06
+    },
+    "locked_body_drift_rad": null,
+    "max_command_step_rad": 0.006025592686859939,
+    "retimed_seconds": 8.839546537355021,
+    "execution_seconds": 10.864445523999166,
+    "max_base_translation_drift_m": 2.046654316446792e-06,
+    "max_base_rotation_drift_rad": 0.0
+  },
+  "finished_at": "2026-10-15T10:43:25.586285+00:00"
+}

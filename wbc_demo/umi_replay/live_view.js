@@ -4,13 +4,37 @@ const errorElement = document.getElementById('error');
 const actionElement = document.getElementById('action');
 const startButton = document.getElementById('start');
 const policyElement = document.getElementById('policy');
+const modeElement = document.getElementById('mode');
+const sourceVideo = document.getElementById('source-video');
 const buttons = [...document.querySelectorAll('[data-command]')];
 const images = [...document.querySelectorAll('[data-view]')];
 let connected = false;
 let commandError = '';
+let sourceSeekPending = false;
+
+function syncSourceVideo(state) {
+  if (sourceVideo.readyState < 2) return;
+  const end = state.source_video_start_s + state.source_duration_s - 1 / 30;
+  const target = Math.min(end, state.source_video_start_s + Number(state.source_time_s));
+  const playing = state.stage === 'replaying' && state.playback_mode === 'realtime';
+  if (!sourceVideo.seeking && !sourceSeekPending && Math.abs(sourceVideo.currentTime - target) > (playing ? 0.12 : 0.025)) {
+    sourceSeekPending = true;
+    sourceVideo.currentTime = target;
+  }
+  sourceVideo.playbackRate = 1;
+  if (playing && target < end) {
+    if (sourceVideo.paused) sourceVideo.play().catch(error => { errorElement.textContent = '源视频播放失败：' + error.message; });
+  } else {
+    sourceVideo.pause();
+  }
+}
+
+sourceVideo.addEventListener('seeked', () => { sourceSeekPending = false; });
+sourceVideo.addEventListener('error', () => { errorElement.textContent = '无法解码源 MP4，请检查浏览器 H.264 支持和 /source.mp4 请求。'; });
 
 function disconnected(message) {
   connected = false;
+  sourceVideo.pause();
   stageElement.textContent = '离线：没有连接到运行中的仿真服务';
   errorElement.textContent = message;
   startButton.disabled = true;
@@ -40,11 +64,16 @@ async function refreshStatus() {
     if (!response.ok) throw new Error('状态接口返回 ' + response.status);
     const state = await response.json();
     connected = true;
+    syncSourceVideo(state);
     document.getElementById('connection').hidden = true;
     stageElement.textContent = state.stage;
     phaseElement.textContent = Number(state.source_time_s).toFixed(3) + ' s';
-    startButton.disabled = !state.ready || state.busy;
+    startButton.disabled = !state.ready || state.busy || sourceVideo.readyState < 2;
     policyElement.disabled = state.busy;
+    modeElement.disabled = state.busy;
+    document.getElementById('timing').textContent = state.playback_mode === 'realtime' ?
+      '在线微分 IK · 源 1× · 目标 30 Hz · 超时 ' + state.deadline_misses + ' 次 · 渲染束帧龄 ' +
+        (state.render_bundle_age_s === null ? '等待' : Math.round(state.render_bundle_age_s * 1000) + ' ms') : '预计算 IK · 安全慢放';
     buttons.forEach(button => {
       const kind = button.dataset.command;
       button.disabled = kind === 'pause' ? state.stage !== 'replaying' :
@@ -63,14 +92,14 @@ async function refreshStatus() {
 
 function refreshImage(image) {
   if (connected) {
-    image.onload = image.onerror = () => window.setTimeout(() => refreshImage(image), 100);
-    image.src = '/frame/' + image.dataset.view + '?t=' + Date.now();
+    image.onerror = () => window.setTimeout(() => refreshImage(image), 1000);
+    image.src = '/stream/' + image.dataset.view + '?t=' + Date.now();
   } else {
     window.setTimeout(() => refreshImage(image), 500);
   }
 }
 
-startButton.addEventListener('click', () => sendCommand({command: 'start', policy: policyElement.value}));
+startButton.addEventListener('click', () => sendCommand({command: 'start', policy: policyElement.value, mode: modeElement.value}));
 buttons.forEach(button => button.addEventListener('click', () => {
   const kind = button.dataset.command;
   if (kind === 'shutdown' && !window.confirm('结束本次回放并关闭本次启动的后端？')) return;

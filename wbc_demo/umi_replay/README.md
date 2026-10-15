@@ -1,6 +1,10 @@
 # XTac UMI → 固定底盘 G2 回放
 
-**最新：[v4 夹爪开合与 Web 交互修复](GRIPPER_AND_WEB_FIX_ZH.md)**。
+**v5 原速在线 IK：[为什么慢、实时架构与核查方法](REALTIME_REPLAY_ZH.md)**。
+Web 默认 1× / 30 Hz 在线微分 IK，UMI 使用浏览器原生视频；旧的预计算慢放模式仍可选择。
+**直接看结果：[v5 自包含四分屏视频/图片验收页](media/episode-000-v5/index.html)**，本轮图像传输空档已修复，视频通过原有同步阈值。
+
+**历史 v4：[夹爪开合与 Web 交互修复](GRIPPER_AND_WEB_FIX_ZH.md)**。
 现在按 0 闭合 / 1 开启回放，使用随开度变化的指尖 TCP；
 执行 `bash wbc_demo/run.sh umi-web` 后打开 `http://127.0.0.1:8765`，不是点击验收页的截图。
 
@@ -21,7 +25,7 @@ Web 默认软直腰偏好，可切换 ±0.5° 对照策略，不新增 PyQt/PySi
 先读 [EEF 修正说明与结果](GRIPPER_EEF_CORRECTION_ZH.md)，再看 [数据坐标系说明](COORDINATES_ZH.md)。
 [上一轮结果](RESULTS_ZH.md) 是历史虚拟 EEF 结果，不能作为本次夹爪 EEF 回放结果。
 核查记录见 [执行记录](WORK_LOG.md)。
-数据、转换产物与清晰 MP4 不进 Git；代码、文档及轻量 PNG/GIF 留在 `wbc_demo/umi_replay/`。
+原始数据、转换产物与完整运行日志不进 Git；v4/v5 自包含验收包的 MP4、图片与报告随代码和文档保留。
 原有交互实验台无需重写，回放复用其双臂/腰部 IK、安全限幅与状态检查。
 
 ## 目录职责

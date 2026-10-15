@@ -1,0 +1,266 @@
+{
+  "execution": {
+    "status": "passed",
+    "report_status": "passed",
+    "source_seconds": 41.66666844685872,
+    "active_wall_seconds": 41.67004277301021,
+    "wall_minus_source_seconds": 0.003374326151487139,
+    "commands": 1250,
+    "deadline_misses": 0,
+    "skipped_source_ticks": 0,
+    "planned_velocity_excess_rad_s": 0.0,
+    "planned_acceleration_excess_rad_s2": 4.697174692402939e-05,
+    "joint_position_excess_rad": 0.0,
+    "coupling_excess": 0.0,
+    "constraint_audit": "nominal 1/30 s command integration; not a certification of physical acceleration or wall-clock jitter",
+    "per_side": {
+      "left": {
+        "max_position_error_m": 0.021409703459024296,
+        "p95_position_error_m": 0.011355151026507694,
+        "max_rotation_error_deg": 1.2570440063455581
+      },
+      "right": {
+        "max_position_error_m": 0.018359029322054278,
+        "p95_position_error_m": 0.008585257762441933,
+        "max_rotation_error_deg": 1.5403782783098776
+      }
+    },
+    "max_abs_roll_deg": 0.16408631205558777
+  },
+  "browser": {
+    "trusted_pointer_actions": true,
+    "executed_motion": true,
+    "browser": "157.0.1",
+    "loaded_image_widths": [
+      640,
+      640,
+      640,
+      640
+    ],
+    "drag": {
+      "before": [
+        0.7853981633974483,
+        0.35,
+        2.4
+      ],
+      "after": [
+        0.04139816339744831,
+        0.5340000000000001,
+        2.4
+      ],
+      "mean_absolute_pixel_change": 22.77005099826389
+    },
+    "wheel": {
+      "before_distance": 1.9,
+      "after_distance": 1.443187034127439
+    },
+    "reset_button": "passed",
+    "pause_button_phase_delta_s": 0.0,
+    "resume_button": "passed",
+    "realtime_video": {
+      "source_wall_speed_ratio": 1.00002114056839,
+      "max_video_phase_gap_s": 0.11020037500818747,
+      "presented_video_fps": 24.581695937708655,
+      "samples": [
+        {
+          "wall_monotonic_s": 93595.228969699,
+          "source_time_s": 2.6487447250110563,
+          "stage": "replaying",
+          "video": {
+            "current_time_s": 2.544009,
+            "playback_rate": 1,
+            "paused": false,
+            "quality": {}
+          }
+        },
+        {
+          "wall_monotonic_s": 93596.23483802,
+          "source_time_s": 3.6569753750081873,
+          "stage": "replaying",
+          "video": {
+            "current_time_s": 3.546775,
+            "playback_rate": 1,
+            "paused": false,
+            "quality": {}
+          }
+        },
+        {
+          "wall_monotonic_s": 93597.241954008,
+          "source_time_s": 4.664180703999591,
+          "stage": "replaying",
+          "video": {
+            "current_time_s": 4.554177,
+            "playback_rate": 1,
+            "paused": false,
+            "quality": {}
+          }
+        },
+        {
+          "wall_monotonic_s": 93598.248099681,
+          "source_time_s": 5.66920019700774,
+          "stage": "replaying",
+          "video": {
+            "current_time_s": 5.561815,
+            "playback_rate": 1,
+            "paused": false,
+            "quality": {}
+          }
+        },
+        {
+          "wall_monotonic_s": 93599.255572805,
+          "source_time_s": 6.673449854002683,
+          "stage": "replaying",
+          "video": {
+            "current_time_s": 6.570701,
+            "playback_rate": 1,
+            "paused": false,
+            "quality": {}
+          }
+        },
+        {
+          "wall_monotonic_s": 93600.261869447,
+          "source_time_s": 7.682097705008346,
+          "stage": "replaying",
+          "video": {
+            "current_time_s": 7.576379,
+            "playback_rate": 1,
+            "paused": false,
+            "quality": {}
+          }
+        },
+        {
+          "wall_monotonic_s": 93601.267895362,
+          "source_time_s": 8.688094497003476,
+          "stage": "replaying",
+          "video": {
+            "current_time_s": 8.586532,
+            "playback_rate": 1,
+            "paused": false,
+            "quality": {}
+          }
+        },
+        {
+          "wall_monotonic_s": 93602.273918262,
+          "source_time_s": 9.694737923011417,
+          "stage": "replaying",
+          "video": {
+            "current_time_s": 9.593755,
+            "playback_rate": 1,
+            "paused": false,
+            "quality": {}
+          }
+        },
+        {
+          "wall_monotonic_s": 93603.280847431,
+          "source_time_s": 10.703105645006872,
+          "stage": "replaying",
+          "video": {
+            "current_time_s": 10.600428,
+            "playback_rate": 1,
+            "paused": false,
+            "quality": {}
+          }
+        },
+        {
+          "wall_monotonic_s": 93604.287911499,
+          "source_time_s": 11.708628257008968,
+          "stage": "replaying",
+          "video": {
+            "current_time_s": 11.604656,
+            "playback_rate": 1,
+            "paused": false,
+            "quality": {}
+          }
+        },
+        {
+          "wall_monotonic_s": 93605.294415144,
+          "source_time_s": 12.713147401009337,
+          "stage": "replaying",
+          "video": {
+            "current_time_s": 12.607831,
+            "playback_rate": 1,
+            "paused": false,
+            "quality": {}
+          }
+        },
+        {
+          "wall_monotonic_s": 93606.300809916,
+          "source_time_s": 13.720819007008686,
+          "stage": "replaying",
+          "video": {
+            "current_time_s": 13.612928,
+            "playback_rate": 1,
+            "paused": false,
+            "quality": {}
+          }
+        }
+      ]
+    },
+    "final_status": {
+      "stage": "finished",
+      "source_time_s": 41.63333511352539,
+      "ready": true,
+      "busy": false,
+      "camera_warning": "",
+      "run": 2,
+      "received": {
+        "UmiEgo": 6266,
+        "ExternalA": 6266,
+        "ExternalB": 6266
+      },
+      "record_frames": 1918,
+      "policy": "soft",
+      "playback_mode": "realtime",
+      "source_duration_s": 41.666666666666664,
+      "source_video_start_s": 0.0,
+      "playback_rate": 0.0,
+      "deadline_misses": 0,
+      "render_bundle_age_s": 0.04439568519592285,
+      "camera_orbits": [
+        [
+          0.7853981633974483,
+          0.35,
+          2.4
+        ],
+        [
+          -1.5707963267948966,
+          0.25,
+          1.9
+        ]
+      ],
+      "output": "wbc_demo/logs/umi-realtime-web-reliable-01",
+      "command_count": 26,
+      "last_command": "resume"
+    }
+  },
+  "image_transport_ab_test": {
+    "best_effort": {
+      "counts": [
+        63,
+        56,
+        61
+      ],
+      "complete_bundles": 35,
+      "max_bundle_interval_s": 0.9666159152984619,
+      "image_age_p50_p95_max_s": [
+        0.026914000511169434,
+        0.03467944860458373,
+        0.04051566123962402
+      ]
+    },
+    "reliable": {
+      "counts": [
+        179,
+        179,
+        176
+      ],
+      "complete_bundles": 176,
+      "max_bundle_interval_s": 0.042119503021240234,
+      "image_age_p50_p95_max_s": [
+        0.03507077693939209,
+        0.04346338510513305,
+        0.14743733406066895
+      ]
+    }
+  }
+}

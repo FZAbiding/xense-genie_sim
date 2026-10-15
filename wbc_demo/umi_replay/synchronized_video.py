@@ -239,7 +239,12 @@ def synchronized_video(args, converted):
         "max_source_phase_gap_seconds": float(phase_gaps.max()),
         "p95_source_phase_gap_seconds": float(np.percentile(phase_gaps, 95)),
         "allowed_max_source_phase_gap_seconds": args.max_source_phase_gap,
-        "real_time_control": False,
+        "real_time_control": report.get("playback_mode") == "realtime",
+        "control_contract": (
+            "soft realtime differential IK"
+            if report.get("playback_mode") == "realtime"
+            else "offline IK with retimed joint execution"
+        ),
         "layout": args.layout,
         "views": (
             ["UMI head_left", "virtual head-pose-aligned ego", "external A", "external B"]

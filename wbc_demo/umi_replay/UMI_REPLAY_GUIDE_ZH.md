@@ -1,6 +1,9 @@
 # 给 VLA 工程师的 UMI → 夹爪 EEF → 全身 IK 入门与工作记录
 
-**最新功能：[v4 夹爪开合与 Web 交互](GRIPPER_AND_WEB_FIX_ZH.md)**。
+**当前入口：[v5 原速在线 IK 与浏览器原生视频](REALTIME_REPLAY_ZH.md)**。
+本页较早的 BioIK 全量预检、全局重定时结果属于慢速验证模式，不代表实时控制。
+
+**此前 v4 功能：[夹爪开合与 Web 交互](GRIPPER_AND_WEB_FIX_ZH.md)**。
 旧 v2/v3 中“夹爪保持开启”的限制已解除；现在 0 闭合 / 1 开启，按实际开度重算指尖 TCP。
 
 **新增：[Web 四视角与 IK/腰部约束讲解](ONLINE_IK_AND_VIEWS_ZH.md)**，
