@@ -1,0 +1,83 @@
+{
+  "kind": "offline teaching material from existing v5 logs; no new robot execution",
+  "reference_run": "wbc_demo/logs/umi-realtime-web-reliable-01/run-001",
+  "commands": 1250,
+  "deadline_misses": 0,
+  "active_wall_seconds": 41.67004277301021,
+  "velocity_near_limit_tick_fraction": 0.0,
+  "acceleration_near_limit_tick_fraction": 0.2352,
+  "near_limit_definition": "at least one command joint at >=99% of configured bound; not KKT multiplier attribution",
+  "acceleration_definition": "discrete command delta velocity / (1/30 s), not measured physical acceleration",
+  "per_side": {
+    "left": {
+      "position_error_m_p50_p95_max": [
+        0.004538091514423123,
+        0.011355151026507694,
+        0.021409703459024296
+      ],
+      "max_position_error_phase_s": 15.534473795007216,
+      "source_speed_m_s_p50_p95_max": [
+        0.060174863811391,
+        0.18736630758222025,
+        0.401452524376733
+      ]
+    },
+    "right": {
+      "position_error_m_p50_p95_max": [
+        0.004682398476455765,
+        0.008585257762441933,
+        0.018359029322054278
+      ],
+      "max_position_error_phase_s": 10.533432328011259,
+      "source_speed_m_s_p50_p95_max": [
+        0.054320866021947564,
+        0.16091649874726224,
+        0.3872582443816224
+      ]
+    }
+  },
+  "inputs_sha256": {
+    "report.json": "7d3ae77e6bed60bf42ada7516144772e6064a0ae6982431791cf20955bd19df6",
+    "realtime.csv": "4a3ef358de4c70eadd5fc18c5e6293e31859dba265ab4761d34e307f9659a364",
+    "command_joints.csv": "9857b758c57cd4bfbcd1daa24294971822fc25128c39080277d2c9e3bff8f43c",
+    "mapped_targets.json": "0b4d5d762adcbfe2a1c5cd0e5122bde546d4ff28eebca2322b01886da929121a"
+  },
+  "feedback_age_s_p50_p95_max": [
+    0.00456243450025795,
+    0.011149282900441903,
+    0.017168428996228613
+  ],
+  "solve_ms_p50_p95_max": [
+    2.498229492630344,
+    4.941353642789181,
+    6.274769999436103
+  ],
+  "cycle_ms_p50_p95_max": [
+    9.575118499924429,
+    13.377334544929907,
+    16.715923004085198
+  ],
+  "two_link_example": {
+    "lengths_m": [
+      0.5,
+      0.4
+    ],
+    "target_m": [
+      0.6,
+      0.4
+    ],
+    "analytic_solutions_deg": [
+      [
+        1.4604717387654091,
+        74.03798583715276
+      ],
+      [
+        65.91966331319416,
+        -74.03798583715276
+      ]
+    ],
+    "numeric_iterations": 6,
+    "numeric_final_position_error_m": 5.404083846959865e-10,
+    "scope": "synthetic planar position-only example; no collisions or limits; not G2 performance"
+  }
+}

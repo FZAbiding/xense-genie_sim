@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>从 VLA 到全身 IK：图解与实测</title>
+<style>
+body{margin:0;background:#101b2a;color:#e9f0f8;font:17px/1.8 system-ui,sans-serif}
+main{max-width:1250px;margin:auto;padding:24px}a{color:#89dbe7}h1,h2{line-height:1.4}
+.notice{background:#33475b;border-left:5px solid #eca24b;padding:18px}img,video{display:block;width:100%;background:white;border-radius:10px}
+figure{margin:25px 0 45px}figcaption{color:#c6d4e5;padding:8px 4px}code{overflow-wrap:anywhere}li{margin:8px 0}
+</style>
+</head>
+<body><main>
+<h1>从 VLA 到全身 IK：配图与实测解读</h1>
+<p><a href="../../IK_LEARNING_GUIDE_ZH.md">完整中文教程（Markdown）</a> · <a href="metrics.json">本轮统计与输入 SHA256</a> · <a href="../../WBC_NEXT_STAGE_ZH.md">WBC 路线</a></p>
+<div class="notice"><strong>模型一致性 ≠ 机器人跟踪精度。</strong> 1.913e-15 m 是两个 FK 实现对同一状态的结果差；21.410 mm 是历史 v5 左手最大动态跟踪误差。本轮只读日志、运行教学例子，没有移动机器人或切换在线后端。</div>
+<h2>四个先记住的结论</h2>
+<ul>
+<li>FK 是正运动学；Jacobian 中文叫雅可比矩阵。v5 本来就使用雅可比＋QP，BioIK 主要负责首帧。</li>
+<li>2.614 → 0.230 ms 是离线模型段 P95，约 11.37 倍；中位数比才是约 12.4 倍。不代表整链提速相同倍数。</li>
+<li>解析求导、数值差分、解析 IK、数值 IK 是不同概念。用解析雅可比做数值 IK 不矛盾。</li>
+<li>v5 23.52% 命令周期至少一维贴近加速度边界，但速度没有贴近上限；尚不能据此精确分摊厘米误差的原因。</li>
+</ul>
+<h2>1. 正解、逆解与雅可比</h2>
+<figure><img src="01-fk-ik-jacobian.png" alt="二连杆正运动学、雅可比预测小运动与肘上肘下两支解"><figcaption>教学几何：同一个手位置可能对应不同关节配置，不能把一个解当作唯一答案。</figcaption></figure>
+<h2>2. 数值法也能把模型残差降得很小</h2>
+<figure><img src="02-numerical-iteration.png" alt="数值迭代末端路径和收敛曲线"><figcaption>二维位置任务，6 次修正后残差约 5.404e-10 m；没有机器人约束，不是 G2 跟踪精度。</figcaption></figure>
+<h2>3. 模型快，不等于执行器和整条链都快</h2>
+<figure><img src="03-v5-control-stack.png" alt="UMI目标、模型、QP、ROS检查与PhysX驱动职责链"><figcaption>Pinocchio 是候选模型层。当前正式回放仍用原有模型＋QP，实测反馈主要用于监控。</figcaption></figure>
+<figure><img src="../pinocchio-study-v1/kinematics-comparison.png" alt="历史100实测状态的FK和雅可比基准"><figcaption>历史模型基准：同样的关节输入与 EEF 定义。模型段计时不包含完整控制周期。</figcaption></figure>
+<h2>4. 重读真实 v5 日志，不猜测原因占比</h2>
+<figure><img src="04-v5-tracking-diagnostics.png" alt="v5误差、源速度、回调反馈年龄和离散加速度比例"><figcaption>左/右位置误差最大 21.410 / 18.359 mm，P95 11.355 / 8.585 mm。反馈年龄不等于全链路时延。</figcaption></figure>
+<h2>5. 下一步应记录什么</h2>
+<figure><img src="05-error-decomposition.png" alt="同时间目标、命令FK和实际FK的误差向量分解"><figcaption>向量可相加，误差范数/P95 不能直接相加。需要同 tick 数据，不能靠异步日志最近邻武断分摊误差。</figcaption></figure>
+<h2>已有 v5 真视频：不是 Pinocchio 在线演示</h2>
+<video controls preload="none" poster="../episode-000-v5/quad-middle.png" src="../episode-000-v5/head_left.mp4"></video>
+<p><a href="../episode-000-v5/index.html">原 v5 完整验收页</a> · <a href="../../IK_LEARNING_GUIDE_ZH.md">继续阅读完整教程、选库表与可运行练习</a></p>
+</main></body></html>

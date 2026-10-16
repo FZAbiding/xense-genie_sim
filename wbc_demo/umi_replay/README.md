@@ -1,5 +1,8 @@
 # XTac UMI → 固定底盘 G2 回放
 
+**从零学习**：[图解 FK、雅可比、解析/数值 IK 与 WBC，读懂 v5 误差](IK_LEARNING_GUIDE_ZH.md)。
+附 [配图与实测诊断索引](media/ik-learning-v1/index.html)；特别区分模型一致性与实际跟踪精度。
+
 **下一阶段研究**：[代码审计](CODE_AUDIT_ZH.md) · [Pinocchio 实测可行性](PINOCCHIO_STUDY_ZH.md) · [WBC 分阶段路线](WBC_NEXT_STAGE_ZH.md)。
 Pinocchio 仅接入离线模型验证与可选测试，未更换在线默认后端；当前可视化研究结果见 [模型对照验收页](media/pinocchio-study-v1/index.html)。
 
