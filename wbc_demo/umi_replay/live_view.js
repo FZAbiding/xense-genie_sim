@@ -11,6 +11,37 @@ const images = [...document.querySelectorAll('[data-view]')];
 let connected = false;
 let commandError = '';
 let sourceSeekPending = false;
+let deliverySample = null;
+let sourcePresentations = 0;
+
+if (sourceVideo.requestVideoFrameCallback) {
+  function presented() {
+    sourcePresentations++;
+    sourceVideo.requestVideoFrameCallback(presented);
+  }
+  sourceVideo.requestVideoFrameCallback(presented);
+}
+
+function updateDelivery(state) {
+  const now = performance.now();
+  if (!deliverySample) {
+    deliverySample = {now, received: state.received, preview: state.preview_frames, sourcePresentations};
+    return;
+  }
+  const seconds = (now - deliverySample.now) / 1000;
+  if (seconds < 2) return;
+  const rate = (current, previous) => Math.max(0, (current - previous) / seconds).toFixed(1);
+  const sourceRate = sourceVideo.requestVideoFrameCallback ? rate(sourcePresentations, deliverySample.sourcePresentations) : '?';
+  const views = ['UmiEgo', 'ExternalA', 'ExternalB'].map(name => {
+    const incoming = rate(state.received[name], deliverySample.received[name]);
+    const encoded = state.preview_frames && deliverySample.preview ?
+      rate(state.preview_frames[name] || 0, deliverySample.preview[name] || 0) : '?';
+    return name + ' ' + incoming + '/' + encoded;
+  });
+  document.getElementById('delivery').textContent = '实测约 2 s：源视频呈现 ' + sourceRate +
+    ' fps；仿真接收/JPEG 编码 fps：' + views.join(' · ') + '（不是浏览器机器人画面的呈现帧率）';
+  deliverySample = {now, received: state.received, preview: state.preview_frames, sourcePresentations};
+}
 
 function syncSourceVideo(state) {
   if (sourceVideo.readyState < 2) return;
@@ -34,6 +65,7 @@ sourceVideo.addEventListener('error', () => { errorElement.textContent = '无法
 
 function disconnected(message) {
   connected = false;
+  deliverySample = null;
   sourceVideo.pause();
   stageElement.textContent = '离线：没有连接到运行中的仿真服务';
   errorElement.textContent = message;
@@ -65,6 +97,7 @@ async function refreshStatus() {
     const state = await response.json();
     connected = true;
     syncSourceVideo(state);
+    updateDelivery(state);
     document.getElementById('connection').hidden = true;
     stageElement.textContent = state.stage;
     phaseElement.textContent = Number(state.source_time_s).toFixed(3) + ' s';
@@ -81,7 +114,7 @@ async function refreshStatus() {
     });
     document.getElementById('ready').textContent = state.ready ?
       '三路相机就绪 · 已记录 ' + state.record_frames + ' 帧' : '等待三路相机';
-    errorElement.textContent = commandError || state.error || state.camera_warning || '';
+    errorElement.textContent = commandError || state.error || state.replay_error || state.camera_warning || '';
     if (state.command_count) actionElement.textContent =
       '后端已处理 ' + state.command_count + ' 次操作 · ' + state.last_command;
   } catch (error) {

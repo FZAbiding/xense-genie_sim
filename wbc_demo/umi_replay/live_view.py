@@ -150,7 +150,6 @@ class LiveSession:
         self.record_frames = 0
         self.frame_trace = None
         self.last_record = 0.0
-        self.last_preview = 0.0
         self.preview_received = {}
         self.running = True
         self.events = []
@@ -266,6 +265,21 @@ class LiveSession:
         }
         (self.record_path / "metadata.json").write_text(json.dumps(metadata, ensure_ascii=False, indent=2) + "\n")
 
+    def update_previews(self):
+        changed = False
+        for name, frame in self.node.frames.items():
+            if self.preview_received.get(name) == self.node.received[name]:
+                continue
+            payload = cv2.imencode(".jpg", frame, [cv2.IMWRITE_JPEG_QUALITY, 85])[1].tobytes()
+            with self.stream_condition:
+                self.jpeg[name] = payload
+                self.jpeg_versions[name] = self.jpeg_versions.get(name, 0) + 1
+            self.preview_received[name] = self.node.received[name]
+            changed = True
+        if changed:
+            with self.stream_condition:
+                self.stream_condition.notify_all()
+
     def tick(self):
         for callback in range(12):
             rclpy.spin_once(self.node, timeout_sec=0)
@@ -279,16 +293,7 @@ class LiveSession:
             self.autoplay_pending = False
             self.start_replay(self.args.posture_policy)
         now = time.monotonic()
-        if now - self.last_preview >= 1 / 30:
-            for name, frame in self.node.frames.items():
-                if self.preview_received.get(name) == self.node.received[name]:
-                    continue
-                self.jpeg[name] = cv2.imencode(".jpg", frame, [cv2.IMWRITE_JPEG_QUALITY, 85])[1].tobytes()
-                self.jpeg_versions[name] = self.jpeg_versions.get(name, 0) + 1
-                self.preview_received[name] = self.node.received[name]
-            with self.stream_condition:
-                self.stream_condition.notify_all()
-            self.last_preview = now
+        self.update_previews()
         if self.writer is not None and self.node.bundle is not None and now - self.last_record >= 1 / 30:
             self.writer.write(self.node.bundle)
             self.frame_writer.writerow([self.record_frames, time.time(), self.node.bundle_time, self.node.source_time])
@@ -316,6 +321,7 @@ class LiveSession:
                 "busy": busy,
                 "run": self.run_count,
                 "received": self.node.received.copy(),
+                "preview_frames": self.jpeg_versions.copy(),
                 "record_frames": self.record_frames,
                 "policy": self.active_policy,
                 "playback_mode": self.active_mode,
@@ -323,6 +329,7 @@ class LiveSession:
                 "source_video_start_s": self.source_start / self.source_fps,
                 "playback_rate": self.node.metrics.get("playback_rate", 0.0),
                 "deadline_misses": self.node.metrics.get("deadline_misses", 0),
+                "replay_error": self.node.metrics.get("replay_error", ""),
                 "render_bundle_age_s": (
                     max(0.0, self.node.get_clock().now().nanoseconds * 1e-9 - self.node.bundle_time)
                     if self.node.bundle_time is not None
@@ -437,14 +444,16 @@ def live_handler(session, port):
                                 or not session.running,
                                 timeout=1,
                             )
-                        payload = session.jpeg.get(name)
-                        current = session.jpeg_versions.get(name, 0)
+                            payload = session.jpeg.get(name)
+                            current = session.jpeg_versions.get(name, 0)
                         if payload is None or current == version:
                             continue
                         version = current
                         self.wfile.write(
                             b"--frame\r\nContent-Type: image/jpeg\r\nContent-Length: "
                             + str(len(payload)).encode()
+                            + b"\r\nX-Frame-Version: "
+                            + str(current).encode()
                             + b"\r\n\r\n"
                             + payload
                             + b"\r\n"

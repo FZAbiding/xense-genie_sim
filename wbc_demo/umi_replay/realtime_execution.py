@@ -177,6 +177,9 @@ def stream(node, frames, config, profile, output, report):
                 "target_opening_right",
                 "actual_opening_left",
                 "actual_opening_right",
+                "observation_ms",
+                "collision_ms",
+                "publication_ms",
             ]
         )
         while rclpy.ok():
@@ -258,6 +261,7 @@ def stream(node, frames, config, profile, output, report):
                     f"Realtime tracking guard: position={position_errors}, rotation={rotation_errors}, gripper={opening_error}"
                 )
             beginning = time.monotonic()
+            observation_ms = (beginning - now) * 1000
             command_targets, command_openings = sample_targets(frames, min(phase + lookahead, timestamps[-1]))
             candidate_positions, next_velocity = solver.step(
                 positions, command_targets, command_openings, velocity, period
@@ -266,13 +270,21 @@ def stream(node, frames, config, profile, output, report):
             solve_ms = (time.monotonic() - beginning) * 1000
             candidate = with_positions(commanded, candidate_positions)
             published = False
+            collision_ms = 0.0
+            publication_ms = 0.0
             try:
-                checked_step(node, commanded, candidate, now + period)
+                collision_begin = time.monotonic()
+                try:
+                    checked_step(node, commanded, candidate, now + period)
+                finally:
+                    collision_ms = (time.monotonic() - collision_begin) * 1000
                 if time.monotonic() >= now + period:
                     raise TimeoutError("Command calculation exceeded the current 33.3 ms deadline")
                 if node.cancel.is_set() or node.pause_requested:
                     continue
+                publication_begin = time.monotonic()
                 last_publication = node.publish_positions(candidate, GROUP)
+                publication_ms = (time.monotonic() - publication_begin) * 1000
                 phase_writer.writerow([time.time(), node.get_clock().now().nanoseconds * 1e-9, phase, tick])
                 result["max_command_velocity_rad_s"] = max(
                     result["max_command_velocity_rad_s"], float(np.max(np.abs(next_velocity)))
@@ -293,7 +305,9 @@ def stream(node, frames, config, profile, output, report):
                 result["deadline_misses"] += 1
                 consecutive_misses += 1
                 velocity = np.zeros(len(names))
+                publication_begin = time.monotonic()
                 last_publication = node.publish_positions(commanded, GROUP)
+                publication_ms = (time.monotonic() - publication_begin) * 1000
             cycle_ms = (time.monotonic() - now) * 1000
             costs.append(cycle_ms)
             solve_costs.append(solve_ms)
@@ -312,6 +326,9 @@ def stream(node, frames, config, profile, output, report):
                     actual_positions["idx04_body_joint4"],
                     *openings,
                     *node.eef.openings_from_positions(actual_positions),
+                    observation_ms,
+                    collision_ms,
+                    publication_ms,
                 ]
             )
             if time.monotonic() - last_save >= 1:

@@ -472,7 +472,12 @@ def run(args, converted, config):
         node.publish_progress(converted["source_duration_seconds"] if args.execute else 0.0, "finished")
         print(f"{report['status']}: {output}", flush=True)
     except BaseException as error:
-        node.publish_progress(getattr(node, "last_source_time", 0.0), "failed")
+        node.publish_progress(
+            getattr(node, "last_source_time", 0.0),
+            "failed",
+            deadline_misses=report.get("replay", {}).get("deadline_misses", 0),
+            replay_error=str(error),
+        )
         report["status"] = "failed"
         report["error"] = str(error)
         if motion_started and node.command_lock is not None:

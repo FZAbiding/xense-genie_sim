@@ -18,12 +18,12 @@
 <button data-command="pause" type="button" disabled>暂停</button>
 <button data-command="resume" type="button" disabled>继续</button>
 <button class="stop" data-command="stop" type="button" disabled>停止并保持</button>
-<select id="policy"><option value="soft">软直腰偏好（默认）</option><option value="upright">直腰对照：roll ±0.5°</option></select>
+<select id="policy"><option value="soft">全身协同＋抑制侧倾（非手臂优先）</option><option value="upright">只限制侧倾关节：±0.5°（不限制前后弯腰）</option></select>
 <select id="mode"><option value="realtime">在线 IK：原速 1× / 30 Hz</option><option value="validated">旧版：全量预检＋安全慢放</option></select>
 <button data-command="reset_views" type="button" disabled>重置外部视角</button>
 <button data-command="shutdown" type="button" disabled>关闭本次后端</button>
 </div>
-<div class="status">阶段 <span id="stage">连接中</span> · 源相位 <span class="phase" id="phase">0.000 s</span> · <span id="ready">等待三路相机</span><div id="timing"></div><div id="action"></div><div id="error" role="alert"></div></div>
+<div class="status">阶段 <span id="stage">连接中</span> · 源相位 <span class="phase" id="phase">0.000 s</span> · <span id="ready">等待三路相机</span><div id="timing"></div><div id="delivery"></div><div id="action"></div><div id="error" role="alert"></div></div>
 <p class="notice">下方镜头：左键拖动旋转、滚轮缩放。夹爪 0 闭合 / 1 开启。在线模式按原始时钟推进；超时丢弃过期目标，不拖慢源视频。首帧就位/回零不计入源视频时长。ego 未做硬件相机标定；在线模式采用单独的仿真限速配置，保留关节/耦合/碰撞/反馈误差保护。</p>
 <div class="grid">
 <figure class="card"><figcaption>① UMI head_left <span class="tag">原生视频解码 · 在线模式 1× / 30 fps</span></figcaption><video id="source-video" src="/source.mp4" preload="auto" muted playsinline aria-label="UMI 源 head_left"></video></figure>

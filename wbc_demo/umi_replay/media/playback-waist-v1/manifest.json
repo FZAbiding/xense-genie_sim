@@ -1,0 +1,24 @@
+{
+  "scope": "diagnostic windows and failed runs, not full acceptance of a new posture controller",
+  "files": {
+    "wbc_demo/umi_replay/PLAYBACK_ALIGNMENT_AND_WAIST_ZH.md": "7ae8832efa0e525b663f288f430fa307b84fa1b9d2dc56cbbaf36f4dba1cd1bf",
+    "wbc_demo/umi_replay/differential_ik.py": "8d00db9089527940e86e7312b8cc3d31c136feb22c3165f9cd1428005346e018",
+    "wbc_demo/umi_replay/execution.py": "84ca524eac25018f4da32f2f38b4b807b094871d5cdb25ff326872a43f31464d",
+    "wbc_demo/umi_replay/live_view.html": "a3d8b06a75f8a1f13aadf9e70ce3c7b53f39e665adfd4cad13623f749657e339",
+    "wbc_demo/umi_replay/live_view.js": "d7e5715dee0869f1e14502996e5ea3fd255ec1ed734f1422894f2cbf7c445d5f",
+    "wbc_demo/umi_replay/live_view.py": "23acd271faeabd44aa2f6a96c2c855154b567aa614ad3a989457bb9ce60bcaa2",
+    "wbc_demo/umi_replay/media/playback-waist-v1/README.md": "0996db5efe412cfefb6b313327d68e0a65a9919369dfa0531fce7bf87f35ab37",
+    "wbc_demo/umi_replay/media/playback-waist-v1/alignment.svg": "912699a99df4e21b9597b2f6558acc94708f0d3f43e16b36405c48831c9c5a93",
+    "wbc_demo/umi_replay/media/playback-waist-v1/controls.json": "1f5c3105d6e9920fbc0fa7c1e8b119308f6c39f04769f49eacacefed6a4e7aa3",
+    "wbc_demo/umi_replay/media/playback-waist-v1/delivery.png": "3cc4248642ff73a6ac88a322294d8ff09f5968af3113bbf813113927d1426e70",
+    "wbc_demo/umi_replay/media/playback-waist-v1/failures.json": "d266376ae1e8dd3de84b8203a8ab7e4bf056a54a04e99bf098b41d382729f36d",
+    "wbc_demo/umi_replay/media/playback-waist-v1/metrics.json": "47f68faa508b79a1119d20f3c2913734579fc5145a73b9a38b18a6eaf23e5a73",
+    "wbc_demo/umi_replay/media/playback-waist-v1/waist-initial.png": "163c631a6a35b0a530d4e0a8fafbcd295e21e6fa1f0745b0acf28c056711d8d6",
+    "wbc_demo/umi_replay/media/playback-waist-v1/web-controls.png": "f2a4cd0f81922161983e489472d090df1f4ed20afded56e659dd06838e32f136",
+    "wbc_demo/umi_replay/playback_review.py": "d278543937b7897e4ba58ffa8ab264963ffd2e7add1acd67f7cd1c37614519ce",
+    "wbc_demo/umi_replay/realtime_execution.py": "1190a55c0052ec7019b3aa4942c3ea9512aefda9447eea00725b5757c4accf94",
+    "wbc_demo/umi_replay/tests/playback_probe.mjs": "bf9fd9ccc36f80d95570ceb5533c0a7ae6e4830bff5a22ca3c93394762dc5a11",
+    "wbc_demo/umi_replay/tests/stream_probe.py": "dbb19c75c3e1f414ac5ee318134738a520c73d40a95dade4fb8fceb1b1459d31",
+    "wbc_demo/umi_replay/waist_probe.py": "2381f7671428d7125707082af6ce50ee3edcf1bb85012074326697ba1e01cddb"
+  }
+}

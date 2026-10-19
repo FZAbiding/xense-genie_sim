@@ -9,12 +9,31 @@ from unittest.mock import patch
 from urllib.error import HTTPError
 from urllib.request import Request, urlopen
 
+import numpy as np
 from rclpy.qos import ReliabilityPolicy
 
-from umi_replay.live_view import IMAGE_QOS, live_handler, ViewNode
+from umi_replay.live_view import IMAGE_QOS, LiveSession, live_handler, ViewNode
 
 
 class LiveWebTests(unittest.TestCase):
+    def test_new_render_frames_are_not_resampled_by_a_second_30hz_clock(self):
+        session = SimpleNamespace(
+            node=SimpleNamespace(frames={"UmiEgo": np.zeros((4, 4, 3), dtype=np.uint8)}, received={"UmiEgo": 1}),
+            preview_received={},
+            jpeg={},
+            jpeg_versions={},
+            stream_condition=threading.Condition(),
+        )
+        LiveSession.update_previews(session)
+        self.assertEqual(session.jpeg_versions["UmiEgo"], 1)
+        original = session.jpeg["UmiEgo"]
+        LiveSession.update_previews(session)
+        self.assertEqual(session.jpeg_versions["UmiEgo"], 1)
+        self.assertIs(session.jpeg["UmiEgo"], original)
+        session.node.received["UmiEgo"] += 1
+        LiveSession.update_previews(session)
+        self.assertEqual(session.jpeg_versions["UmiEgo"], 2)
+
     def test_image_transport_requests_retransmission_with_bounded_history(self):
         self.assertEqual(IMAGE_QOS.reliability, ReliabilityPolicy.RELIABLE)
         self.assertEqual(IMAGE_QOS.depth, 3)

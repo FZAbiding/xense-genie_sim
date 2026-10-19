@@ -1,0 +1,290 @@
+{
+  "scope": "local diagnostic windows, not a full-episode acceptance or a causal A/B of controller backends",
+  "streams": {
+    "before": {
+      "received_fps": {
+        "UmiEgo": 30.038840543308602,
+        "ExternalA": 30.038840543308602,
+        "ExternalB": 30.038840543308602
+      },
+      "render_bundle_age_ms_p95": 64.67981338500975,
+      "streams": [
+        {
+          "view": "UmiEgo",
+          "delivered_fps": 27.100828892954205,
+          "gap_ms_p50_p95_p99_max": [
+            35.92075203778222,
+            40.015051476075314,
+            72.00075691507664,
+            73.67725297808647
+          ],
+          "mean_jpeg_bytes": 26829.152334152335
+        },
+        {
+          "view": "ExternalA",
+          "delivered_fps": 27.16831052996423,
+          "gap_ms_p50_p95_p99_max": [
+            35.93950200593099,
+            40.38530818070285,
+            71.37319854926318,
+            72.66456098295748
+          ],
+          "mean_jpeg_bytes": 12567.142156862745
+        },
+        {
+          "view": "ExternalB",
+          "delivered_fps": 27.022646334156022,
+          "gap_ms_p50_p95_p99_max": [
+            35.971848003100604,
+            40.50278076902031,
+            71.16368171293288,
+            72.59404502110556
+          ],
+          "mean_jpeg_bytes": 15352.697044334975
+        }
+      ]
+    },
+    "after": {
+      "received_fps": {
+        "UmiEgo": 30.046608633223126,
+        "ExternalA": 30.046608633223126,
+        "ExternalB": 30.046608633223126
+      },
+      "render_bundle_age_ms_p95": 66.69106483459473,
+      "streams": [
+        {
+          "view": "UmiEgo",
+          "delivered_fps": 29.996264207244092,
+          "gap_ms_p50_p95_p99_max": [
+            33.098882500780746,
+            43.61388193501625,
+            47.344194942852475,
+            122.60712502757087
+          ],
+          "mean_jpeg_bytes": 29639.756097560974
+        },
+        {
+          "view": "ExternalA",
+          "delivered_fps": 29.924149897014644,
+          "gap_ms_p50_p95_p99_max": [
+            33.09840598376468,
+            43.71965698665008,
+            46.05757776182141,
+            103.6006300128065
+          ],
+          "mean_jpeg_bytes": 12557.097777777777
+        },
+        {
+          "view": "ExternalB",
+          "delivered_fps": 30.091706436930107,
+          "gap_ms_p50_p95_p99_max": [
+            33.133301010821015,
+            43.72973399586044,
+            45.9756100026425,
+            67.09392700577155
+          ],
+          "mean_jpeg_bytes": 15264.763274336283
+        }
+      ]
+    }
+  },
+  "browsers": {
+    "before": {
+      "browser": "148.0.7778.96",
+      "presented_source_fps": 30.086179055259983,
+      "sampled_source_phase_gap_ms_max": 4.153168001174379,
+      "events": [
+        {
+          "kind": "seeking",
+          "wall_ms": 383,
+          "media_s": 18.266301
+        },
+        {
+          "kind": "waiting",
+          "wall_ms": 383,
+          "media_s": 18.266301
+        },
+        {
+          "kind": "seeked",
+          "wall_ms": 386.4000000357628,
+          "media_s": 18.2664
+        },
+        {
+          "kind": "playing",
+          "wall_ms": 386.4000000357628,
+          "media_s": 18.266407
+        }
+      ],
+      "sampled_stages": [
+        "replaying",
+        "replaying",
+        "replaying",
+        "replaying",
+        "replaying",
+        "replaying",
+        "replaying",
+        "replaying",
+        "replaying",
+        "replaying",
+        "replaying",
+        "replaying"
+      ],
+      "errors": []
+    },
+    "after": {
+      "browser": "148.0.7778.96",
+      "presented_source_fps": 30.00129573702519,
+      "sampled_source_phase_gap_ms_max": 63.44759600913186,
+      "events": [
+        {
+          "kind": "seeking",
+          "wall_ms": 18578.69999998808,
+          "media_s": 9.48973
+        },
+        {
+          "kind": "waiting",
+          "wall_ms": 18578.69999998808,
+          "media_s": 9.48973
+        },
+        {
+          "kind": "seeked",
+          "wall_ms": 18594.600000023842,
+          "media_s": 9.48983
+        },
+        {
+          "kind": "playing",
+          "wall_ms": 18594.600000023842,
+          "media_s": 9.489836
+        },
+        {
+          "kind": "seeking",
+          "wall_ms": 18879.900000035763,
+          "media_s": 10.080583
+        },
+        {
+          "kind": "waiting",
+          "wall_ms": 18879.900000035763,
+          "media_s": 10.080583
+        },
+        {
+          "kind": "pause",
+          "wall_ms": 18879.900000035763,
+          "media_s": 10.080583
+        },
+        {
+          "kind": "seeked",
+          "wall_ms": 18883.100000023842,
+          "media_s": 10.080583
+        }
+      ],
+      "sampled_stages": [
+        "replaying",
+        "replaying",
+        "replaying",
+        "replaying",
+        "replaying",
+        "replaying",
+        "replaying",
+        "replaying",
+        "replaying",
+        "failed",
+        "failed",
+        "failed",
+        "failed",
+        "failed",
+        "failed"
+      ],
+      "errors": []
+    }
+  },
+  "reference_replay": {
+    "wall_seconds": 116.54644448001636,
+    "pause_seconds": 74.8784934800351,
+    "active_wall_seconds": 41.66795179399196
+  },
+  "arm_only": {
+    "scope": "read-only first-frame candidate; no trajectory or robot commands; local failure is not proof of unreachability",
+    "backend": "pinocchio",
+    "reference_sha256": {
+      "report.json": "5452f39bebbba4903336f5376f4c4a590b9fac842b64f889542d880e752718a3",
+      "mapped_targets.json": "0b4d5d762adcbfe2a1c5cd0e5122bde546d4ff28eebca2322b01886da929121a"
+    },
+    "waist_fixed_rad": {
+      "idx01_body_joint1": 0.0,
+      "idx02_body_joint2": 0.0,
+      "idx03_body_joint3": 0.0,
+      "idx04_body_joint4": 0.0,
+      "idx05_body_joint5": 0.0
+    },
+    "position_errors_m": [
+      7.871825735030768e-15,
+      1.344890804037647e-12
+    ],
+    "rotation_errors_rad": [
+      3.1303273105585496e-15,
+      5.944341370199575e-13
+    ],
+    "optimizer_success": true,
+    "optimizer_message": "`gtol` termination condition is satisfied.",
+    "joint_positions_rad": {
+      "idx01_body_joint1": 0.0,
+      "idx02_body_joint2": 0.0,
+      "idx03_body_joint3": 0.0,
+      "idx04_body_joint4": 0.0,
+      "idx05_body_joint5": 0.0,
+      "idx11_head_joint1": -8.510025587835285e-07,
+      "idx12_head_joint2": 3.74981492500176e-07,
+      "idx13_head_joint3": -0.0005706405852169036,
+      "idx21_arm_l_joint1": 0.2486086887684613,
+      "idx61_arm_r_joint1": -0.007439096071922441,
+      "idx22_arm_l_joint2": -0.5818564602325015,
+      "idx23_arm_l_joint3": 0.39387243887211354,
+      "idx24_arm_l_joint4": -2.173179732109189,
+      "idx25_arm_l_joint5": -1.4887581663641218,
+      "idx26_arm_l_joint6": -0.017850496274946177,
+      "idx27_arm_l_joint7": 0.6250153879197559,
+      "idx31_gripper_l_inner_joint1": 0.0,
+      "idx32_gripper_l_outer_joint1": 0.0,
+      "idx34_gripper_l_inner_joint2": 0.0,
+      "idx35_gripper_l_outer_joint2": 0.0,
+      "idx33_gripper_l_left_support_joint": 0.0,
+      "idx36_gripper_l_right_support_joint": 0.0,
+      "idx62_arm_r_joint2": -0.7157166790444651,
+      "idx63_arm_r_joint3": -0.7694595288092081,
+      "idx64_arm_r_joint4": -2.2641566443119197,
+      "idx65_arm_r_joint5": 1.6454193763021334,
+      "idx66_arm_r_joint6": -0.2403393434342561,
+      "idx67_arm_r_joint7": -0.7605771616829308,
+      "idx71_gripper_r_inner_joint1": -0.0002844357490539018,
+      "idx72_gripper_r_outer_joint1": -0.0002844357490539018,
+      "idx74_gripper_r_inner_joint2": 0.0002844357490539018,
+      "idx75_gripper_r_outer_joint2": 0.0002844357490539018,
+      "idx73_gripper_r_left_support_joint": 0.0002844357490539018,
+      "idx76_gripper_r_right_support_joint": 0.0002844357490539018,
+      "idx111_chassis_lwheel_front_joint1": -5.368138683888466e-08,
+      "idx131_chassis_rwheel_front_joint1": 5.377281128200032e-08,
+      "idx141_chassis_rwheel_rear_joint1": 5.37807758994729e-08,
+      "idx121_chassis_lwheel_rear_joint1": -5.369696288451488e-08,
+      "idx112_chassis_lwheel_front_joint2": -0.001380704423881272,
+      "idx132_chassis_rwheel_front_joint2": 0.001311122188359009,
+      "idx142_chassis_rwheel_rear_joint2": 0.0013117217897157646,
+      "idx122_chassis_lwheel_rear_joint2": -0.0013800152269194841,
+      "base_footprint_to_base_link": 0.04000014066695542
+    },
+    "moveit_state_valid": true,
+    "approach_path_validated": false,
+    "full_episode_validated": false,
+    "coupled_constraints_valid": true,
+    "joint_command_publishers_during_readonly_probe": 0
+  },
+  "inputs_sha256": {
+    "wbc_demo/logs/wbc-online-web-20261019-02/run-002/report.json": "5452f39bebbba4903336f5376f4c4a590b9fac842b64f889542d880e752718a3",
+    "wbc_demo/logs/wbc-online-web-20261019-02/run-002/command_joints.csv": "d7405d332757e9a71f18c6272175fc4f4b4a40022428ac70c343d16eb0e6dda2",
+    "wbc_demo/logs/playback-waist-review/arm-only-first-frame-readonly.json": "f0a56b3ba3260ff4ddc14248adc5a48c3327551e2335ca53370fde8935a1fcfc"
+  },
+  "waist_pitch_sum_deg": {
+    "initial_goal": -24.394081233351404,
+    "replay_min": -25.00758985914711,
+    "replay_max": -4.279669206147978
+  }
+}

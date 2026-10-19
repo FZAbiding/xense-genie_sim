@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="520" viewBox="0 0 1280 520">
+<defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0 0L6 3L0 6" fill="none" stroke="#415f79"/></marker></defs>
+<rect width="1280" height="520" rx="18" fill="#f1f6fa"/>
+<g font-family="sans-serif" fill="#17344c">
+<text x="30" y="44" font-size="25" font-weight="bold">首帧对齐：先搬整个 UMI 世界，再找机器人的关节解</text>
+<rect x="24" y="76" width="360" height="310" rx="12" fill="white" stroke="#a4bacb"/>
+<rect x="460" y="76" width="360" height="310" rx="12" fill="white" stroke="#a4bacb"/>
+<rect x="896" y="76" width="360" height="310" rx="12" fill="white" stroke="#a4bacb"/>
+<text x="45" y="112" font-size="21" font-weight="bold">① 原始世界：UMI / VR</text>
+<text x="480" y="112" font-size="21" font-weight="bold">② 机器人 odom 世界</text>
+<text x="915" y="112" font-size="21" font-weight="bold">③ 首帧 IK ＋平滑就位</text>
+<path d="M80 168V308H290" fill="none" stroke="#415f79" stroke-width="2"/>
+<text x="55" y="155" font-size="16">Z</text><text x="300" y="315" font-size="16">X</text>
+<circle cx="195" cy="256" r="12" fill="#247db5"/><circle cx="265" cy="270" r="12" fill="#d67433"/>
+<text x="108" y="213" font-size="18">双手中点 Z ≈ −0.705 m</text>
+<text x="45" y="346" font-size="16">负高度是相对 VR 原点，不是地底。</text>
+<path d="M390 230H450" stroke="#415f79" stroke-width="3" marker-end="url(#arrow)"/>
+<text x="395" y="207" font-size="18">同一个 T</text>
+<path d="M510 168V308H750" fill="none" stroke="#415f79" stroke-width="2"/>
+<circle cx="630" cy="199" r="12" fill="#247db5"/><circle cx="700" cy="213" r="12" fill="#d67433"/>
+<text x="485" y="151" font-size="17">目标中点 (0.30, 0, 1.05) m</text>
+<text x="485" y="253" font-size="18">p′ = R p + t；朝向 R′ = R R手</text>
+<text x="485" y="285" font-size="17">本段 R = I；t ≈ (0.086, 0.014, 1.755)</text>
+<text x="485" y="346" font-size="16">左右共用，保留双手间距；不缩放。</text>
+<path d="M826 230H886" stroke="#415f79" stroke-width="3" marker-end="url(#arrow)"/>
+<text x="834" y="207" font-size="18">求关节 q</text>
+<text x="918" y="164" font-size="18">EEF 目标并不唯一决定腰和肘。</text>
+<text x="918" y="205" font-size="18">现有首帧解：腰已后仰。</text>
+<text x="918" y="246" font-size="18">新只读探针：直腰也有可行解。</text>
+<text x="918" y="287" font-size="18">必须另验就位路径、整段连续性。</text>
+<text x="918" y="346" font-size="16">首帧就位完，源视频才从 0 s 播放。</text>
+<rect x="24" y="408" width="1232" height="86" rx="10" fill="#dfeaf2"/>
+<text x="44" y="442" font-size="19">重要：这里不是把 UMI 每只手分别吸附到机器人初始手位，也不是复制 UMI 的关节角。</text>
+<text x="44" y="476" font-size="19">同一个目标可以“动手不动腰”，也可以“手腰一起动”；选择哪一种，是优化目标与任务优先级的职责。</text>
+</g></svg>

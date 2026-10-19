@@ -1,0 +1,169 @@
+{
+  "before": {
+    "stage": "waiting_for_operator",
+    "source_time_s": 0,
+    "ready": true,
+    "busy": false,
+    "camera_warning": "",
+    "run": 0,
+    "received": {
+      "UmiEgo": 279,
+      "ExternalA": 288,
+      "ExternalB": 282
+    },
+    "preview_frames": {
+      "ExternalA": 219,
+      "ExternalB": 218,
+      "UmiEgo": 203
+    },
+    "record_frames": 0,
+    "policy": "soft",
+    "playback_mode": "realtime",
+    "source_duration_s": 41.666666666666664,
+    "source_video_start_s": 0,
+    "playback_rate": 0,
+    "deadline_misses": 0,
+    "replay_error": "",
+    "render_bundle_age_s": 0.19013094902038574,
+    "camera_orbits": [
+      [
+        0.7853981633974483,
+        0.35,
+        2.4
+      ],
+      [
+        -1.5707963267948966,
+        0.25,
+        1.9
+      ]
+    ],
+    "output": "wbc_demo/logs/wbc-online-web-playback-final"
+  },
+  "dragged": {
+    "stage": "waiting_for_operator",
+    "source_time_s": 0,
+    "ready": true,
+    "busy": false,
+    "camera_warning": "",
+    "run": 0,
+    "received": {
+      "UmiEgo": 296,
+      "ExternalA": 309,
+      "ExternalB": 300
+    },
+    "preview_frames": {
+      "ExternalA": 236,
+      "ExternalB": 231,
+      "UmiEgo": 217
+    },
+    "record_frames": 0,
+    "policy": "soft",
+    "playback_mode": "realtime",
+    "source_duration_s": 41.666666666666664,
+    "source_video_start_s": 0,
+    "playback_rate": 0,
+    "deadline_misses": 0,
+    "replay_error": "",
+    "render_bundle_age_s": 0.04827547073364258,
+    "camera_orbits": [
+      [
+        0.02539816339744827,
+        0.5400000000000001,
+        2.4
+      ],
+      [
+        -1.5707963267948966,
+        0.25,
+        1.9
+      ]
+    ],
+    "output": "wbc_demo/logs/wbc-online-web-playback-final",
+    "command_count": 7,
+    "last_command": "orbit"
+  },
+  "zoomed": {
+    "stage": "waiting_for_operator",
+    "source_time_s": 0,
+    "ready": true,
+    "busy": false,
+    "camera_warning": "",
+    "run": 0,
+    "received": {
+      "UmiEgo": 313,
+      "ExternalA": 323,
+      "ExternalB": 316
+    },
+    "preview_frames": {
+      "ExternalA": 248,
+      "ExternalB": 245,
+      "UmiEgo": 232
+    },
+    "record_frames": 0,
+    "policy": "soft",
+    "playback_mode": "realtime",
+    "source_duration_s": 41.666666666666664,
+    "source_video_start_s": 0,
+    "playback_rate": 0,
+    "deadline_misses": 0,
+    "replay_error": "",
+    "render_bundle_age_s": 0.03149127960205078,
+    "camera_orbits": [
+      [
+        0.02539816339744827,
+        0.5400000000000001,
+        2.4
+      ],
+      [
+        -1.5707963267948966,
+        0.25,
+        1.407554619295264
+      ]
+    ],
+    "output": "wbc_demo/logs/wbc-online-web-playback-final",
+    "command_count": 8,
+    "last_command": "zoom"
+  },
+  "reset": {
+    "stage": "waiting_for_operator",
+    "source_time_s": 0,
+    "ready": true,
+    "busy": false,
+    "camera_warning": "",
+    "run": 0,
+    "received": {
+      "UmiEgo": 368,
+      "ExternalA": 383,
+      "ExternalB": 379
+    },
+    "preview_frames": {
+      "ExternalA": 294,
+      "ExternalB": 298,
+      "UmiEgo": 274
+    },
+    "record_frames": 0,
+    "policy": "soft",
+    "playback_mode": "realtime",
+    "source_duration_s": 41.666666666666664,
+    "source_video_start_s": 0,
+    "playback_rate": 0,
+    "deadline_misses": 0,
+    "replay_error": "",
+    "render_bundle_age_s": 0.06298422813415527,
+    "camera_orbits": [
+      [
+        0.7853981633974483,
+        0.35,
+        2.4
+      ],
+      [
+        -1.5707963267948966,
+        0.25,
+        1.9
+      ]
+    ],
+    "output": "wbc_demo/logs/wbc-online-web-playback-final",
+    "command_count": 9,
+    "last_command": "reset_views"
+  },
+  "errors": []
+}
