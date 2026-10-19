@@ -238,7 +238,11 @@ class LiveSession:
             mode,
             "--limits-profile",
             str(self.args.limits_profile),
+            "--kinematics-backend",
+            getattr(self.args, "kinematics_backend", "urdf"),
         ]
+        if getattr(self.args, "approach_reference", None):
+            command.extend(["--approach-reference", str(self.args.approach_reference)])
         self.process = subprocess.Popen(
             command, stdout=self.process_log, stderr=self.process_log, start_new_session=True
         )

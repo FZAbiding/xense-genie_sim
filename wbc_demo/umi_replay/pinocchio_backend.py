@@ -52,6 +52,8 @@ class PinocchioKinematics:
         return self.model.getFrameId(name)
 
     def configuration(self, positions):
+        if not set(self.names) <= positions.keys():
+            raise ValueError("Missing measured command joints")
         configuration = self.pin.neutral(self.model)
         for name, index, size in self.configuration_joints:
             value = self.eef.joint_value(self.eef.joints[name], positions)

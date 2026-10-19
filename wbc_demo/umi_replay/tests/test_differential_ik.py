@@ -102,6 +102,23 @@ class DifferentialIKTests(unittest.TestCase):
             with self.subTest(value=value), self.assertRaises(ValueError):
                 DifferentialIK(self.model, self.positions, self.limits, self.velocities, self.coupled, profile)
 
+    def test_infeasible_braking_state_is_rejected_not_silently_clipped(self):
+        positions = dict(self.positions)
+        joint = "idx01_body_joint1"
+        positions[joint] = self.limits[joint][1]
+        solver = DifferentialIK(self.model, positions, self.limits, self.velocities, self.coupled, self.profile)
+        previous = np.zeros(len(self.names))
+        previous[self.names.index(joint)] = self.profile["waist"]["acceleration_rad_s2"] / 30 + 0.000672977154299842
+        poses, unused = self.model.evaluate(positions, jacobian=False)
+        with self.assertRaisesRegex(RuntimeError, "bounds are infeasible"):
+            solver.step(
+                positions,
+                [pose_dict(pose) for pose in poses],
+                self.eef.openings_from_positions(positions),
+                previous,
+                1 / 30,
+            )
+
     def test_gripper_jacobian_preserves_measured_mimic_deflection(self):
         positions = dict(self.positions)
         positions["idx33_gripper_l_left_support_joint"] += 0.002

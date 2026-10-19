@@ -85,3 +85,9 @@ class PinocchioBackendTests(unittest.TestCase):
         positions[self.names[0]] = float("nan")
         with self.assertRaises(ValueError):
             self.candidate.evaluate(positions)
+
+    def test_missing_command_joint_is_rejected(self):
+        positions = dict(self.positions)
+        positions.pop(self.names[0])
+        with self.assertRaisesRegex(ValueError, "Missing measured command joints"):
+            self.candidate.evaluate(positions)

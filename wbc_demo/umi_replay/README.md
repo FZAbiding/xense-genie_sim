@@ -1,10 +1,15 @@
 # XTac UMI → 固定底盘 G2 回放
 
+**2026-10-19 在线验证**：[同步误差分解、可选 Pinocchio 后端与多 episode A/B](ONLINE_AB_RESULTS_ZH.md)。
+附 [固定首帧解验收](media/online-ab-v1/index.html) 与 [保留失败的探索批次](media/online-ab-pilot-v1/index.html)。默认模型仍是 URDF，尚未升级实测状态笛卡尔闭环。
+**尚未全项验收通过**：已复现关节制动余量不足，以及一次超时 HOLD 的名义加速度不连续；两项都保留证据，没有放宽约束或删掉失败。
+**新视频**：[v6 Pinocchio 真正在线的 2×2 四分屏](media/episode-000-v6/index.html)。本次在线服务使用 `http://127.0.0.1:8780`，没有占用或结束其他项目的 8765/8766 服务。
+
 **从零学习**：[图解 FK、雅可比、解析/数值 IK 与 WBC，读懂 v5 误差](IK_LEARNING_GUIDE_ZH.md)。
 附 [配图与实测诊断索引](media/ik-learning-v1/index.html)；特别区分模型一致性与实际跟踪精度。
 
 **下一阶段研究**：[代码审计](CODE_AUDIT_ZH.md) · [Pinocchio 实测可行性](PINOCCHIO_STUDY_ZH.md) · [WBC 分阶段路线](WBC_NEXT_STAGE_ZH.md)。
-Pinocchio 仅接入离线模型验证与可选测试，未更换在线默认后端；当前可视化研究结果见 [模型对照验收页](media/pinocchio-study-v1/index.html)。
+Pinocchio 已可选接入在线回放，但未更换默认后端；此前离线模型结果见 [模型对照验收页](media/pinocchio-study-v1/index.html)，不要与实际跟踪精度混淆。
 
 **v5 原速在线 IK：[为什么慢、实时架构与核查方法](REALTIME_REPLAY_ZH.md)**。
 Web 默认 1× / 30 Hz 在线微分 IK，UMI 使用浏览器原生视频；旧的预计算慢放模式仍可选择。

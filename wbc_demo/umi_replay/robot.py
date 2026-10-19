@@ -53,7 +53,16 @@ class GripperEEFLab(WholeBodyLab):
         self.eef_broadcaster = TransformBroadcaster(self)
 
     def on_state(self, message):
+        received = {
+            "sample_ros_time_s": message.header.stamp.sec + message.header.stamp.nanosec * 1e-9,
+            "receive_ros_time_s": self.get_clock().now().nanoseconds * 1e-9,
+            "receive_monotonic_s": time.monotonic(),
+            "receive_wall_time_s": time.time(),
+            "sequence": getattr(self, "feedback_sequence", 0) + 1,
+        }
         super().on_state(message)
+        self.feedback_sequence = received["sequence"]
+        self.feedback_metadata = received
         if hasattr(self, "eef_broadcaster"):
             self.broadcast_eef(dict(zip(message.name, message.position)), message.header.stamp)
 
@@ -145,6 +154,13 @@ class GripperEEFLab(WholeBodyLab):
         command.name = [name for name, value in values]
         command.position = [value for name, value in values]
         self.command.publish(command)
+        self.command_sequence = getattr(self, "command_sequence", 0) + 1
+        return {
+            "sequence": self.command_sequence,
+            "stamp_ros_time_s": command.header.stamp.sec + command.header.stamp.nanosec * 1e-9,
+            "publish_monotonic_s": time.monotonic(),
+            "publish_wall_time_s": time.time(),
+        }
 
     def execute_prepared(self, prepared, seconds=4.0):
         if len(prepared["path"]) != 2:

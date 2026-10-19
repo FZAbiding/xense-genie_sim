@@ -1,0 +1,13 @@
+{
+  "base_commit": "1fffdf5faeeedf3983b0ee7b7cb0a43f3df539c3",
+  "files": {
+    "wbc_demo/umi_replay/execution.py": "126fda656929966b2911ec6c631ea6488706b6420fffb4639fbf2e42fc19e346",
+    "wbc_demo/umi_replay/realtime_execution.py": "4f892225f525596ccb9c63dd19fbebf51eadf4f0127dc0a701ef6a34c41991e9",
+    "wbc_demo/umi_replay/robot.py": "1cd515604915702fb42694d68f3f7ab6e70422a41a446a5cb1d54da1b74fbd1f",
+    "wbc_demo/umi_replay/differential_ik.py": "8d00db9089527940e86e7312b8cc3d31c136feb22c3165f9cd1428005346e018",
+    "wbc_demo/umi_replay/kinematics.py": "0587fb09ac15f8f033bfd56b7712370126d9ece209d01b12f15e959c4627023e",
+    "wbc_demo/umi_replay/pinocchio_backend.py": "6be4ba44174852bc05c4829d438e3aa7650336e6cc72b0bdf29c1cf80ab27b9e",
+    "wbc_demo/umi_replay/batch.py": "4783e76426e5bff93ae7f54d50908264cb3120903ad66becb35cfec2faf39a32",
+    "wbc_demo/umi_replay/approach_reference.py": "5882472b61fedfab527d4df12cc98e272e5216ff84a228dbc247cfa3fa84877f"
+  }
+}

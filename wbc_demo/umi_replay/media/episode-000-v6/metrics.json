@@ -1,0 +1,341 @@
+{
+  "execution": {
+    "status": "passed",
+    "report_status": "passed",
+    "source_seconds": 41.66666844685872,
+    "active_wall_seconds": 41.66930455295369,
+    "wall_minus_source_seconds": 0.002636106094968227,
+    "commands": 1250,
+    "deadline_misses": 0,
+    "skipped_source_ticks": 0,
+    "planned_velocity_excess_rad_s": 0.0,
+    "planned_acceleration_excess_rad_s2": 3.7749651347951385e-05,
+    "joint_position_excess_rad": 0.0,
+    "coupling_excess": 0.0,
+    "constraint_audit": "nominal 1/30 s command integration; not a certification of physical acceleration or wall-clock jitter",
+    "acceleration_audit_complete": true,
+    "per_side": {
+      "left": {
+        "max_position_error_m": 0.018951666802438295,
+        "p95_position_error_m": 0.010613306680702204,
+        "max_rotation_error_deg": 1.181946657707876
+      },
+      "right": {
+        "max_position_error_m": 0.019106800824790268,
+        "p95_position_error_m": 0.0079358582926164,
+        "max_rotation_error_deg": 1.2096364654298164
+      }
+    },
+    "max_abs_roll_deg": 0.19378985464572906
+  },
+  "synchronized_ticks": {
+    "status": "analyzed",
+    "execution_status": "passed",
+    "partial": false,
+    "snapshots": 1250,
+    "kinematics_backend": "pinocchio",
+    "max_vector_identity_error_m": 0.0,
+    "callback_age_s_p50_p95_max": [
+      0.005018182477215305,
+      0.010768302759970538,
+      0.018070947960950434
+    ],
+    "last_publication_age_s_p50_p95_max": [
+      0.025675534474430606,
+      0.027812303151586094,
+      0.02993109100498259
+    ],
+    "message_stamp_age_s_p50_p95_max": [
+      0.006485104560852051,
+      0.011802542209625243,
+      0.020038843154907227
+    ],
+    "per_side": {
+      "left": {
+        "total_position_m_p50_p95_max": [
+          0.0040612249823591285,
+          0.010613306680702204,
+          0.018951666802438295
+        ],
+        "task_position_m_p50_p95_max": [
+          3.172030129287598e-05,
+          0.00021849911922567332,
+          0.0008791184270090165
+        ],
+        "following_position_m_p50_p95_max": [
+          0.004079797081631898,
+          0.010728199346852853,
+          0.018693355022969316
+        ]
+      },
+      "right": {
+        "total_position_m_p50_p95_max": [
+          0.0040765259194904535,
+          0.0079358582926164,
+          0.019106800824790268
+        ],
+        "task_position_m_p50_p95_max": [
+          3.1373352708055504e-05,
+          0.0001837077910663945,
+          0.0010242893232075047
+        ],
+        "following_position_m_p50_p95_max": [
+          0.004106424852188512,
+          0.00786273413024169,
+          0.018948073000927053
+        ]
+      }
+    },
+    "contract": "Position-vector decomposition at one controller observation; following is relative to last published command, not acknowledged actuator command. Not causal attribution or physical metrology.",
+    "inputs_sha256": {
+      "control_ticks.jsonl": "dfedc0d23b0242d9ce1bf9079af7627fdc73b3cb69e8f9ec8906ebc4761eb1ea",
+      "report.json": "2315a18ec280756a6169f19f70fd03073af165277a6d889fc7f20b2bf8f93352"
+    }
+  },
+  "snapshot_geometry": {
+    "status": "passed",
+    "sampled_ticks": 100,
+    "max_position_difference_m": 1.9908701176995277e-15,
+    "max_rotation_difference_rad": 1.669928058083021e-15,
+    "urdf_sha256": "a78d5055fa9b66dc73bc7f8a62e71cf8f58795512945f5ee9d99ed15bf419cb2",
+    "snapshots_sha256": "dfedc0d23b0242d9ce1bf9079af7627fdc73b3cb69e8f9ec8906ebc4761eb1ea",
+    "contract": "Independent URDF FK checks logged measured and last-command poses against the exact joint snapshots; not actuator acknowledgement."
+  },
+  "hold_transition_audit": {
+    "status": "passed",
+    "execution_status": "passed",
+    "partial": false,
+    "hold_ticks": [],
+    "max_nominal_acceleration_excess_rad_s2": 3.7749651347951385e-05,
+    "worst_joint": "idx67_arm_r_joint7",
+    "worst_phase_s": 29.267414645000827,
+    "worst_acceleration_rad_s2": 8.000037749651348,
+    "limit_rad_s2": 8.0,
+    "contract": "Nominal 30 Hz position-command integration including zero-advance HOLD transitions; not measured physical acceleration or wall-clock certification."
+  },
+  "alignment": {
+    "comparison": "UMI head_left vs actual physical replay, nearest image ROS timestamp at each commanded source phase",
+    "frames": 1250,
+    "fps": 30,
+    "duration_seconds": 41.666666666666664,
+    "source_phase_end_seconds": 41.63333511352539,
+    "physical_replay_seconds": 41.6693033639458,
+    "max_camera_timestamp_gap_seconds": 0.028133869171142578,
+    "p95_camera_timestamp_gap_seconds": 0.01963437795639038,
+    "allowed_max_camera_timestamp_gap_seconds": 0.4,
+    "max_source_phase_gap_seconds": 0.02752789068305006,
+    "p95_source_phase_gap_seconds": 0.019850465552160655,
+    "allowed_max_source_phase_gap_seconds": 0.1,
+    "real_time_control": true,
+    "control_contract": "soft realtime differential IK",
+    "layout": "quad",
+    "views": [
+      "UMI head_left",
+      "virtual head-pose-aligned ego",
+      "external A",
+      "external B"
+    ],
+    "alignment_limitations": "Camera timestamps label rendered TF state; this is command-phase alignment, not calibrated sensor latency or identical viewpoints.",
+    "source_license": "TacVerse/xtac-umi-g1-block-to-box / CC-BY-SA-4.0; head_left excerpt resized and composed",
+    "provenance": {
+      "dataset": "TacVerse/xtac-umi-g1-block-to-box",
+      "revision": "8ad651578fda4724514387e2d3d3551c3c9631f9",
+      "data_file": "data/chunk-000/file-000.parquet",
+      "data_sha256": "bc3165d4d981926fe2af052b612381384a5789226f30d2fae0f2e9ed29660ef4",
+      "feature": "observation.state",
+      "source_episode_id": "EP-1788246093295-0001",
+      "fps": 30,
+      "source_frames": 1250,
+      "extrinsics_already_applied": true,
+      "max_source_step_m": 0.013381546623244832,
+      "max_source_rotation_step_rad": 0.03257997144927967
+    },
+    "robot_model": {
+      "definition": "midpoint of the two distal fingertip faces at the held URDF zero-joint (open) configuration",
+      "axes": "X toward fingertips; Z toward the wrist-camera side; Y = Z cross X (opposite URDF left_support)",
+      "axis_revision": "camera_side_up_v2",
+      "urdf_sha256": "a78d5055fa9b66dc73bc7f8a62e71cf8f58795512945f5ee9d99ed15bf419cb2",
+      "hardware_calibration": false,
+      "sides": [
+        {
+          "side": "l",
+          "base_to_eef": [
+            [
+              0.0,
+              -1.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              -1.0,
+              1.7250422388316068e-05
+            ],
+            [
+              1.0,
+              0.0,
+              0.0,
+              0.20500573350429535
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ],
+          "tip_to_eef": [
+            [
+              0.0,
+              -2.220446049250313e-16,
+              1.0,
+              -1.7250422388316068e-05
+            ],
+            [
+              0.0,
+              -1.0,
+              -2.220446049250313e-16,
+              3.830363224003556e-21
+            ],
+            [
+              1.0,
+              0.0,
+              0.0,
+              0.21200573350429536
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ],
+          "meshes": [
+            {
+              "resource": "package://genie_sim_robot_model/robots/genie/g2/meshes/gripper/swiftpicker/left_support_link.STL",
+              "sha256": "a4c3248cf9f2c925d18aa9bb2e3659ef0d6a703252b006a3d9f1bc8ec2e917fb",
+              "distal_face_center_in_base_m": [
+                0.04867500028759242,
+                6.86751445755588e-05,
+                0.20500573350429535
+              ]
+            },
+            {
+              "resource": "package://genie_sim_robot_model/robots/genie/g2/meshes/gripper/swiftpicker/right_support_link.STL",
+              "sha256": "136475599e901768a0195df51634cb3f007d0d5a0c647855056aac31dc62a73b",
+              "distal_face_center_in_base_m": [
+                -0.04867500028759242,
+                -3.4174299798926666e-05,
+                0.20500573350429535
+              ]
+            }
+          ],
+          "camera_housing": {
+            "resource": "package://genie_sim_robot_model/robots/genie/g2/meshes/gripper/swiftpicker/camera_link.STL",
+            "sha256": "750873a92e9b23af434b29478c0be1cf54c4501bd05e092f4877a8718878cd25",
+            "bbox_center_in_eef_m": [
+              -0.15911583357151599,
+              0.005589677020907402,
+              0.03197862068191171
+            ]
+          }
+        },
+        {
+          "side": "r",
+          "base_to_eef": [
+            [
+              0.0,
+              -1.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              -1.0,
+              1.7250422388316068e-05
+            ],
+            [
+              1.0,
+              0.0,
+              0.0,
+              0.20500573350429535
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ],
+          "tip_to_eef": [
+            [
+              0.0,
+              -2.220446049250313e-16,
+              1.0,
+              -1.7250422388316068e-05
+            ],
+            [
+              0.0,
+              -1.0,
+              -2.220446049250313e-16,
+              3.830363224003556e-21
+            ],
+            [
+              1.0,
+              0.0,
+              0.0,
+              0.21200573350429536
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ],
+          "meshes": [
+            {
+              "resource": "package://genie_sim_robot_model/robots/genie/g2/meshes/gripper/swiftpicker/left_support_link.STL",
+              "sha256": "a4c3248cf9f2c925d18aa9bb2e3659ef0d6a703252b006a3d9f1bc8ec2e917fb",
+              "distal_face_center_in_base_m": [
+                0.04867500028759242,
+                6.86751445755588e-05,
+                0.20500573350429535
+              ]
+            },
+            {
+              "resource": "package://genie_sim_robot_model/robots/genie/g2/meshes/gripper/swiftpicker/right_support_link.STL",
+              "sha256": "136475599e901768a0195df51634cb3f007d0d5a0c647855056aac31dc62a73b",
+              "distal_face_center_in_base_m": [
+                -0.04867500028759242,
+                -3.4174299798926666e-05,
+                0.20500573350429535
+              ]
+            }
+          ],
+          "camera_housing": {
+            "resource": "package://genie_sim_robot_model/robots/genie/g2/meshes/gripper/swiftpicker/camera_link.STL",
+            "sha256": "750873a92e9b23af434b29478c0be1cf54c4501bd05e092f4877a8718878cd25",
+            "bbox_center_in_eef_m": [
+              -0.15911583357151599,
+              0.005589677020907402,
+              0.03197862068191171
+            ]
+          }
+        }
+      ],
+      "runtime_tcp": "fingertip midpoint recomputed from measured gripper joints; zero-joint fully-open reference retained above"
+    },
+    "inputs": {
+      "wbc_demo/data/converted/episode-000.json": "aaad631763b3899223043ee7f94589a22c5d4517630e968a7e4c5b569345ae29",
+      "wbc_demo/logs/wbc-online-web-20261019-02/run-001/report.json": "2315a18ec280756a6169f19f70fd03073af165277a6d889fc7f20b2bf8f93352",
+      "wbc_demo/logs/wbc-online-web-20261019-02/run-001/command_phase.csv": "4f48a19d2623f12865ea784b8e17056e5fa3f0d0dc38eecc46b9247687faa25e",
+      "wbc_demo/logs/wbc-online-web-20261019-02/recording-001/frames.csv": "326c346002003c75fa5b00af89a07459540a5472712eb9a696ec419a8da85c80",
+      "wbc_demo/logs/wbc-online-web-20261019-02/recording-001/views.mp4": "95800c44f516d1c48d71c91ce3d941f09940b8d060970438b37e2416180dbdcf",
+      "/home/xense/src/xense-genie_sim/wbc_demo/data/xtac-umi-g1-block-to-box/videos/observation.images.head_left/chunk-000/file-000.mp4": "fbfd668f3a7497648399ec046c0cecb895a559d819588fb10050f2f14597502a"
+    },
+    "output_sha256": "b133757c9916e836af162a06c73b2243eef1311a34a2fbc8526d95ed861f36d8"
+  }
+}

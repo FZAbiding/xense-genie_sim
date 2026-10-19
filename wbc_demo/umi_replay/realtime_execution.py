@@ -1,5 +1,6 @@
 import copy
 import csv
+import json
 import math
 import time
 
@@ -10,8 +11,9 @@ from moveit_msgs.srv import GetStateValidity
 from dual_arm_ik import GROUP
 from lab_core import pose_values, save_json
 
-from .differential_ik import DifferentialIK, PlaybackClock, URDFKinematics, matrix_error
-from .geometry import interpolate_pose, pose_matrix
+from .differential_ik import DifferentialIK, PlaybackClock, matrix_error
+from .geometry import interpolate_pose, pose_matrix, pose_dict
+from .kinematics import create_kinematics
 from .validation import validate_realtime_profile, validate_realtime_source
 
 
@@ -68,12 +70,7 @@ def checked_step(node, previous, candidate, deadline):
             raise RuntimeError("Online collision/state validity guard rejected the next command")
 
 
-def stream(node, frames, config, profile, output, report):
-    validate_realtime_profile(profile)
-    period = 1 / 30
-    lookahead = profile.get("lookahead_seconds", 0.0)
-    timestamps = validate_realtime_source(frames)
-    duration = float(timestamps[-1] + period)
+def prepare_model(node, backend):
     positions = state_positions(node.state)
     names = [name for name in node.state.joint_state.name if node.is_command_joint(name)]
     root = node.tf_buffer.lookup_transform("odom", "base_link", rclpy.time.Time()).transform
@@ -83,7 +80,7 @@ def stream(node, frames, config, profile, output, report):
             "quaternion_xyzw": [root.rotation.x, root.rotation.y, root.rotation.z, root.rotation.w],
         }
     )
-    model = URDFKinematics(node.eef, root_matrix, names)
+    model = create_kinematics(backend, node.eef, root_matrix, names)
     local, unused = model.evaluate(positions, jacobian=False)
     service = pose_values(node.forward(node.state))
     discrepancy = [matrix_error(actual, pose_matrix(expected)) for actual, expected in zip(local, service)]
@@ -92,6 +89,19 @@ def stream(node, frames, config, profile, output, report):
         or max(np.linalg.norm(item[3:]) for item in discrepancy) > 1e-5
     ):
         raise RuntimeError(f"Local URDF FK disagrees with MoveIt: {discrepancy}")
+    model.crosscheck = [float(np.linalg.norm(item[:3])) for item in discrepancy]
+    return model
+
+
+def stream(node, frames, config, profile, output, report):
+    validate_realtime_profile(profile)
+    period = 1 / 30
+    lookahead = profile.get("lookahead_seconds", 0.0)
+    timestamps = validate_realtime_source(frames)
+    duration = float(timestamps[-1] + period)
+    positions = state_positions(node.state)
+    model = node.realtime_model
+    names = model.names
     solver = DifferentialIK(
         model, positions, node.limits, node.velocities, node.coupled, profile, node.joint_position_bounds
     )
@@ -100,7 +110,7 @@ def stream(node, frames, config, profile, output, report):
         "control_hz_requested": 30,
         "source_duration_seconds": duration,
         "time_scale": 1.0,
-        "solver": "repository differential Cartesian IK + OSQP; BioIK only for the initial approach",
+        "solver": "repository differential Cartesian IK + OSQP; initial approach method recorded separately",
         "limits_profile": profile,
         "active_joints": names,
         "planned_velocity_limits_rad_s": solver.velocity.tolist(),
@@ -110,7 +120,11 @@ def stream(node, frames, config, profile, output, report):
         "coupled_matrix": solver.coupled.tolist(),
         "coupled_ceiling": solver.ceiling.tolist(),
         "target_lookahead_s": lookahead,
-        "fk_crosscheck_max_position_m": max(float(np.linalg.norm(item[:3])) for item in discrepancy),
+        "fk_crosscheck_max_position_m": max(model.crosscheck),
+        "kinematics_backend": report["kinematics_backend"],
+        "model_version": getattr(getattr(model, "pin", None), "__version__", "repository URDF geometry"),
+        "model_root_to_odom": model.root.tolist(),
+        "tick_snapshot_contract": "same callback state snapshot vs last published command; no actuator acknowledgement or causal latency attribution",
         "commands": 0,
         "deadline_misses": 0,
         "skipped_source_ticks": 0,
@@ -134,7 +148,7 @@ def stream(node, frames, config, profile, output, report):
     commanded = copy.deepcopy(node.state)
     with (output / "realtime.csv").open("w") as trace, (output / "command_joints.csv").open("w") as joint_trace, (
         output / "command_phase.csv"
-    ).open("w") as phase_trace:
+    ).open("w") as phase_trace, (output / "control_ticks.jsonl").open("w") as snapshots:
         writer = csv.writer(trace)
         joint_writer = csv.writer(joint_trace)
         joint_writer.writerow(
@@ -142,7 +156,7 @@ def stream(node, frames, config, profile, output, report):
         )
         phase_writer = csv.writer(phase_trace)
         phase_writer.writerow(["wall_time_s", "command_ros_time_s", "source_time_s", "keyframe"])
-        node.publish_positions(commanded, GROUP)
+        last_publication = node.publish_positions(commanded, GROUP)
         phase_writer.writerow([time.time(), node.get_clock().now().nanoseconds * 1e-9, 0.0, 0])
         writer.writerow(
             [
@@ -187,7 +201,7 @@ def stream(node, frames, config, profile, output, report):
                 raise RuntimeError("Stale joint feedback or competing joint-command publisher")
             node.observe_base_drift()
             if node.pause_requested:
-                node.publish_positions(commanded, GROUP)
+                last_publication = node.publish_positions(commanded, GROUP)
                 time.sleep(0.01)
                 continue
             if phase >= duration:
@@ -203,8 +217,31 @@ def stream(node, frames, config, profile, output, report):
             last_tick = tick
             targets, openings = sample_targets(frames, min(phase, timestamps[-1]))
             actual_positions = state_positions(node.state)
+            feedback_metadata = dict(node.feedback_metadata)
+            measured_velocities = dict(zip(node.state.joint_state.name, node.state.joint_state.velocity))
+            observation_ros_time = node.get_clock().now().nanoseconds * 1e-9
+            observation_monotonic = time.monotonic()
             feedback_age = time.monotonic() - node.last_state_time
             actual, unused = model.evaluate(actual_positions, jacobian=False)
+            command_before, unused = model.evaluate(positions, jacobian=False)
+            snapshot = {
+                "tick": tick,
+                "source_time_s": phase,
+                "observation_ros_time_s": observation_ros_time,
+                "observation_monotonic_s": observation_monotonic,
+                "observation_wall_time_s": time.time(),
+                "feedback": feedback_metadata,
+                "last_publication": dict(last_publication),
+                "positions_measured": actual_positions,
+                "velocities_measured": measured_velocities,
+                "positions_last_command": dict(positions),
+                "eef_target": targets,
+                "eef_measured": [pose_dict(pose) for pose in actual],
+                "eef_last_command": [pose_dict(pose) for pose in command_before],
+                "target_gripper_openings": openings.tolist(),
+                "model_observation_ms": (time.monotonic() - observation_monotonic) * 1000,
+            }
+            snapshots.write(json.dumps(snapshot, allow_nan=False, separators=(",", ":")) + "\n")
             errors = [matrix_error(measured, pose_matrix(wanted)) for measured, wanted in zip(actual, targets)]
             position_errors = [float(np.linalg.norm(item[:3])) for item in errors]
             rotation_errors = [float(np.linalg.norm(item[3:])) for item in errors]
@@ -235,7 +272,7 @@ def stream(node, frames, config, profile, output, report):
                     raise TimeoutError("Command calculation exceeded the current 33.3 ms deadline")
                 if node.cancel.is_set() or node.pause_requested:
                     continue
-                node.publish_positions(candidate, GROUP)
+                last_publication = node.publish_positions(candidate, GROUP)
                 phase_writer.writerow([time.time(), node.get_clock().now().nanoseconds * 1e-9, phase, tick])
                 result["max_command_velocity_rad_s"] = max(
                     result["max_command_velocity_rad_s"], float(np.max(np.abs(next_velocity)))
@@ -256,7 +293,7 @@ def stream(node, frames, config, profile, output, report):
                 result["deadline_misses"] += 1
                 consecutive_misses += 1
                 velocity = np.zeros(len(names))
-                node.publish_positions(commanded, GROUP)
+                last_publication = node.publish_positions(commanded, GROUP)
             cycle_ms = (time.monotonic() - now) * 1000
             costs.append(cycle_ms)
             solve_costs.append(solve_ms)

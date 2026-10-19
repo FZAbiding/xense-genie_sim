@@ -21,6 +21,7 @@ from .download import sha256
 from .geometry import check_transform, interpolate_pose, pose_error
 from .robot import GripperEEFLab
 from .validation import validate_realtime_profile, validate_realtime_source
+from .kinematics import validate_backend
 
 
 def ros_targets(poses):
@@ -310,6 +311,17 @@ def run(args, converted, config):
     realtime = getattr(args, "playback_mode", "validated") == "realtime"
     config = posture_config(config, policy)
     realtime_profile = None
+    backend = validate_backend(getattr(args, "kinematics_backend", "urdf"))
+    if not realtime and backend != "urdf":
+        raise ValueError("Kinematics backend selection only applies to realtime playback")
+    approach_reference = None
+    if getattr(args, "approach_reference", None):
+        from .approach_reference import validate_reference
+
+        if not realtime:
+            raise ValueError("Frozen approach reference only applies to realtime playback")
+        approach_bytes = args.approach_reference.read_bytes()
+        approach_reference = validate_reference(json.loads(approach_bytes), sha256(args.input), config)
     if realtime:
         profile_bytes = args.limits_profile.read_bytes()
         realtime_profile = validate_realtime_profile(json.loads(profile_bytes))
@@ -351,10 +363,15 @@ def run(args, converted, config):
         "gripper_sampling_tolerance": 0.02,
         "playback_mode": "realtime" if realtime else "validated",
         "preflight_scope": "initial_pose_only" if realtime else "all_sampled_keyframes",
+        "kinematics_backend": backend,
+        "motion_started": False,
     }
     if realtime:
         report["realtime_limits_profile"] = realtime_profile
         report["realtime_limits_profile_sha256"] = hashlib.sha256(profile_bytes).hexdigest()
+    if approach_reference:
+        report["approach_reference_report_sha256"] = hashlib.sha256(approach_bytes).hexdigest()
+        report["approach_reference_path"] = str(args.approach_reference)
     report["backend_log_directory"] = os.environ.get("WBC_BACKEND_LOG_DIR")
     save_json(output / "report.json", report)
     os.environ.setdefault("ROS_DOMAIN_ID", "42")
@@ -375,6 +392,13 @@ def run(args, converted, config):
         node.publish_progress(0.0, "initializing")
         node.acquire_control()
         node.initialize()
+        report["initial_measured_positions_rad"] = dict(
+            zip(node.state.joint_state.name, node.state.joint_state.position)
+        )
+        if realtime:
+            from .realtime_execution import prepare_model
+
+            node.realtime_model = prepare_model(node, backend)
         report["tracking_pose_frame"] = "gripper_eef"
         report["robot_eef_frames"] = node.eef.frame_names
         report["solver_internal_links"] = node.eef.tip_names
@@ -399,10 +423,19 @@ def run(args, converted, config):
         if realtime:
             from .realtime_execution import prepare_initial
 
-            first = prepare_initial(node, frames[0])
+            if approach_reference:
+                from .approach_reference import prepare_reference
+
+                first = prepare_reference(node, frames[0], approach_reference)
+            else:
+                first = prepare_initial(node, frames[0])
+            report["initial_approach_goal_rad"] = dict(
+                zip(first["goal"].joint_state.name, first["goal"].joint_state.position)
+            )
             report["initial_approach_ik"] = {
                 key: first[key] for key in ("ik_error_m", "ik_orientation_error_rad", "solve_seconds")
             }
+            report["initial_approach_ik"]["method"] = first["planning_method"]
             report["time_scale"] = 1.0
         else:
             states, first = preflight(node, frames, report, output)
@@ -422,6 +455,7 @@ def run(args, converted, config):
             report["status"] = "executing"
             save_json(output / "report.json", report)
             motion_started = True
+            report["motion_started"] = True
             node.publish_progress(0.0, "approaching")
             report["approach"] = node.execute_prepared(first)
             if realtime:

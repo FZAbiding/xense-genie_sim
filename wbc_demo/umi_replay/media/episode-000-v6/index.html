@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Episode 000 v6 · Pinocchio 在线全身 IK</title>
+<style>body{margin:0;background:#122032;color:#edf4fb;font:17px/1.8 system-ui}main{max-width:1350px;margin:auto;padding:24px}a{color:#8adbe9}video,img{width:100%;display:block;border-radius:8px;background:white}.frames{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.notice{background:#31465e;padding:18px}code{overflow-wrap:anywhere}@media(max-width:800px){.frames{grid-template-columns:1fr}}</style></head>
+<body><main><h1>Episode 000 v6 · Pinocchio 在线回放</h1>
+<p><a href="../../ONLINE_AB_RESULTS_ZH.md">完整实验与失败记录</a> · <a href="../online-ab-v1/index.html">固定首帧 A/B</a> · <a href="metrics.json">指标</a> · <a href="replay-report.json">真实执行报告</a> · <a href="manifest.json">SHA256</a></p>
+<div class="notice">Pinocchio 4.1.0 模型＋原有联合 QP，固定底盘、指尖 EEF、两夹爪开合。1250 条在线命令、零超时，实际 41.669305 s。仅证明这一段运行；批测中仍发现制动可行域和超时 HOLD 的名义加速度问题，未宣称已经全部修复。</div>
+<h2>1× 四分屏真视频</h2>
+<video controls preload="metadata" poster="quad-middle.png" src="head_left.mp4"></video>
+<p>左上：源 UMI head_left；右上：方向对齐虚拟第一视角；下方：两个外部镜头。导出 30 fps / 1250 帧 / 41.666667 s；最大源相位差 27.528 ms，小于原有 100 ms 门槛。</p>
+<h2>首 / 中 / 末帧</h2><div class="frames"><img src="quad-start.png" alt="首帧"><img src="quad-middle.png" alt="中间帧"><img src="quad-end.png" alt="末帧"></div>
+<h2>同步位置误差分解</h2><img src="error-decomposition.png" alt="本次Web运行的真实同步位置误差曲线">
+<p>following 相对最后发布命令计算，不是驱动确认或因果误差占比。模型一致性不等于机器人定位精度，任务/伺服范数不能直接相加。</p>
+<p>这是单独 Web 录制，不混入无 Web 负载的 A/B 耗时比较；没有新验证鼠标拖动/按钮，也没有块箱接触成功验收。在线服务当前使用 <code>http://127.0.0.1:8780</code>，静态页面本身不控制机器人。</p>
+</main></body></html>

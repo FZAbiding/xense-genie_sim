@@ -73,6 +73,8 @@ def main():
     live_parser.add_argument("--port", type=int, default=8765)
     live_parser.add_argument("--playback-mode", choices=("realtime", "validated"), default="realtime")
     live_parser.add_argument("--limits-profile", type=Path, default=ROOT / "umi_replay/configs/g2_realtime_limits.json")
+    live_parser.add_argument("--kinematics-backend", choices=("urdf", "pinocchio"), default="urdf")
+    live_parser.add_argument("--approach-reference", type=Path)
     replay = commands.add_parser("replay")
     replay.add_argument("--input", type=Path, required=True)
     replay.add_argument("--config", type=Path, default=ROOT / "umi_replay/configs/g2_shared_world.json")
@@ -83,6 +85,31 @@ def main():
     replay.add_argument("--interactive-controls", action="store_true")
     replay.add_argument("--playback-mode", choices=("validated", "realtime"), default="validated")
     replay.add_argument("--limits-profile", type=Path, default=ROOT / "umi_replay/configs/g2_realtime_limits.json")
+    replay.add_argument("--kinematics-backend", choices=("urdf", "pinocchio"), default="urdf")
+    replay.add_argument("--approach-reference", type=Path)
+    tick_parser = commands.add_parser("analyze-ticks")
+    tick_parser.add_argument("--run-directory", type=Path, required=True)
+    verify_parser = commands.add_parser("verify-ticks")
+    verify_parser.add_argument("--run-directory", type=Path, required=True)
+    verify_parser.add_argument("--samples", type=int, default=100)
+    batch_parser = commands.add_parser("batch")
+    batch_parser.add_argument("--reference-run", type=Path, required=True)
+    batch_parser.add_argument("--approach-reference-batch", type=Path)
+    batch_parser.add_argument("--converted-directory", type=Path, default=ROOT / "data/converted")
+    batch_parser.add_argument("--config", type=Path, default=ROOT / "umi_replay/configs/g2_shared_world.json")
+    batch_parser.add_argument(
+        "--limits-profile", type=Path, default=ROOT / "umi_replay/configs/g2_realtime_limits.json"
+    )
+    batch_parser.add_argument("--episodes", type=int, nargs="+", default=[0, 1, 2])
+    batch_parser.add_argument("--backends", choices=("urdf", "pinocchio"), nargs="+", default=["urdf", "pinocchio"])
+    batch_parser.add_argument("--repeats", type=int, default=1)
+    batch_parser.add_argument("--posture-policy", choices=("soft", "upright"), default="soft")
+    batch_parser.add_argument("--timeout", type=float, default=300)
+    batch_parser.add_argument("--execute", action="store_true")
+    batch_parser.add_argument("--output", type=Path, required=True)
+    batch_evidence = commands.add_parser("batch-evidence")
+    batch_evidence.add_argument("--batch-directory", type=Path, required=True)
+    batch_evidence.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
     if args.command == "download":
         download(args.root, args.revision, metadata_only=args.metadata_only)
@@ -124,6 +151,22 @@ def main():
         from .live_view import live
 
         live(args, json.loads(args.input.read_text()))
+    elif args.command == "analyze-ticks":
+        from .tick_analysis import analyze_ticks
+
+        print(json.dumps(analyze_ticks(args.run_directory), indent=2))
+    elif args.command == "verify-ticks":
+        from .tick_analysis import verify_tick_geometry
+
+        print(json.dumps(verify_tick_geometry(args.run_directory, args.samples), indent=2))
+    elif args.command == "batch":
+        from .batch import run_batch
+
+        run_batch(args)
+    elif args.command == "batch-evidence":
+        from .batch_evidence import export_batch
+
+        export_batch(args.batch_directory, args.output)
     else:
         from .execution import run
 

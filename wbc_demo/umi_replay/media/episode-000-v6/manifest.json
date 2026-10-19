@@ -1,0 +1,15 @@
+{
+  "kind": "actual Pinocchio online replay, separate Web recording",
+  "source_run": "wbc_demo/logs/wbc-online-web-20261019-02/run-001",
+  "files_sha256": {
+    "metrics.json": "eb92b839f49cc89342910d4092a0f73bbe3e95182fb35768fcf6f43db4672e10",
+    "replay-report.json": "2315a18ec280756a6169f19f70fd03073af165277a6d889fc7f20b2bf8f93352",
+    "error-decomposition.png": "facf74fe2e52509387778f9bdc2a0641d5d51666e48e4c0652d255af55f4a9db",
+    "README.md": "07a758a31ac5194267757be2a8e0cc615a26f5846bb9e503354575e3674791b4",
+    "head_left.mp4": "b133757c9916e836af162a06c73b2243eef1311a34a2fbc8526d95ed861f36d8",
+    "quad-start.png": "bc5334b3631800d2a2469a90f07caa108d45e71fdd97f293ed0e937afb720283",
+    "quad-middle.png": "77599e3b773f50ab76140ae86dd096aef5d015195c86e2fc255d2505d5f94fe5",
+    "index.html": "b09911db4b625d8715b6b4709f29e598faf70899f16892ff2ff49bb7149e6601",
+    "quad-end.png": "2cd77e6d705b5cf2a04800d21d66e6c738666495e558eaa9eaf5ce45454e70f2"
+  }
+}
