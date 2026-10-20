@@ -1,3 +1,12 @@
+## 本工程图文总结：唯一入口
+
+**[打开根目录 PROJECT_GUIDE_ZH.md：G2 全身 IK、UMI 回放与 WBC 学习总览](PROJECT_GUIDE_ZH.md)**
+
+全部有价值的复现结论、坐标与 EEF 说明、连杆 / IK 教程、Flexiv / ARX5 对照、实测图视频、已知问题和下一阶段计划统一收口在该文档。
+原有子文档保留为历史参考；下面继续保留上游 Genie Sim 平台说明，不是本工程实验总结的另一入口。
+
+---
+
 ![image.png](./docs/image.png)
 
 <div align="center">

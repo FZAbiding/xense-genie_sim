@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="760" viewBox="0 0 1400 760">
+<defs><marker id="arrow" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0 0L7 3L0 6" fill="none" stroke="#44657b" stroke-width="1.5"/></marker></defs>
+<rect width="1400" height="760" rx="16" fill="#f2f6fa"/>
+<g font-family="sans-serif" fill="#17344c">
+<text x="30" y="44" font-size="27" font-weight="bold">坐标统一不是一次操作：先区分采集导出、世界放置、工具安装</text>
+<text x="30" y="83" font-size="20" fill="#317a72">上游采集 / 导出链：HF 文件保存的是这条链的结果，不应再做一遍</text>
+<g fill="white" stroke="#9bb1c2"><rect x="30" y="110" width="300" height="170" rx="12"/><rect x="420" y="110" width="360" height="170" rx="12"/><rect x="870" y="110" width="495" height="170" rx="12"/></g>
+<text x="48" y="145" font-size="21" font-weight="bold">PICO / xrt 原始 tracker</text>
+<text x="48" y="185" font-size="18">参考：VR 启动建立的原点</text><text x="48" y="221" font-size="18">采样的是定位设备，不是指尖</text><text x="48" y="255" font-size="17">SDK 原始轴约定需依具体导出核查</text>
+<path d="M337 193H410" stroke="#44657b" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="350" y="173" font-size="19">换基 G</text>
+<text x="440" y="145" font-size="21" font-weight="bold">导出 world 中的 tracker</text>
+<text x="440" y="185" font-size="18">p → [−z, −x, y]</text><text x="440" y="221" font-size="18">R → G R Gᵀ</text><text x="440" y="255" font-size="18">world：X 前 / Y 左 / Z 上，米</text>
+<path d="M788 193H860" stroke="#44657b" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="793" y="173" font-size="18">工具外参</text>
+<text x="890" y="145" font-size="21" font-weight="bold">HF：world 中的夹爪 EEF 绝对位姿</text>
+<text x="890" y="185" font-size="18">T_world_EEF = T_world_tracker · T_tracker_EEF</text><text x="890" y="221" font-size="18">本数据 poses_are_ee = true：已经应用外参</text><text x="890" y="255" font-size="18">state[t] 是绝对值；action[t] 是下一时刻绝对值</text>
+<text x="30" y="328" font-size="20" fill="#317a72">本项目回放链：用同一个世界变换搬左右手，再处理机器人自己的工具几何</text>
+<g fill="white" stroke="#9bb1c2"><rect x="30" y="355" width="360" height="185" rx="12"/><rect x="485" y="355" width="390" height="185" rx="12"/><rect x="970" y="355" width="395" height="185" rx="12"/></g>
+<text x="48" y="393" font-size="21" font-weight="bold">数据世界 W → 仿真世界 O</text>
+<text x="48" y="434" font-size="18">同一个 T_O_W，同时作用于双手</text><text x="48" y="470" font-size="18">默认按首帧双手中点放置工作区</text><text x="48" y="506" font-size="18">不是左右手分别吸附到机器人手位</text>
+<path d="M399 451H475" stroke="#44657b" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="505" y="393" font-size="21" font-weight="bold">odom 中的目标夹爪 EEF</text>
+<text x="505" y="434" font-size="18">T_O_E* = T_O_W · T_W_E</text><text x="505" y="470" font-size="18">位置、朝向一起变换；不缩放</text><text x="505" y="506" font-size="18">底盘固定，腰和手臂寻找关节解</text>
+<path d="M884 451H960" stroke="#44657b" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="990" y="393" font-size="21" font-weight="bold">需要法兰目标的首帧接口</text>
+<text x="990" y="434" font-size="18">T_O_F* = T_O_E* · inverse(T_F_E)</text><text x="990" y="470" font-size="18">T_F_E 来自 G2 夹爪模型</text><text x="990" y="506" font-size="18">夹爪开度改变时，TCP 位置重算</text>
+<rect x="30" y="578" width="1335" height="143" rx="12" fill="#dfeaf2"/>
+<text x="50" y="615" font-size="21" font-weight="bold">机器人自身不是只有一个“坐标系”</text>
+<text x="50" y="653" font-size="19">odom → base_footprint → base_link → 腰部 → arm_base_link → 左/右臂法兰 → 各自夹爪 EEF</text>
+<text x="50" y="691" font-size="19">Flexiv WORLD、ARX5 base_link、G2 odom、UMI world 名字或轴方向相似，也不代表原点和安装关系相同。</text>
+</g></svg>

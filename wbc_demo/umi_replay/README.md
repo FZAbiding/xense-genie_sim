@@ -1,5 +1,8 @@
 # XTac UMI → 固定底盘 G2 回放
 
+**唯一总结入口：[根目录 PROJECT_GUIDE_ZH.md](../../PROJECT_GUIDE_ZH.md)**。
+坐标、算法、结果、图视频和下一阶段总结统一在根目录维护；以下为原使用说明和历史阶段记录，不作为另一个当前总览。
+
 **2026-10-19 在线验证**：[同步误差分解、可选 Pinocchio 后端与多 episode A/B](ONLINE_AB_RESULTS_ZH.md)。
 附 [固定首帧解验收](media/online-ab-v1/index.html) 与 [保留失败的探索批次](media/online-ab-pilot-v1/index.html)。默认模型仍是 URDF，尚未升级实测状态笛卡尔闭环。
 **尚未全项验收通过**：已复现关节制动余量不足，以及一次超时 HOLD 的名义加速度不连续；两项都保留证据，没有放宽约束或删掉失败。
@@ -21,15 +24,15 @@ Web 默认 1× / 30 Hz 在线微分 IK，UMI 使用浏览器原生视频；旧�
 
 **[v4 同目录视频/图片验收页](media/episode-000-v4/index.html)**；本目录包含 MP4，不再依赖本机 logs 才能播放。
 
-**新入口：[Web 四视角在线回放与 IK 原理](ONLINE_IK_AND_VIEWS_ZH.md)**。
+**历史专项：[Web 四视角在线回放与 IK 原理](ONLINE_IK_AND_VIEWS_ZH.md)**。
 原始 `head_left` + 同向虚拟第一视角 + 两个可拖动外部镜头，支持播放/暂停/恢复/停止；
 Web 默认软直腰偏好，可切换 ±0.5° 对照策略，不新增 PyQt/PySide 依赖。
 最新实际视频、误差和边界条件见 [四视角验收记录](MULTIVIEW_RESULTS_ZH.md)。
 
-首次阅读推荐 **[给 VLA 工程师的科普、当前结果与工作记录](UMI_REPLAY_GUIDE_ZH.md)**：
+历史教程 **[给 VLA 工程师的科普、当前结果与工作记录](UMI_REPLAY_GUIDE_ZH.md)**：
 从法兰/EEF、坐标变换、旋转编码讲到全身 IK、WBC、误差判断和复跑核查。
 教程第 0 节现有真实运动 GIF、关键帧图与验收表；本机可打开 [最新版离线图文/视频验收页](../logs/umi-evidence-episode-000-v2/index.html)。
-**当前应先看 [腰部/腕部相机/head_left 分屏/IK 来源核查](USER_FEEDBACK_REVIEW_ZH.md)**。
+**历史反馈核查：[腰部/腕部相机/head_left 分屏/IK 来源](USER_FEEDBACK_REVIEW_ZH.md)**。
 相机侧 EEF 修订为 `camera_side_up_v2`；旧 `umi-gripper-eef-*` 报告保留为历史，不再作为最新验收证据。
 
 **当前默认已修正为机器人模型夹爪 EEF 控制，不再使用首帧拟合的虚拟工具。**

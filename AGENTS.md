@@ -1,5 +1,12 @@
 # Agent Development Guide
 
+## Project Summary Documentation
+
+- Keep the single maintained, user-facing summary for this project's G2 / UMI / IK / WBC reproduction work at repository-root `PROJECT_GUIDE_ZH.md`.
+- Put valuable new conclusions, tutorials, results, limitations and next-stage plans into that root document; do not create parallel summary guides in subdirectories.
+- Root and subsystem READMEs should direct summary readers to that document. Keep package API/build documentation and agent instructions in their existing canonical locations.
+- Preserve existing detailed reports and historical documents as references. Preserve media paths and evidence hashes; link images/videos from the root guide instead of duplicating evidence or rewriting old reports.
+
 This file is the entry point for agentic coding agents operating in this repository.
 Start here, then follow the links below for details on each subsystem.
 

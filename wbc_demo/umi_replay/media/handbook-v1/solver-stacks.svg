@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="720" viewBox="0 0 1400 720">
+<defs><marker id="arrow" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0 0L7 3L0 6" fill="none" stroke="#44657b" stroke-width="1.5"/></marker></defs>
+<rect width="1400" height="720" rx="16" fill="#f2f6fa"/>
+<g font-family="sans-serif" fill="#17344c">
+<text x="30" y="45" font-size="27" font-weight="bold">三个平台：相同的末端任务，不同的求解边界</text>
+<g fill="white" stroke="#9bb1c2"><rect x="30" y="88" width="1335" height="155" rx="12"/><rect x="30" y="267" width="1335" height="175" rx="12"/><rect x="30" y="466" width="1335" height="220" rx="12"/></g>
+<text x="50" y="123" font-size="22" font-weight="bold">Flexiv 七轴：当前 LeRobot RT 笛卡尔路径</text>
+<text x="50" y="168" font-size="20">绝对 TCP 目标</text><text x="305" y="168" font-size="20">C++ 共享内存 / 插值</text><text x="665" y="168" font-size="20">厂商 Cartesian 接口</text><text x="1050" y="168" font-size="20">机器人内部控制</text>
+<path d="M210 161H290M540 161H645M925 161H1035" stroke="#44657b" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="50" y="214" font-size="18">本地这条路径没有显式调用 KDL；内部 IK / 冗余处理细节不能由 Python 包装器推定。</text>
+<text x="50" y="302" font-size="22" font-weight="bold">ARX5 六轴：当前 LeRobot + 固定版本 SDK</text>
+<text x="50" y="347" font-size="20">绝对 eef_link 目标</text><text x="335" y="347" font-size="20">本地多初值 IK</text><text x="665" y="347" font-size="20">关节目标 / 插值</text><text x="1050" y="347" font-size="20">底层关节控制</text>
+<path d="M265 340H320M525 340H645M910 340H1035" stroke="#44657b" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="50" y="393" font-size="18">URDF + KDL LMA 成员声明；控制器尝试当前 / 零位 / 随机初值，成功候选按距离选择。</text>
+<text x="50" y="422" font-size="17">solver 核心在预编译库，不能把头文件声明冒充完整源码审计或真机安全验收。</text>
+<text x="50" y="501" font-size="22" font-weight="bold">本项目 G2：固定底盘，双手共享腰部</text>
+<text x="50" y="546" font-size="20">双手 EEF 绝对目标</text><text x="335" y="546" font-size="20">FK / 雅可比</text><text x="665" y="546" font-size="20">联合微分 IK QP</text><text x="1050" y="546" font-size="20">检查 / 位置驱动</text>
+<path d="M270 539H320M525 539H645M925 539H1035" stroke="#44657b" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="335" y="584" font-size="18" fill="#317a72">URDF 实现或 Pinocchio</text><text x="665" y="584" font-size="18" fill="#317a72">本仓库目标函数 + OSQP</text><text x="1050" y="584" font-size="18" fill="#317a72">MoveIt + ROS + PhysX</text>
+<text x="50" y="631" font-size="18">首帧另走 BioIK / 已冻结首帧解；在线阶段不是每帧调用 BioIK，也不是 Pinocchio 自动决定腰臂优先级。</text>
+<text x="50" y="665" font-size="18">图为软件调用关系，不是三套平台实时性、跟踪精度或碰撞安全性的等价保证。</text>
+</g></svg>

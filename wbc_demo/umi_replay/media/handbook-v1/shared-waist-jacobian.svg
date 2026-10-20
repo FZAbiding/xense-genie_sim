@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="760" viewBox="0 0 1400 760">
+<rect width="1400" height="760" rx="16" fill="#f2f6fa"/>
+<g font-family="sans-serif" fill="#17344c">
+<text x="30" y="46" font-size="27" font-weight="bold">全身 IK 并没有换一套几何学：两条普通运动链共享五个腰变量</text>
+<g stroke-width="4" fill="none"><path d="M260 298V220L150 155L75 193" stroke="#247db5"/><path d="M260 220L370 155L445 193" stroke="#d67433"/><path d="M260 440V298" stroke="#647781" stroke-width="12"/></g>
+<g fill="#647781"><circle cx="260" cy="266" r="9"/><circle cx="260" cy="310" r="9"/><circle cx="260" cy="350" r="9"/><circle cx="260" cy="390" r="9"/><circle cx="260" cy="430" r="9"/></g>
+<text x="180" y="485" font-size="21">底盘固定</text><text x="290" y="360" font-size="20">共享腰 qW：5 维</text><text x="35" y="130" font-size="20" fill="#247db5">左臂 qL：7 维</text><text x="350" y="130" font-size="20" fill="#d67433">右臂 qR：7 维</text>
+<text x="590" y="115" font-size="23" font-weight="bold">关节变量 q = [ qW | qL | qR ]，共 19 维</text>
+<text x="590" y="156" font-size="20">固定夹爪开度时，双手任务速度共 12 维：</text>
+<g stroke="#91a7b8" stroke-width="1.5"><rect x="665" y="205" width="180" height="120" fill="#dce3e7"/><rect x="845" y="205" width="230" height="120" fill="#cfe4f5"/><rect x="1075" y="205" width="230" height="120" fill="white"/><rect x="665" y="325" width="180" height="120" fill="#dce3e7"/><rect x="845" y="325" width="230" height="120" fill="white"/><rect x="1075" y="325" width="230" height="120" fill="#f7e2cd"/></g>
+<text x="715" y="185" font-size="20">腰 5 列</text><text x="900" y="185" font-size="20">左臂 7 列</text><text x="1130" y="185" font-size="20">右臂 7 列</text>
+<text x="562" y="271" font-size="20">左手 6 行</text><text x="562" y="391" font-size="20">右手 6 行</text>
+<text x="714" y="273" font-size="25">JL,W</text><text x="914" y="273" font-size="25">JL,L</text><text x="1180" y="273" font-size="28">0</text><text x="714" y="393" font-size="25">JR,W</text><text x="950" y="393" font-size="28">0</text><text x="1145" y="393" font-size="25">JR,R</text>
+<text x="595" y="497" font-size="20">两只手都受腰部影响；左臂关节不直接改变右手 FK。</text>
+<text x="595" y="534" font-size="20">这是结构示意，不是某姿态下实际数值或满秩证明。</text>
+<rect x="30" y="577" width="1335" height="143" rx="12" fill="#dfeaf2"/>
+<text x="50" y="613" font-size="20">近似关系：双手微小位姿变化 ≈ J · Δq；把两个手的误差一起解，而不是让两个 IK 各自决定腰怎么转。</text>
+<text x="50" y="653" font-size="20">实际在线控制还加入两夹爪主关节：21 个变量；手位姿 12 行 + 开度任务 2 行，任务矩阵 14 × 21。</text>
+<text x="50" y="691" font-size="20">腰“尽量不动”、躯干“尽量直立”、手“必须到目标”是不同任务；优先级需要显式设计。</text>
+</g></svg>

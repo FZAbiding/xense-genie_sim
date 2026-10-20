@@ -1,6 +1,9 @@
 # G2 固定底盘：双臂 + 腰部全身 IK
 
-首次阅读请先看 [给 VLA 工程师的全身 IK 入门](WHOLE_BODY_IK_GUIDE_ZH.md)：
+**唯一总结入口：[根目录 PROJECT_GUIDE_ZH.md](../PROJECT_GUIDE_ZH.md)**。
+坐标、连杆 / IK 教程、Flexiv / ARX5 对照、实测图视频、结果和待办已统一到根目录；下文保留原有操作和历史记录，不作为并列的当前总览。
+
+早期复现入门见 [给 VLA 工程师的全身 IK 入门](WHOLE_BODY_IK_GUIDE_ZH.md)：
 解释 FK/IK/WBC、运行命令、仓库已有能力与本次新增代码、worktree 与私人仓库同步，以及下一阶段实验。
 
 **来源说明：本 demo 是基于仓库已有 G2 仿真与 MoveIt/BioIK 能力新增的测试流程，

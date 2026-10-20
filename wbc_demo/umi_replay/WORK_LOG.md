@@ -1,5 +1,19 @@
 # UMI 回放执行记录
 
+> 唯一总结入口已收口到仓库根目录 [PROJECT_GUIDE_ZH.md](../../PROJECT_GUIDE_ZH.md)。
+> 本文件保留历史执行过程，不另行维护并列的当前总览。
+
+## 统一学习手册与本地机械臂对照（2026-10-20）
+
+- 新增统一入口 `wbc_demo/WBC_IK_UMI_HANDBOOK_ZH.md`，串起坐标、模型、IK 公式、源码、教程、历史结果与待办；不删除原有专项文档。
+- 核对 `lerobot-xense` HEAD 1de0dc8、ARX5 gitlink 4dcc490、libpyflexiv gitlink baa532b、RDK gitlink a2dcedc；目标 LeRobot 的子模块未初始化，使用另一现有副本的固定 Git 对象只读查看，没有把该副本不同 HEAD 当作指定版本。
+- 直接读取 X5 与 Rizon4 固定版 URDF，给出 xyz/rpy/axis 实表，说明它们不是凭空拟合的 DH 参数；Flexiv 资源仅是模板，不能代替用户硬件模型和 TCP。
+- 明确 HF 为共同 world 下的 EEF 绝对位姿，已应用 tracker→EEF，非末帧 action 是下一帧绝对 state；没有再次应用上游 PICO 换基或工具外参。
+- 对照 Flexiv 厂商笛卡尔接口、ARX5 本地多初值 / KDL LMA 相关求解、G2 的 Pinocchio/URDF + OSQP；对 ARX5 二进制 solver 实现和失败后仍覆盖 waypoint 的公开调用顺序保留边界，不声称真机验收。
+- 新增三张可直接打开的 SVG 教学图：坐标链、求解软件栈、共享腰雅可比；并链接已有实际 FK 图和真实四分屏视频，没有生成假的运动验收资料。
+- 本轮只改文档和矢量图，不连接真机、不启动机器人运动、不改 SDK / 控制算法。
+- 后续终端调用默认沙箱仍报 bwrap loopback 权限错误；必要提权的自动审核连续超时，按允许的单次重试后停止重试。已有关键源码读取成功，文档使用文件补丁工具完成；本轮未执行新增教程片段、链接/渲染自动检查或 Git 提交推送，不宣称这些已完成。
+
 ## 播放卡顿、首帧与腰臂优先级核查（2026-10-19，追加摘要）
 
 - 从 `b229d9d` 开始，未修改原始 HF 数据、世界变换、已保存首帧参考或既有控制保护。
